@@ -1,5 +1,5 @@
 ;;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
-;; AWAY / AUTO-AWAY MANAGER
+;; AWAY MANAGER
 
 dialog away-manager {
   title "incorrigo syx | away settings"
