@@ -3,7 +3,6 @@ A script created for new users to get their hands on a real-life IRC client [i.e
 
 ## Find us on IRC
 Incorrigo Syx IRC network is relatively new, even though it has been around for several years. My favourite IRC client is mIRC, you do the maths.
-- https://incorrigo.io/script
 - ircs://irc.incorrigo.io:+6697/
 - https://incorrigo.io/web?ch=westid
 - https://incorrigo.io/irc?ch=westid
