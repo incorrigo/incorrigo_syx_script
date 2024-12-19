@@ -5,7 +5,7 @@ Incorrigo Syx IRC network is relatively new, even though it has been around for 
 - https://incorrigo.io/script
 - ircs://irc.incorrigo.io:+6697/
 - https://incorrigo.io/web?ch=westid
-- https://incorrigo.io/irc?ch=beginner
+- https://incorrigo.io/irc?ch=westid
 
 Here are the instructions to install:
 - **(a)** Download mIRC
