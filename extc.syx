@@ -1,0 +1,162 @@
+;;; INCORRIGO SYX IRC NETWORK
+;; DIGITAL COMMUNICATION SYSTEMS
+;; Extended Mode Options [Nick List]
+
+alias extc.mode {
+  if (!%extc.mode) {
+    %extc.mode = account
+  }
+  if (%extc.mode == account) {
+    return ~a: $+ $$1
+  }
+  if (%extc.mode == address) {
+    return $$address($1, 2)
+  }
+  return -1
+}
+
+alias extc.toggle {
+  if (!%extc.mode) {
+    %extc.mode = account
+    goto hindenburg
+  }
+
+  if (%extc.mode == account) {
+    %extc.mode = address
+    goto hindenburg
+  }
+
+  if (%extc.mode == address) {
+    %extc.mode = account
+  }
+  :hindenburg
+  echo -atc Mode * Extended Modes: Toggled the extended mode target to %extc.mode
+}
+
+#switchbansearch off
+raw 367:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.search) { goto hindenberg }
+    if (%mode.search) {
+      if ($istok($3,%mode.search, 58)) {
+        if ($me ison $2) { echo  -act * Extc - Mode Search:  $+ $chr(91) $+  $+ $2 $+  $+ $chr(93) $+  Removing hit $3 }
+        .mode %mode.search.channel -b $3
+      }
+    }
+  }
+  :hindenberg
+}
+
+raw 368:*: {
+  haltdef
+  .enable #switchbanlist
+  .disable #switchclearbans
+  .disable #switchbansearch
+}
+#switchbansearch end
+
+#switchexemptsearch off
+raw 348:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.search) { goto hindenberg }
+    if (%mode.search) {
+      if ($istok($3,%mode.search, 58)) {
+        if ($me ison $2) { echo  -act * Extc - Mode Search:  $+ $chr(91) $+  $+ $2 $+  $+ $chr(93) $+  Removing hit $3 }
+        .mode %mode.search.channel -e $3
+      }
+    }
+  }
+  :hindenberg
+}
+
+raw 349:*: {
+  haltdef
+  .enable #switchexceptlist
+  .disable #switchclearexcepts
+  .disable #switchexemptsearch
+}
+#switchexemptsearch end
+
+
+;; actual extended modes
+; +b ~q: quiet
+; +b ~n: nickchange
+; +b ~n: join only
+; +b ~f:#blahblah: forward to channel
+
+; +e ~m:moderated: exempt from +m/+M
+; +e ~m:external: exempt from +n
+; +e ~m:color: exempt from +S/+c
+; +e ~m:notice: exempt from +T
+
+; +e ~F:*: will not trigger flood control
+; cjkmntr*
+; ctcp join knock message notice text(/1) repeat(/1) *(all/1)
+
+alias extc.setquiet {
+  mode $$1 +b ~q: $+ $extc.mode($$2)
+}
+
+alias extc.dequiet {
+  mode $$1 -n ~q: $+ $extc.mode($$2)
+}
+
+alias extc.setnonick {
+  mode $$1 +b ~n: $+ $extc.mode($$2)
+}
+
+alias extc.denick {
+  mode $$1 -b ~n: $+ $extc.mode($$2)
+}
+
+alias extc.setnojoin {
+  mode $$1 +b ~j: $+ $extc.mode($$2)
+}
+
+alias extc.deblock {
+  mode $$1 -b ~j: $+ $extc.mode($$2)
+}
+
+alias extc.forwardtochannel {
+  mode $$1 +b ~f: $+ $$decision(goe¿incorrigo syx $pipe forward to channel¿Enter channel name to forward $$2 $+ :) $+ : $+ $extc.mode($$2)
+}
+
+alias extc.exempt.m {
+  mode $$1 +e ~m:moderated: $+ $extc.mode($$2)
+}
+
+alias extc.exempt.n {
+  mode $$1 +e ~m:external: $+ $extc.mode($$2)
+}
+
+alias extc.exempt.c {
+  mode $$1 +e ~m:color: $+ $extc.mode($$2)
+}
+
+alias extc.exempt.p {
+  mode $$1 +e ~m:notice: $+ $extc.mode($$2)
+}
+
+;extc.unban channel selector tok
+alias extc.unban {
+  %mode.search = $extc.mode($$2)
+  if ($right(%mode.search,-3) == $$2) { %mode.search = $$2 }
+  %mode.search.channel = $$1
+  .disable #switchclearbans
+  .disable #switchbanlist
+  .enable #switchbansearch
+  mode %mode.search.channel +b
+}
+
+;ext
+alias extc.dexempt {
+  %mode.search = $extc.mode($$2)
+  if ($right(%mode.search,-3) == $$2) { %mode.search = $$2 }
+  %mode.search.channel = $$1
+  .disable #switchclearexcepts
+  .disable #switchexceptlist
+  .enable #switchexemptsearch
+  mode %mode.search.channel +e
+}
