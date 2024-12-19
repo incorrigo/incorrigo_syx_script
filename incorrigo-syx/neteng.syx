@@ -23,7 +23,7 @@ on *:JOIN:#: {
 }
 #svcsaop end
 
-#selfaop off
+#selfaop on
 on *:JOIN:#: {
   ;; Use your own (oper override was the intended) permssion to establish yourself in a channel
   if ($nick == $me && $sysop) {
@@ -41,7 +41,7 @@ on *:JOIN:#: {
 }
 #csvcaop end
 
-#scmdaop on
+#scmdaop off
 on *:JOIN:#: {
   ;; Using /SAMODE will make the server _you are on_ give you +a status
   if ($nick == $me && $sysop) {

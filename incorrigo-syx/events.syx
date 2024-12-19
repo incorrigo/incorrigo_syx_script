@@ -1,5 +1,6 @@
 ;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
 ;; SCRIPT DESIGNED FOR mIRC
+;; EVENTS
 
 ;; locops and globops [with services specialisation] handler
 on ^*:SNOTICE:from *: {

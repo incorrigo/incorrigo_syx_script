@@ -1,6 +1,6 @@
 ;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
 ;; UI MANAGER - EXTENDED BAN CREATOR
-;; DESIGNED FOR AN UNREALIRCD 6 CHANNEL OPERATOR
+;; Designed for UnrealIRCd extended bans
 
 dialog extban-creator {
   title "incorrigo syx | extended list mode creator"

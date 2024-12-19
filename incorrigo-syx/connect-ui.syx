@@ -1,4 +1,5 @@
 ;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; CONNECTION MANAGER
 
 alias F3 {
   bingowing
@@ -359,7 +360,7 @@ on *:START: {
     }
     .identd off
     %birthday = $time(yyyy-mm-dd HH:nnTT)
-    .timer -m 1 100 noop $decision(ugot¿incorrigo syx $pipe initialised¿Welcome to Incorrigo Syx $+ $crlf $crlf $+ This script has been fully loaded with all the commands and menus you need to get the most out of our network $+ $crlf $crlf $+ Enjoy your new improved IRC session)
+    .timer -m 1 100 noop $decision(ugot¿incorrigo syx $pipe welcome¿Welcome to Incorrigo Syx script for mIRC !)
   }
 
   else {
