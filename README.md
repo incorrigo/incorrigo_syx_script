@@ -20,3 +20,5 @@ Here are the instructions to install:
 Some of the messages / the way that things are laid out might come across as _patronising_. This is not intended as an insult, just an attempt to help the concept of an IRC client make sense to people who might not have used it before
 
 I will try to keep things up to date that you will see here
+
+Unfortunately I can't provide anyone with [mIRC](https://www.mirc.com/) and it is not free software. You will have to make that arrangement separately - but once you have done, this script will give you your money's worth
