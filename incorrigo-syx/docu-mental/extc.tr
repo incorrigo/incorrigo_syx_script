@@ -1,0 +1,23 @@
+Extended Bans Nick List Menu
+
+Toggle Target
+[~a:registered_nickname / *!*@host.name.or.ip]
+When you use the extended bans menu in the nickname list, you can either add+remove extended [ban and exempt list modes] based on the user's [IP / host] address, which is preferable if your target is unregistered or has a unique vHost, or you can target their account, which is more useful if they are registered
+
+Extended Bans Menu
+
+You can add several types of extended bans ...
+
+Quiet: This means that the user is still allowed to join the channel as normal, but they need voice permission or higher to be able to speak
+
+No Nick Change: While the user is on your channel, they are not allowed to change their nickname. Enforces the same situation as channel mode +N
+
+Block /join: When someone is banned the normal way, they cannot set their nickname, speak on the channel they are banned in. Blocking /join simply stops them from (re)joining the channel but otherwise imposes no other effects
+
+Remove Extended Bans: This will remove all extended bans which the target has on the channel. Doesn't work if the account name is different from the nickname that they are using - either their nickname or address will have to appear in the current ban list for it to be removed successfully
+
+---
+
+Extended Exempts
+
+Here you can bypass the same message restrictions, for more information right-click the channel and go to the "Extended Ban Creator" - this has all the information you need for what message restrictions you can bypass

@@ -1,0 +1,38 @@
+Every channel has three lists, which are created by using 'list modes'
+
+The 3 list modes are:
+ban list (+b)
+exception list (+e)
+invite list (+I)
+
+Remember the mode letters are case-sensitive
+i.e. +i makes the channel invite only, +I adds an entry to the invite list
+
+To add an item to the list, you can insert a user mask. User masks are like this: nick!user@host.name.or.ip
+
+Wildcards are accepted too. They take the form of an asterisk (*)
+Here's an example: *!*@*.name.or.ip
+
+This example means [any nickname]![any username]@[anything].name.or.ip
+
+If a user has an hostname or IP address that ends in .name.or.ip then they will either (i) be denied access to the channel because they're banned (ii) be allowed access to the channel because they are an exception (iii) gain access to the channel when it's 'invite only' without having to be /INVITEd each time they want to join
+
+* * EXTENDED BANS * *
+When you add an entry to one of the three lists, you can also use something called 'extended bans' - which basically mean other criteria than *!*@* may be used to qualify an entry on the list instead
+
+/mode #channelname +b ~a:wanker
+Anyone who is logged into an account called 'wanker' will be denied access for being banned
+
+/mode #channelname +e wanker!*@*.some-isp.net
+When wanker is connected with the host name ending in some-isp.net, then all of a sudden the ban will not apply to them and they will be allowed in
+
+/mode #channelname +I gibbous!*@crescent.moon.isp.ex
+When the channel is 'invite only' (+i) then someone with the nickname 'gibbous', _any_ username (because * is a wild card), and a hostname 'crescent.moon.isp.ex' NOTE: default "cloaked" (e.g. lH-12345678.moon....) addresses, real full addresses, and "vHost" addresses will _ALL_ work when they're added to the list
+
+A few last things to remember:
++b when a user is banned - but still on the channel - they need to be given voice to speak, they won't be able to change their nickname, and they won't be able to come back in once they have left / been kicked
+
++e will not enable someone access to the channel, if it is invite only (+i)
+
++I will not allow someone to come in if they match an entry on this list but are also banned
+

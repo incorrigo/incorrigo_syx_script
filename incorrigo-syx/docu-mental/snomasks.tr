@@ -1,0 +1,34 @@
+Network / services operators will receive notifications from the server / services when something happens. What the operator receives is determined by the server notices mask, which is usually called snomask for short
+
+If you are an operator and you want to stop receiving server notices, you can disable them all using the following command:
+
+/mode yournickname -s
+
+On the other hand, if you wish to receive server notices - and they are configured when you become an operator in the way that you would like - then the syntax for server notices goes like this ,,,
+
+/mode yournickname +s +qo-r
+This is only an example, of opting to receive two types of server notice, and stop the server from sending you a third kind
+
+Snomasks, as they are called, are like modes in that you set +/- and the letters are CaSe SeNsItIvE. Here are the server notice letters:
+
+ [b] Server Bans [KLINE / GLINE / SHUN &c.]
+ [B] DNS Blacklist Module
+ [c] Local client connects [to the server you are on]
+ [C] Global client connects [except those of services server]
+ [d] Blocked DCC [file / p2p chat] because of DENY DCC in the server configuration
+ [D] Debugging, spammy messages that are not normally needed or used
+ [f] Notices / warnings from the anti-flooding defences
+ [j] Channel joins / parts / kicks
+ [k] Kill notices [/KILL command]
+ [n] Local nickname changes [server you are on]  
+ [N] Global nickname changes [all servers]
+ [q] Deny nickname [q-line] rejection notices
+ [r] SPAMREPORT usage notices [spam filter]
+ [R] JSON-RPC usage [commands that can be run from the web etc]
+ [s] Notices that can't be categorised but still recommended
+ [S] Spamfilter hits [people who match a spamfilter that's in force]
+ [o] Operator Override [giving themselves permissions in channels &c.]
+ [O] Operator changing user's properties [/CHGHOST] or forcing a user to do things [/SAJOIN, /SAPART &c.]
+ [v] Any VHOST usage activity
+
+

@@ -1,0 +1,247 @@
+;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; network engineer's subsection(s)
+
+;;; AOPPER uses either your oper override or operserv permission to establish dominance &
+;;; authority whenever you join someone's channel
+
+on *:LOAD: {
+  ;; aopper only triggers when you are IRC operator
+  .aopper.set self
+  .enable aopper
+  .enable selfaop
+  .disable svcsaop
+  .disable csvcaop
+  .disable scmdaop
+}
+
+#svcsaop off
+on *:JOIN:#: {
+  ;; This requires operserv/mode permission on the network manager
+  if ($nick == $me && $sysop) {
+    .operserv mode # +a $me
+  }
+}
+#svcsaop end
+
+#selfaop off
+on *:JOIN:#: {
+  ;; Use your own (oper override was the intended) permssion to establish yourself in a channel
+  if ($nick == $me && $sysop) {
+    .mode # +a $me
+  }
+}
+#selfaop end
+
+#csvcaop off
+on *:JOIN:#: {
+  ;; Use chanserv [registered channels only!]
+  if ($nick == $me && $sysop) {
+    .chanserv protect # $me
+  }
+}
+#csvcaop end
+
+#scmdaop on
+on *:JOIN:#: {
+  ;; Using /SAMODE will make the server _you are on_ give you +a status
+  if ($nick == $me && $sysop) {
+    .samode # +a $me
+  }
+}
+#scmdaop end
+
+alias aopper.set {
+  if ($0 == 1) {
+    if ($1 == self) {
+      ;; active oper-override self-aop on join
+      %aopper.active = $true
+      %aopper.mode = self
+      .enable #selfaop
+      .disable #csvcaop
+      .disable #svcsaop
+      .disable #scmdaop
+      .echo -atc Info2 * Aopper: Current method is now oper override [se1f]
+      goto barrymore
+    }
+
+    if ($1 == csvc) {
+      ;; using chanserv therefore registered channels only
+      .enable #csvcaop
+      %aopper.active = $true
+      %aopper.mode = csvc
+      .disable #svcsaop
+      .disable #selfaop
+      .disable #scmdaop
+      .echo -atc Info2 * Aopper: Current method now set to chanserv [registered channels only]
+      goto barrymore
+    }
+
+    if ($1 == svcs) {
+      ;; using operserv to demonstrate how high up you are
+      ;; also doesn't limit you to registered channels
+      .disable #csvcaop
+      .enable #svcsaop
+      %aopper.active = $true
+      %aopper.mode = svcs
+      .disable #selfaop
+      .disable #scmdaop
+      .echo -atc Info2 * Aopper: Current method now set to services operator [operserv / mode]
+      goto barrymore
+    }
+
+    if ($1 == scmd) {
+      ;; use /SAMODE [the mode is set by your server]
+      .disable #csvcaop
+      .disable #svcsaop
+      .disable #selfaop
+      .enable #scmdaop
+      %aopper.active = $true
+      %aopper.mode = scmd
+      .echo -atc Info2 * Aopper: Current method now set to server mode [/SAMODE command]
+      goto barrymore
+    }
+
+    if ($1 == off) {
+      .disable #selfaop
+      .disable #svcsaop
+      .disable #scmdaop
+      .disable #csvcaop
+      %aopper.active = $false
+      %aopper.mode = off
+      echo -atc Info2 * Aopper: Aopper has been de-activated
+      goto barrymore
+    }
+
+    if ($1 == on) {
+      ;; initialise default [self] setting
+      %aopper.active = $true
+      %aopper.mode = self
+      .enable #selfaop
+      .disable #svcsaop
+      .disable #scmdaop
+      .disable #csvcaop
+      if ($sysop) { echo -atc Info2 * Aopper: Aopper has been activated and set to oper override [self] }
+      goto barrymore
+    }
+
+
+  }
+
+  if ($0 < 1) {
+    if (%aopper.active == $null) {
+      ;; setting defaults to OFF
+      set %aopper.active $false
+      return off
+    }
+
+    if (%aopper.mode == $null) {
+      ;; setting defaults to SELF
+      set %aopper.mode self
+      return off
+    }
+
+    if (%aopper.active == $false) {
+      return off
+    }
+
+    if (%aopper.active == $true) {
+      if (%aopper.mode == self) {
+        ;; oper-override mode
+        return self
+      }
+
+      if (%aopper.mode == svcs) {
+        ;; operserv/mode permission mode
+        return svcs
+      }
+
+      if (%aopper.mode == scmd) {
+        ;; /SAMODE mode
+        return scmd
+      }
+
+      if (%aopper.mode == csvc) {
+        ;; /CHANSERV mode
+        return csvc
+      }
+    }
+  }
+
+  :barrymore 
+}
+
+alias aopper.rmenu {
+  ;; this will establish a setting if the variable for it is somehow missing. the default setting is aopper: on and setting: self (most likely setting and usermode +o more relevant to choice
+  ;; aopper current status will be shown on the menu so default is fully established simply by opening the menu in the first place. the settings will be the default setting in any case
+  if (%aopper.active == $null || %aopper.mode == $null) {
+    ;; either values being null will trigger activation with default setting
+    aopper.set on
+  }
+
+  if ($$1 == svcs) {
+    if ($aopper.set == svcs) { return $true }
+    else return $false
+  }
+
+  if ($$1 == csvc) {
+    if ($aopper.set == csvc) { return $true }
+    else return $false
+  }
+
+  if ($$1 == self) {
+    if ($aopper.set == self) { return $true }
+    else return $false
+  }
+
+  if ($$1 == scmd) {
+    if ($aopper.set == scmd) { return $true }
+    else return $false
+  }
+
+  if ($$1 == off) {
+    if ($aopper.set == off) { return $true }
+    else return $false
+  }
+
+  if ($$1 == on) {
+    if ($aopper.set != off) { return $true }
+    else return $false
+  }
+
+  return $false
+}
+
+alias sysop {
+  ;; irc operator bool identifier
+  if (o isincs $usermode) { return $true }
+  else return $false
+}
+
+
+;; mserver notices window
+on ^*:SNOTICE:*[info]*: {
+  if ($window(@sno. $+ $me) == $null) {
+    window -nie[0] @sno. $+ $me
+    echo -tc Info @sno. [ $+ [ $me ] ] You are on  $+ $server $+ , server notices for  $+ $me $+ :
+  }
+  haltdef
+  echo -tc Info @sno. $+ $me  $+ $nick $+ : $$1-
+}
+
+on ^*:SNOTICE:*[warn]*: {
+  if ($window(@sno. $+ $me) == $null) {
+    window -nie[0] @sno. $+ $me
+    echo -tc Info @sno. [ $+ [ $me ] ] You are on  $+ $server $+ , server notices for  $+ $me $+ :
+  }
+  haltdef
+  echo -tc Info @sno. $+ $me  $+ $nick $+ : $$1-
+}
+
+on ^*:SNOTICE:*[error]*: {
+  if ($window(@sno. $+ $me) == $null) {
+    window -nie[0] @sno. $+ $me
+    echo -tc Info @sno. [ $+ [ $me ] ] You are on  $+ $server $+ , server notices for  $+ $me $+ :
+  }
+  haltdef
+  echo -tc Info @sno. $+ $me  $+ $nick $+ : $$1-
+}

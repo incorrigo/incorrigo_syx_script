@@ -1,0 +1,19 @@
+Here are some openly shared security groups that you can use for extended bans / exceptions / invites
+
+Ban a security group
+/mode #channelname +b ~G:security-group
+
+Make a security group an exception to bans
+/mode #channelname +e ~G:security-group
+
+Everyone in this security group can join the channel if invite-only
+/mode #channelname +I ~G:security-group
+
+~G:plaintext - This group is all users who are deliberately connected via plaintext [no TLS]
+
+~G:unregistered - This group is all or any unregistered user
+
+~G:registered - This group represents all people who are registered
+
+~G:webirc-tls - This group will apply to anyone who is connected via our web chat [all web chat connections are secure with TLS and can join a channel / speak to a user that is mode +z]
+

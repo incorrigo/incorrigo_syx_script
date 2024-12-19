@@ -1,0 +1,75 @@
+To make this information easy to follow, this will be laid our into 2 things ...
+ - Classic Channel Banlist Behaviour
+ - New "Extended Ban" Choices / Functionality
+
+01 - THE CLASSIC IRC CHANNEL BAN LIST
+Before the addition of the "extended ban" style of chanlists creation, an entry the [ban / except / invite] lists each had their own function, and used the same information
+
+Classic banlist entry would have a usermask in this format: nick!user@host.name.or.ip and used wildcards so a banned user couldn't get back in just by changing a bit of information ...
+
+Here is a more realistic example for your education:
+  - justin_roper!~bacup@207.46.216.25
+
+This is an example using a wildcard that was the channel op only way to specify broader information:
+  - justin*!*@207.46.216.*
+
+Here: any nickname starting with "justin" with whatever username they could be using, and the IP 207.46.216.* covers only a range of 255 addresses; unlikely to be everyone on the same ISP
+
+Also if you're on a channel's banlist, naturally this would just stop someone from joining the channel basically
+
+The other two channel lists used the same type of functionality:
+ - Execeptions (mode +e) allows the channel operator to ban a broad range of things, but if someone they like could no longer gain entry, then putting their (usually more specific) information in this list would enable the channel operator to make an exception without having to remove the ban entirely
+
+- Invite +I [remember mode letters are case sensitive!] is a bit separate than the other two lists in functionality - this list would allow the channel operator to make the channel invite only (mode +i) and specify a "guest list" without having to use the /INVITE command every single time someone needed to join, annoying / repetitively
+
+Although the +I list is not connected to banning of users, and exceptions to let someone override the ban list entry - the format is still the same - nick!user@host.name.or.ip
+
+IMPORTANT: In any type of banlist specification, choose wildcards very carefully; a ban that is too vague could ban an entire ISP, or worse all users completely, unintentionally. Try not to get too much like *!*@* because that can cause all kinds of headache
+
+
+02 - New "extended ban" functionality and types of information that you can target more specifically
+
+This came much later in the game, but brought a lot more to it. Even though it's called "extended ban" the new tools for targeting and functionality there are more tools at the channel operator's disposal that apply to all three
+
+(a) The classic function of a channel ban was basically nobody whose user mask matches a ban list entry would be unable to join the channel. Now you can decide what exactly is banned - a user's behaviour is usually what gets them banned, generally. This new functionality though may allow a channel operator to stop the unwanted behaviour without the same blunt instrument all the time of banning everyone completely
+
+(b) On top of that, extended functionality provides a channel with a wealth of information far beyond the scope of nick!user@host.name.or.ip - with a complete roulette wheel if the users' host name or IP is set out in a way that a wildcard will not be so specific pointlessly, or ban a ridiculously vast amount of people entirely
+
+IMPORTANT: Don't try and ban someone by simply typing in their registered nickname. Banning john_smith!*@* will be side stepped simply by moving to a new nickname - and incorrigo syx lets you have a number of registered nicknames under the same account, so one registered nickname will keep no one out
+
+EXTENDED BAN LAYOUT:
+Here are some realistic examples of extended list items that one is likely to recognise - any user can view the three lists from inside the channel
+
+~account:wank_shafterson
+This is an extended ban that specifies the name of an account. Even if wank switches to an unregistered nickname, he will still not get in because as long as you are logged into the accout name in an entry it will still keep you out no matter who you pretend to be
+
+~account:0
+This is a special version of an account entry that - depending on whether you use +b or +e - applies to every user who is not logged into an account completely. The opposite of this is ~account:* which the wildcard allows to refer every user that is logged into an account entirely
+
+EXTENDED LISTMODE FUNCTIONALITY:
+You can now link channels to your lists' entries, and be even more particular if you wish - a user can match a different entry based on their status on the other channel presently
+
+~channel:#dick_waddington
+Putting this in your channel's ban list will deny channel entry to any user who is on this channel when they try to join yours
+
+~channel:@#dick_waddington
+If you were to add the prefix - in this case, that of a channel operator's nickname, then anyone on #dick_waddington will not be refused entry - however, if someone is a channel operator [NB: or higher! so includes ~ and & [+q and +a respectively] then things will go differently and they won't be granted entry
+
+CHANGING WHAT A BAN DOES:
+Here are some things you can do to change the way the ban affects someone who matches the information in that particular entry
+
+~quiet:wank*!*@*.isp.btroadband.com
+the way the details in this ban broaden quite vaguely, but if someone matches with it, they will still be allowed in but would only be able to speak if someone give them voice [+ / +v] which is the case for most channels' message silencing sort of functionality
+
+~nickchange:~account:wank_shafterson
+just in case you have not yet seen, this combines the behaviour and the information that can be used to match instead of nick user and host/IP. in this example, for instance, when someone is logged in as wank_shafterson, no matter what their other details might be, they will still be allowed to join, they can even chat as if they weren't even banned in the first place! but as long as they remain on your channel, they will not be able to change their /NICK while they are on your channel, of if this is deleted [mode =b]
+
+MAKING YOUR EXTENDED BANLIST ENTRY TEMPORARY:
+Now you have seen the ability to combine a number of things in your banlist entry, you can also time these things so that they run out eventually. This is handled by the server itself, so incidentally any time limits you impose will not depend on you / your client / its current status of connectivity
+
+Here's one final example to stop this little guide from going on for infinity; and how you can time anything that you put down, even if in some cases it's +e - nothing is guaranteed for all eternity
+
+~time:20:~account:wank_shafterson
+This will ban anyone signed into the dastardly desktop client of wank_shafterson, westid's #1 testing phase arch enemy
+
+Even though the Incorrigo Syx official script intends to give you all of this functionality without you having to figure it out comprehensively, you may benefit from learning the up to date wiki-documentation about extended bans straight from our server software: UnrealIRCd ... https://www.unrealircd.org/docs/Extended_bans

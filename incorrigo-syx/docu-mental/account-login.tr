@@ -1,0 +1,20 @@
+Logging ino an account is easy peasy. This is how you do it ...
+
+Right-click on the status window, or a channel one if it's nearest - you will have different options that depend on your current login status
+
+1) if you're logged in but not using the "main nickname" [which will be your account name] you will have the option to change your nickname to the one on your account -- that's why the option to change your nick is not-so-randomly there
+
+2) If you're not logged in, you will see the "User Account Login"
+To use this, you need to type in your "main" account nickname, then you will be prompted to enter your password that you use to identify with nickserv
+
+3) Already logged in? Then you will see the option to log out instead. You won't be pressured into providing a password and can keep on using your registered nickname if that's the one you were using when you logged out
+
+4) Identify as [current nickname] will _always_ be an option - just for a fail safe in case there is an unexpected contingency that wasn't planned for, and you just need to enter your password real quick
+
+5) If you're using an unregistered nickname and you want to have sole use of it, you will see the option to add your current nickname to your "group"
+
+This is because you only need to [create, email, verify] once. After this, you can register a number of nicknames and you only need one account for them all
+
+This group option will require your account name and password if you use it while you aren't currently logged into your account
+
+This is as simple as it gets... once you've set up an account, you will have ful enjoyment of / protection from * by the network manager (services)

@@ -1,0 +1,137 @@
+;;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;;; Network specific client only tags
+
+;; CTCP-X
+
+raw TAGMSG:*: {
+  ;; clear value for incoming message tags
+  ronnik ctcp $false
+  unset % [ $+ [ $server ] $+ . $+ [ $me ] $+ .ctcp-x ]
+  ronnik from $nick
+  ronnik aud $target
+
+  if ($msgtags(+ctcp)) {
+    ronnik ctcp $msgtags(+ctcp).key
+
+  }
+
+  if ($msgtags(+ctcp-x)) {
+    ronnik ctcp-x $msgtags(+ctcp-x).key
+  }
+
+  clientmsgs $nick $msgtags(+ctcp).key $msgtags(+ctcp-x).key
+
+}
+
+alias clientmsgs {
+  if ($1 != $me) {
+    if ($0 == 2) {
+      ;; this is a request
+      echo -smtc CTCP $1 sent you a  $+ $upper($2) $+  request
+      if ($2 == NAME) {
+        clientrsp $1 NAME $fullname
+      }
+      if ($2 == VERSION) {
+        clientrsp $1 VERSION mIRC v $+ $version https://www.mirc.com/
+      }
+
+      if ($2 == SCRIPT) {
+        clientrsp $1 SCRIPT 14,1incorrigo15,1syx v $+ %lacigare by 4,1westid. 13https://incorrigo.io/script
+      }
+
+      if ($2 == TIME) {
+        if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
+          %ctcp.timeformat = 2
+        }
+
+        if (%ctcp.timeformat == 1) {
+          clientrsp $1 TIME [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ] [ $+ $asctime(dddd) $timeofdaynow $+ ] [ $+ $asctime(yyyy-mm-dd) $+ ]
+        }
+
+        if (%ctcp.timeformat == 2) {
+          clientrsp $1 TIME [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ]
+        }
+
+        if (%ctcp.timeformat == 3) {
+          clientrsp $1 TIME $asctime(HH:nnTT) - GMT $asctime(z)
+        }
+
+        if (%ctcp.timeformat == 4) {
+          clientrsp $1 TIME $asctime(HH:nnTT) $asctime(yyyy-mm-dd)
+        }
+
+        if (%ctcp.timeformat == 5) {
+          clientrsp $1 TIME $asctime(dddd) $timeofdaynow $asctime(yyyy-mm-dd)
+        }
+      }
+
+
+      if ($2 == EMAIL) {
+        clientrsp $1 EMAIL $emailaddr
+      }
+
+      if ($2 == IDLE) {
+        clientrsp $1 IDLE $duration($idle)
+      }
+
+      if ($2 == URL) {
+        if (%main.url == $null) {
+          clientrsp $1 URL 13https://incorrigo.io/
+        }
+
+        if (%main.url != $null) {
+          clientrsp $1 URL %main.url
+        }
+      }
+
+      if ($2 == FINGER) {
+        clientrsp $1 FINGER $fullname ( $+ $emailaddr $+ ) Idle: $duration($idle)
+      }
+
+    }
+
+    if ($0 >= 3) {
+      ;; this is a response
+      echo -atc CTCP $1  $+ $upper($2) $+  response: $gogat($3-)
+    }
+  }
+}
+
+alias -l ctcp.tag {
+  return $ironnik(ctcp)
+}
+
+alias -l ctcp-x.tag {
+  return $ironnik(ctcp-x)
+}
+
+alias -l ctcp.from {
+  return $ironnik(from)
+}
+
+alias -l ctcp.aud {
+  return $ironnik(aud)
+}
+
+alias ctcp-x {
+  .raw @+ctcp= $+ $2 TAGMSG $1
+}
+
+alias -l clientxrp {
+  echo -atc CTCP $1  $+ $2 $+  response: $3-
+}
+
+alias -l clientrsp {
+  .raw @+ctcp= $+ $2 $+ ;+ctcp-x= $+ $gatgo($3-) TAGMSG $1
+}
+
+
+alias gatgo {
+  ;; convert string into message tag value (IRCv3 special character specification)
+  return $replacex($$1-, $chr(32), \s, $chr(59), \:, $chr(92), \\, $crlf, \r\n, $cr, \r, $lf, \n)
+}
+
+alias gogat {
+  ;; parse real value from message tag value
+  return $replacex($$1-, \s, $chr(32), \:, $chr(59), \\, $chr(92), \r\n, $crlf, \r, $cr, \n, $lf)
+}

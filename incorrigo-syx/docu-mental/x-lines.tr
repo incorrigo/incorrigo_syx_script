@@ -1,0 +1,44 @@
+Kill and "Lines"
+
+Kill a User
+- - - - - - - - - -
+Just as kick removes a user from a channel, kill removes a user from the server
+
+All Incorrigo Syx servers are the same, so anyone who can kill a user will do so from the network
+
+When you use the /klll command, you must provide a reason. The user being killed will be able to re-connect when this is done
+
+This is usually appropriate as a warning. When you are killed it's thankful that there are no lasting consequences
+
+
+What is a G Line?
+- - - - - - - - - -
+A G-Line is a ban from the network. As a network engineer, you can view a list of all bans using the command /stats G
+
+Because each ban is a line starting with the letter G, it is known as a G line. The letter G stands for 'global' ... meaning something that applies to all servers
+
+There are 3 parts to a G-Line. The user's IP/hostname (wildcards are permitted), the duration of the ban (e.g. 10h30m for ten and a half hours), and the reason / ban message
+
+With a G Line, the message will be shown to the user when their connection is initially closed. If they try to re-connect, then the connection process will be interrupted with this message until the ban is removed or the time runs out. Connection attempts are allowed to be made, and there's a reason for that
+
+Exceptions can be made that will allow someone connecting with an operator's account, for instance. For example, if a user who is G-Lined logs on using SASL with an admin's TLS certificate fingerprint ... they could be immune to bans, and the server will take the (CPU / bandwidth) time to determine that before the connection is closed
+
+Also, it will bother to start the handshake / do a DNS lookup, and provide the ban message all before the connection is closed again. If you are banning a human, also if the ban is only temporary, this is the appropriate type of ban to use. Next, we will look at the other type of ban
+
+What is a Z Line?
+- - - - - - - - - -
+The second type of ban is called a Z Line. You can list these using the command /stats Z
+
+This ban can be made against an IP address ONLY. However you can use wildcards to ban address ranges e.g. 192.168.0.* will ban all IP addresses starting with those first 3 octets, but that's the only flexibility the Z Line gives you
+
+When you use this type of ban it is designed to be used against an automated adversary. Examples: compromised machines, poorly configured proxy servers, commercial ventures that can provide enemy users with compromised address ranges. The kind of foe that the Z Line is meant for doesn't care about why they are banned, and will probably just keep bouncing against this ban on a regular basis
+
+At the beginning, when a user is Z-Lined - they will see the ban message as their connectionn is closed. After that, there will be no courtesy - no DNS lookup will be attempted, there will be no handshake, an operator will not be able to over-rule the ban by using SASL, ban exception lists will not be checked
+
+Once the banned user (re)connects - or tries to - it will just look as though the server is gone. The connection will be refused. None of the IRC handshake or any other protocol will take place
+
+It's more appropriate to use a Z Line when nobody is going to listen to reason, or the only thing trying to connect is an oblivious user's compromised machine, some python script spamming another network using an open proxy or TOR exit node
+
+The rationale behind the Z Line is that it will reject the incoming connection using as negligible amount of resources as possible, so anything matching the ban will be unsuccessful in causing such an excess of network load that it will not cause any denial of service to legitimate users who may continue as though the problem was not there
+
+

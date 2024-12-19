@@ -1,0 +1,614 @@
+;; INCORRIGO SYX SYSTEMS
+;; ALIASES / COMMANDS
+
+;; use - //msg # good $timeofdaynow !
+timeofdaynow {
+  ;Sets a catch-all in case time check fails
+  set %timeofday day to you
+  if ($time(t) == a) { set %timeofday morning }
+  else if ($time(t) == p) {
+    if ($time(HH) >= 17) { set %timeofday evening }
+    else { set %timeofday afternoon }
+  }
+  return %timeofday
+}
+
+ctrl+H {
+  echo -atc Own ctrl + h
+}
+
+gettime {
+  if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
+    %ctcp.timeformat = 1
+  }
+
+  if (%ctcp.timeformat == 1) {
+    return [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ] [ $+ $asctime(dddd) $timeofdaynow $+ ] [ $+ $asctime(yyyy-mm-dd) $+ ]
+  }
+
+  if (%ctcp.timeformat == 2) {
+    return [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ]
+  }
+
+  if (%ctcp.timeformat == 3) {
+    return $asctime(HH:nnTT) - GMT $asctime(z)
+  }
+
+  if (%ctcp.timeformat == 4) {
+    return $asctime(HH:nnTT) $asctime(yyyy-mm-dd)
+  }
+
+  if (%ctcp.timeformat == 5) {
+    return $asctime(dddd) $timeofdaynow $asctime(yyyy-mm-dd)
+  }
+
+  return Time format violation: %ctcp.timeformat
+}
+
+ronnik {
+  ;; set a variable unique to the current session
+  ;; using -e for all of them keeps things nice and tidy
+  set -e % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $$1 ] ] [ [ $2- ] ]
+}
+
+ironnik {
+  ;; retrieves a variable name unique to the current session
+  ;; usage $ironnik(trump) will return domald
+  return % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $1 ] ]
+}
+
+timewy {
+  ;; check time zone menu setting
+  if ($timeformat == $$1) {
+    return $style(1) $+
+  }
+
+  else return $null $+
+}
+
+aopper {
+  if ($group(aopper).status == on( {
+    return $true
+  }
+
+  else return $false
+}
+
+aopper.svcs {
+  if ($aopper) {
+    if ($group(svcsaop).status == on) {
+      return $true
+    }
+
+    else return $false
+  }
+}
+
+aopper.scmd {
+  if ($aopper) {
+    if ($group(svcsaop).status == on) {
+      return $true
+    }
+
+    else return $false
+  }
+}
+
+aopper.csvc {
+  if ($aopper) {
+    if ($group(svcsaop).status == on) {
+      return $true
+    }
+
+    else return $false
+  }
+}
+
+aopper.self {
+  if ($aopper) {
+    if ($group(svcsaop).status == on) {
+      return $true
+    }
+
+    else return $false
+  }
+}
+
+aopper.details {
+  noop $decision(obg¿incorrigo syx $pipe self-aop¿Self-AOP is an IRC operator function that automatically grants you channel admin status when a channel is joined. It has the following settings: $&
+    $+ $crlf $crlf $+ Self - This is the default setting and uses your 'oper override' permission when any channel is joined $&
+    $+ $crlf $crlf $+ Chanserv - This setting will use chanserv PROTECT on join - this works in registered channels only $&
+    $+ $crlf $crlf $+ Services - This setting will use the operserv/mode permission and you will be granted +a by operserv on join $&
+    $+ $crlf $crlf $+ SA Command - This will use the /SAMODE command and will show to the channel that +a mode was granted by the server you are currently on and not the server which created the channel $&
+    $+ $crlf $crlf $+ This feature will only kick in on channel join when you are an IRC operator $obk $+ even if you choose to use one of the services commands $+ $cbk the network engineer sub-menu will only be displayed if you have IRC operator status)
+}
+
+;; CODEFIELDS SWAY LAZILY
+;; NOTE: you will be given a unique identifier anyway, so you might as well choose your own
+lhnumber {
+  echo -atc Own *** lH Numbers and lH hex numbers [more realistic]
+  echo -atc Own * lH Numbers: $lHngen $lHngen $lHngen Hex: $lHxgen $lHxgen $lHxgen
+  echo -atc Own * lH Numbers: $lHngen $lHngen $lHngen Hex: $lHxgen $lHxgen $lHxgen
+  echo -atc Own * lH Numbers: $lHngen $lHngen $lHngen Hex: $lHxgen $lHxgen $lHxgen
+}
+
+thematrix {
+  window -ae[0] @the.matrix
+  .debug @the.matrix
+  echo -tc Info @the.matrix Debug: All
+}
+
+spreadtheword {
+  msg $$1 14,1incorrigo15,1syx - text based virtual world - a new nonpartisan IRC network: 13https://incorrigo.io 12ircs://irc.incorrigo.io/
+}
+
+sysop {
+  ;; irc operator bool identifier
+  if (o isincs $usermode) { return $true }
+  else return $false
+}
+
+changeposition {
+  ;; moves permission up or down
+  mode $$1 -qaohv $$2 $$2 $$2 $$2 $$2
+  %modechg = +
+  if ($$3 == top) {
+    %modechg = %modechg $+ oq
+  }
+}
+
+fatseagal {
+  msg $$1  0,7:.` ,:;0,0;::1,0TEST CIGARETTE0,0::::::4,1:4,1;`15~~~~~~
+}
+
+getit {
+  if ($nick($$1, $$2, ~) {
+    return q
+  }
+
+  if $nick($$1, $$2.
+}
+
+cF12 {
+  exit -rn
+}
+
+;; line separator
+lhsep {
+  if ($$1 == -s) { echo -sc $2 - | return }
+  if ($$1 == -a) { echo -a $2 - | return }
+}
+
+;; lH- NGEN
+lHngen {
+  ;; generate a single lH number
+  %lH.look = lH-
+  :k0ng
+  %lH.hook = $r(0,1)
+  if (%lH.hook) { goto middle }
+  :top
+  %lH.line = $r(0,9)
+  goto bottom
+  :middle
+  %lH.sink = $r(A,Z)
+  :bottom
+  %lH.look = %lH.look $+ $iif(%lH.hook,%lH.sink,%lH.line)
+  if ($len(%lH.look) == 11) { goto victory }
+  goto k0ng
+  :victory
+  return %lH.look
+}
+
+cgen {
+  return $iif($r(0,1) == 1,$r(0,9),$r(A,Z))
+}
+
+hexcgen {
+  return $iif($r(0,1) == 1,$r(0,9),$r(A,F))
+}
+
+anycgen {
+  %cgen.select = $r(0,1)
+  if (%cgen.select == 0) { return $cgen }
+  if (%cgen.select == 1) { return $hexcgen }
+}
+
+strgen {
+  ; generates a string of characters X characters long
+  %cgen.min = $$1
+  %cgen.max = $$2
+  %cgen.str = $null
+  if (%cgen.min isnum && %cgen.max isnum && %cgen.max >= %cgen.min && %cgen.min > 0) {
+    %cgen.len = $r(%cgen.min, %cgen.max)
+    %cgen.cnt = 0
+    while (%cgen.cnt < %cgen.len) {
+      %cgen.str = %cgen.str $+ $anycgen
+      inc %cgen.cnt
+    }
+  }
+  else { return -1 }
+  return %cgen.str
+}
+
+hexgen {
+  ; generates a string of characters X characters long
+  %cgen.min = $$1
+  %cgen.max = $$2
+  %cgen.str = $null
+  if (%cgen.min isnum && %cgen.max isnum && %cgen.max >= %cgen.min && %cgen.min > 0) {
+    %cgen.len = $r(%cgen.min, %cgen.max)
+    %cgen.cnt = 0
+    while (%cgen.cnt < %cgen.len) {
+      %cgen.str = %cgen.str $+ $hexcgen
+      inc %cgen.cnt
+    }
+  }
+  return %cgen.str
+}
+
+genguestnick {
+  return guesto $+ $strgen(2, 8)
+}
+
+lHxgen {
+  ;; generate a single lH number
+  ;; same as other alias but this one uses A-E instead of A-Z
+  %lH.look = lH-
+  :k0ng
+  %lH.hook = $r(0,1)
+  if (%lH.hook) { goto middle }
+  :top
+  %lH.line = $r(0,9)
+  goto bottom
+  :middle
+  %lH.sink = $r(A,E)
+  :bottom
+  %lH.look = %lH.look $+ $iif(%lH.hook,%lH.sink,%lH.line)
+  if ($len(%lH.look) == 11) { goto victory }
+  goto k0ng
+  :victory
+  return %lH.look
+}
+
+
+;; input mode letters
+;; combine these letters to form a prompt
+; e - show input editbox
+; p - show input password editbox
+; o - ok button
+; y - $yes $no buttons
+; n - $yes $no $cancel buttons
+; r - $retry $cancel buttons
+; v - return val $ok, $yes, $no, $cancel for buttons
+; g - right-align buttons
+; b - disables buttons for a second when dialog is displayed
+; f - return $no/$cancel for edit/combo boxes if no/cancel is pressed
+; h - "halt" error icon
+; q - "question mark"
+; i - "info" icon
+; w - "warning" notification
+; t - "star" icon
+; c - "bin" icon
+
+decision {
+  return $input($gettok($$1-, 3, 191), $gettok($$1-, 1, 191), $gettok($$1-, 2, 191))
+}
+
+deprecation {
+  %input.str = $$1-
+  %input.mode = $gettok(%input.str, 1, 191)
+  %input.title = $gettok(%input.str, 2, 191)
+  %input.prompt = $gettok(%input.str, 3, 191)
+
+  return $input(%input.prompt, %input.mode, %input.title)
+}
+
+
+explain {
+  return $$decision(ogb¿incorrigo syx $pipe what's this?¿ $+ $$1-)
+}
+
+implain {
+  return $$decision(iogb¿incorrigo syx $pipe more detailed explanation¿ $+ $$1-)
+}
+
+;; shocking lack of escape characters work-around
+c {
+  ; quickest way to use a comma in a string of text
+  ; without causing the current command to mistake
+  ; the syntax of an alias when it is used as an identifier
+  ; so it can return a value into thinking it is being
+  ; asked to parse an additional argument when it only
+  ; needs to put a comma into a string of text .. $c
+  return $chr(44)
+}
+
+idf {
+  if ($server) {
+    ;; if user is logged in / user mode +r
+    if (r isincs $usermode) {
+      return $true
+    }
+
+    if ($eval(% $+ $server $+ . $+ $me $+ .login,2)) {
+      return $true
+    }
+  }
+
+  ;; otherwise however
+  return $false
+}
+
+idfr {
+  if ($server) {
+    if (r isincs $usermode) {
+      return $true
+    }
+
+    return $false
+  }
+}
+
+idfc {
+  ;; disable popup menus when
+  ;; no account is logged into
+  if ($idf) { return $null }
+  return $style(2) $+
+}
+
+getuserID {
+  return $eval(% $+ $server $+ . $+ $me $+ .login, 2)
+}
+
+checkme {
+  if ($server != $null) { whois $me $me }
+  else { rawbak.d words incorrigo syx $pipe whois error¿You need to be connected to a server to make whois requests }
+}
+
+obk {
+  ; even more pathetic .... 'open bracket'
+  return $chr(40)
+}
+
+rhash {
+  ; an actual hash
+  return $chr(35)
+}
+
+cbk {
+  ; duhh what comes next deorge?
+  return $chr(41)
+}
+
+lo {
+  locops $$1-
+}
+
+go {
+  globops $$1-
+}
+
+pipe {
+  ; vertical '|' line (aka "pipe")
+  return $eval(|,0)
+}
+
+ampersand {
+  ; an ampersand symbol (&)
+  return $eval(&, 0)
+}
+
+percenti {
+  ; an actual percent symbol
+  return $eval(%, 0)
+}
+
+;;; secret passenge command
+cap.snaffle {
+  if (!%main.lkey) {
+    %main.lkey = $strgen(12,24)
+    echo -etcs Mode * Cap Snaffler: Your new loanword is %main.lkey
+  }
+  %caps.loanword = $$1-
+  return $encode(%caps.loanword, cl, %main.lkey)
+}
+
+cap.ds {
+  %caps.lwd = $$1-
+  return $decode(%caps.lwd, cl, %main.lkey)
+}
+
+capsnaffler {
+  noop $strgen(5,35)
+  %main.lkey = $strgen(21, 29)
+  return %main.lkey
+}
+
+cap.truba {
+  if (%caps.llwd || $len(%caps.llwd) > 1) {
+    return $decode(%caps.llwd, cl, %main.lkey)
+  }
+
+  return $null
+}
+
+
+quik.d {
+  ; pre-fabricated straight forward input prompts
+  set -e %yaword $$1
+  ; click a button quik
+  if (%yaword == death) { return $decision(ogtb¿ $+ $$2-) }
+  if (%yaword == crucial) { return $decision(hvnf¿ $+ $$2-) }
+  if (%yaword == binary) { return $decision(qvybf¿ $+ $$2-) }
+  if (%yaword == warnin) { .timer -m 1 100 return $decision(wovgb¿ $+ $$2-) }
+  if (%yaword == info) { .timer -m 1 100 return $decision(iovg¿ $+ $$2-) }
+  if (%yaword == problem) { return $decision(hrgbvf¿ $+ $$2-) }
+  ; type an answer quik - text / $cancel / (test for $ok / blank input)
+  ; double dollar $$ should fuck the entire thing off if input not indulged
+  if (%yaword == tellme) { return $decision(fqgbe¿ $+ $$2-) }
+  if (%yaword == doubled) {
+    set %inputmem $$decision(fqgbe¿ $+ $$2-)
+    if (%inputmem) {
+      .timer -m 1 250 unset %inputmem
+      return %inputmem
+    }
+  }
+  ; type hidden characters [with little 'eye' toggle] quik
+  if (%yaword == passgrip) { return $decision(qpfgbv¿ $+ $$2-) }
+  if (%yaword == pdoubled) {
+    set %inputmem $$decision(qpfgb¿ $+ $$2-)
+    if (%inputmem) {
+      .timer -m 1 250 unset %inputmem
+      return %inputmem
+    }
+  }
+}
+
+rawbak.d {
+  ; general info and error messages for raw responses
+  %yaword = $$1
+
+  ; different icon images
+  if (%yaword == info) { return $decision(oigv¿ $+ $$2-) }
+  if (%yaword == warnin) { return $decision(owgv¿ $+ $$2-) }
+  if (%yaword == error) { return $decision(ohgv¿ $+ $$2-) }
+  if (%yaword == words) { return $decision(ogv¿ $+ $$2-) }
+}
+
+quik.demo {
+  ;; first get button shit out the way
+  set %lovelyhead incorrigo syx $chr(124)
+  echo -stc own * Quik-demo of decision system 2.0 who d fuk needz vicky p after today it will be vicky me
+  echo -stc own * Four button icon combo test:
+  echo -stc own * crucial: $quik.d(crucial, %lovelyhead crucial decision¿Are you going to decide yes? $+ $crlf $+ Are you going to decide no? $+ $crlf $+ So what, you come all this way and you seriously expect me to believe that you're just gonna fucking quit? $+ $crlf $crlf $+ Decision time, big man. What's it gonna be?)
+  echo -stc own * binary: $quik.d(binary, %lovelyhead conclusive contribution¿You thought that was easy? Well it must be your lucky day $+ $c sunshiiiine $+ $c coz this is even EASIER... $+ $crlf $crlf $crlf $+ YES? ... or ..... fucking $crlf $+ ....  NO!? Mucho gringo pendejo :/)
+  echo -stc own * simple notification: even tho its a message with exclamation mark, still might return a value $quik.d(warnin, %lovelyhead piece of friendly advice¿This is a more grown-up $+ $c intellectual version of a notice. Even though $+ $c THAT notice )
+  echo -stc own * stress test notification: $quik.d(warnin, %lovelyhead beautifeele pristine $+ $c IMMACULATE :O ooooooo *whoops* notation¿this is an extreme case that uses multiple characters there is no escape character possible to prevent breaking of syntax .... $+ $crlf $crlf $+ $obk $+ you can take this motherfucking $+ $c comma separated $+ $c cunt-themed sonofabitch to the motherfukkin BANK $+ $cbk)
+  echo -stc own * 25 years moment of truth: $quik.d(warnin, %lovelyhead moment of truth¿For twenty five years $+ $c even much of that spend only partially aware of the concept of an escape character $+ $c solely because anything that involved windows file paths and back slashes in general were just - at the time - something I thought to be sloppily $+ $c awkwardly sort-of nuanced $+ $c I have been making life un-necessarily difficult for myself by coming up with $obk $+ pointless shortcut identifiers $+ $c extravagant variables set purely so I could put text where text would fuck up the thing it's meant to be helping to go $+ $c and even then not using them $+ $c when escape characters have blatantly gone unattempted for all this time! $+ $cbk $+ $crlf $crlf $+ Even having said all this shit ... still yet to do the one ultimate thing that will make or break me as a mIRC scripted even though it is the first time I have used tokens as well which is more prominently ... script- al -ly ... pathetic $+ $crlf $crlf $+ Here goes nothin! (what a total, utter, WANKER...))
+}
+
+decision.test {
+  %decided = $decision(hvnb¿incorrigo syx $chr(124) oi dick edd .... ¿where do you think things like that gonna get ya?)
+  if (%decided == $yes) { echo -atc mode * Man from del monte, he say YES | return %decided }
+  if (%decided == $no) { echo -atc mode * Man from del monte, he say NO :( | return %decided }
+  if (%decided == $cancel) { echo -atc mode * Man from del monte, he fuck off not even bother ses so ???? | return %decided }
+}
+
+;; grey out menu for channels you don't control
+wdy {
+  if ($sysop) { return $null }
+  if ($me !isop $$1) { return $style(2) }
+  return $null
+}
+
+wxy {
+  if ($me !ishop $$1) { return $style(2) }
+  return $null
+}
+
+wzy {
+  if ($me isop $$1) {
+    return $null
+  }
+
+  if ($me ishop $$1) {
+    return $null
+  }
+
+  if ($sysop) {
+    return $null
+  }
+
+  return $style(2)
+}
+
+
+;; read status [in channel] mode changes in plain english
+smc {
+  return $iif($group(#statusmodechange).status == on, $style(1), $null) $+
+}
+
+togglesmc {
+  if ($group(#statusmodechange).status == on) { .disable #statusmodechange | return }
+  else .enable #statusmodechange
+}
+
+;; grey out if not channel operator $notop
+notop {
+  if ($me !isop $$1) { return $style(2) }
+  return $null
+}
+
+;; check online status (decision identifier)
+nln {
+  if ($server != $null) { return $true }
+  if ($server == $null) { return $false }
+}
+
+pnln {
+  return $iif($nln == $true, $null, $style(2)) $+
+}
+
+pnlnf {
+  ; online AND registered AND identified
+  return $iif($nln && $idf, $null, $style(2)) $+
+}
+
+;; return 'grey out' if not on channel $1
+wwy {
+  if ($me !ison $$1) { return $style(2) }
+  return $null
+}
+
+wwk {
+  if ($me ison $$1) { return $true }
+  else return $false
+}
+
+;; internal encryption layer
+;; 
+
+;; connect duration
+getconnectid {
+  return $duration($calc($ctime - $eval(% $+ $server $+ . $+ $me $+ .connectid,2)))
+}
+
+getctcp {
+  return $eval(% $+ $server $+ . $+ $me $+ .ctcp,2)
+}
+
+getctcp-x {
+  return $eval(% $+ $server $+ . $+ $me $+ .ctcp-x,2)
+}
+
+;; access mIRC channel settings depending on channel operator status
+ls {
+  %aktiv = #
+  if ($1) { %aktiv = $1 }
+
+  if ($server) {
+    if ($me ison %aktiv) {
+      if ($me !isop %aktiv) {
+        if ($me !ishop %aktiv) {
+          rawbak.d words incorrigo syx $pipe channel settings¿You're not a channel operator on %aktiv $+ $c so the channel settings are read only.
+        }
+      }
+      channel
+    }
+
+    else {
+      channel
+    }
+
+  }
+
+  if ($me !ison %aktiv) {
+    if (%aktiv != $null) { rawbak.d words incorrigo syx $pipe channel settings¿You can't see the channel settings when you're not on the channel }
+    else { rawbak.d words incorrigo syx $pipe channel settings¿It's a bit difficult to figure out which channel you're trying to get the modes of ... }
+  }
+}
+
+if (!$server) {
+  rawbak.d error incorrigoo syx $pipe channel settings¿You must be connected to the network to look at the settings of any channel
+
+}

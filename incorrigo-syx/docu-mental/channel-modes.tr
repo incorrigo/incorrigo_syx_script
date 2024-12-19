@@ -1,0 +1,19 @@
+When you want to control what goes on, who gets in, what people are allowed to do, on your channel; this is done by using settings called modes
+
+If you right-click a channel while you are a channel operator [@] and go to "Set Channel Modes" you will see a list of all possible channel modes [the modes are listed in alphabetical order]
+
+For most of the modes, you will see a "What is This?" option, which will tell you information about a specific mode
+
+Some modes require parameters, for example = setting a user limit in a channel
+
+/mode #channelname +l 150
+This will set a maximum user count of 150 ... once the 151st user tries to join, they will be denied access
+
+/mode #channelname +L #rejects
+Note that channel modes are CaSe SeNsItIvE .... this mode will automatically forward users who can't get in [for any reason ... banned, invite only] to another channel - in this example #rejects
+
+To set modes you use + as you can see here. To unset modes /mode #channelname -L will remove the channel link and it won't do that anymore
+
+Explore the list of channel modes by creating a new channel [joining one that doesn't exist yet] ... you will have descriptions of all the modes
+
+When creating a new channel, the default modes +nt are automatically set

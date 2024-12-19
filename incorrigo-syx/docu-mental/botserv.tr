@@ -1,0 +1,30 @@
+Botserv provides registered channels with a fully functional bot that gives you extra settings and commands, in extension to what chanserv already provides
+
+- List of bots
+There is a list of bots to choose from, which you can see via command: /botserv botlist
+
+- Assign a bot
+When you have chosen a bot name from the list, you can assign the bot using /botserv assign #channelname botnickname
+
+- Command your bot
+There are a lot of extra commands you can use by speaking in the channel. Bot commands begin with ! or . so to see a list of these commands, go into the channel where the bot is present and type !help or .help
+
+- Enforce your rules
+You can choose what you wish your bot to enforce by setting the KICK options directly with botserv. /query botserv help kick
+
+- Change your settings
+If you want to decide how your bot behaves / set ban expiry from kick settings, you could check out /botserv help set
+
+- Joining the channel
+If the channel your bot is assigned to goes completely empty, the bot will leave the channel as well
+
+As soon as someone is detected in your channel, your bot will join again and op itself
+
+- Same bot other channels?
+No matter which bot you use, it is classed as a network service. This means no one can see what channels your bot is in, even if they share some of these channels
+
+And in the same way, none of the options you have chosen for one channel will have no effect on any other channel - even if the other channel is also yours
+
+- There are other bots not on 'botlist'
+Some botserv bots are configured differently and can only be assigned by a services operator who has the permission to use them. If you right click and --> whois them, you will be told if that bot can be used or not
+

@@ -1,0 +1,16 @@
+You are not allowed to remove user mode x on Incorrigo Syx
+
+This is an explanation about why
+
+A mIRC script was developed for Incorrigo Syx mainly to introduce new users to IRC client / server software, to discover a great way to interact with millions of people worldwide over the internet
+
+When you connect to the network, your address is "cloaked" - which scrambles up either your IP, or replaces the first part of your hostname with an lH-12345678 number - so it is still unique [and can be used to ban you / give you special permissions] to your internet connection, but it can't be used by anyone to try and connect to you over the internet
+
+You can de-cloak your address by setting user mode -x, so we disabled this
+
+If this was allowed, then another user could potentially persuade people to unset this mode while having no prior knowledge that this could be used in an harmful or dishonest way. This way, when people are encouraged to start using an IRC client, they are not discouraged by being tricked into letting themselves in for an online attack
+
+You're still perfectly within your rights to disclose your real hostname or IP address. It is not prohibited and we don't interfere with your decision to do this. You automatically advertise your real IP / hostname when you send someone a DCC chat or file send request, for example
+
+Try to make sure you're responsible with your personal information, and don't give it up so easily
+

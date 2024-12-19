@@ -1,0 +1,21 @@
+This network allows the use of bots with just a few conditions they must meet
+
+- The connecting node must be yours, i.e.
++ Not a compromised machine
++ Have no commercial or advertising agenda of any kind
++ Nothing that is used as any part of a denial of service attack
+
+- Joining channels indiscriminately for any purpose is not allowed
+- Any unwanted behaviour that it brought to your attention must stop
+- Advertising other networks or commercial ventures must have target's consent
+- There must be no automated activity that targets / victimises individuals
+
+We provide a list of publicly available bots that can be assigned to registered channels. This is done using a service called botserv
+
+A services bot - when you assign it to your channel - will take over most of the automatic things otherwise provided by chanserv
+
+When you assign a bot to your registered channel, it will accept your commands [say !help while the bot is on the channel for a complete list], and provide some useful features chanserv does not provide - which can be configured and managed through botserv
+
+Start a botserv session to see what it can do for your registered channel: 
+
+/query botserv help

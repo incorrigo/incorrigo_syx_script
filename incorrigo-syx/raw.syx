@@ -1,0 +1,976 @@
+;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; Raw server messages and information cues
+
+; information based on user IP or hostname / whois response
+
+raw 340:*: {
+  ;; used for network engineer operations
+  ronnik get.host $deltok($$2-, 1, 64)
+}
+
+raw 340:*: {
+  ;; used for network engineer operations
+  ronnik get.ip $deltok($$2-, 1, 64)
+}
+
+raw 344:*: {
+  haltdef
+  echo -astc Whois * Geographical Location: [ $+ $$3 $+ ] $$7-
+}
+
+;; chat history retrieval
+raw BATCH:*chathistory*: {
+  if ($2 == chathistory && $left($1, 1) == +) {
+    if ($left($1,  1) == +) {
+      set -e %playback.batch $right($1, -1)
+      set -e %playback.channel $3
+      echo -tc Mode $3 * Batch: Receiving history playback ...
+      ronnik empty-batch 1
+    }
+  }
+}
+
+on *:TEXT:*:#: {
+  if ($msgtags(batch).key != $null) {
+    ronnik empty-batch 0
+  }
+}
+
+on *:ACTION:*:#: {
+  if ($msgtags(batch).key != $null) {
+    ronnik empty-batch 0
+  }
+}
+
+raw BATCH:*: {
+  if ($left($1, 1) == - && $right($1, -1) == %playback.batch && $me ison %playback.channel) {
+    if ($ironnik(empty-batch) == 1) {
+      echo -tc Info %playback.channel This batch appears to be empty
+    }
+    echo -tc Mode %playback.channel * Batch: End of batch ...
+  }
+}
+
+;; nickserv delay for new account
+on ^nickserv:NOTICE:You must have been*:*: {
+  haltdef
+  echo -stc Info2 New Account Delay: $$1-
+  .timer -m 1 100 pushdd $$1-
+}
+
+alias -l pushdd {
+  noop noop $$decision(iogb¿incorrigo syx $pipe new user account¿For a new account you currently need to be using your nickname for $duration($11) $+ $crlf $crlf $+ You only need to do this once and can add any other available nicknames you want when you have confirmed your new account)
+}
+
+;; general server / command error messages
+on ^*:USERMODE: {
+  ;; modes are still case sensitive
+
+  haltdef
+  if ($$1 === -r) {
+    echo -estc info * Unregistered Nickname: Identified status removed by  $+ $nick $+ 
+    goto done
+  }
+
+  if ($$1 === +r) {
+    echo -eastc mode * Registered Nickname: You are identified by $nick as  $+ $me $+ 
+    goto done
+  }
+
+  if ($$1 === +w) {
+    echo -eastc wallops * Wallops: You are now receiving wallops messages
+    goto done
+  }
+  if ($$1 === -w) {
+    echo -eastc wallops * Wallops: No more wallops messages will be received
+    goto done
+  }
+
+  echo -eastc Mode * User Mode: $nick sets mode $$1-
+  :done
+}
+
+
+ctcp ^*:PING:#: haltdef | echo -astc CTCP * CTCP: $nick has just pinged #
+ctcp ^*:PING:?: haltdef | echo -astc CTCP * CTCP: $nick has sent you a PING request
+ctcp ^*:VERSION:#: {
+  haltdef
+  echo -astc CTCP * CTCP: $nick sends  $+ # $+  a client version request
+}
+
+ctcp ^*:VERSION:?: {
+  haltdef
+  echo -astc CTCP * CTCP: $nick requests your client version
+  /notice $nick I am using 14,1incorrigo15,1syx IRC Network - script for mIRC - version %lacigare by 4,1westid. - 13https://incorrigo.io/ / 13#incorrigo
+}
+
+ctcp ^*:TIME:*: {
+  haltdef  
+  if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
+    %ctcp.timeformat = 1
+  }
+  if (%ctcp.timeformat == 1) {
+    .ctcpreply $nick TIME [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ] [ $+ $asctime(dddd) $timeofdaynow $+ ] [ $+ $asctime(yyyy-mm-dd) $+ ]
+  }
+
+  if (%ctcp.timeformat == 2) {
+    .ctcpreply $nick TIME [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ]
+  }
+
+  if (%ctcp.timeformat == 3) {
+    .ctcpreply $nick TIME $asctime(HH:nnTT) - GMT $asctime(z)
+  }
+
+  if (%ctcp.timeformat == 4) {
+    .ctcpreply $nick TIME $asctime(HH:nnTT) $asctime(yyyy-mm-dd)
+  }
+
+  if (%ctcp.timeformat == 5) {
+    .ctcpreply $nick TIME $asctime(dddd) $timeofdaynow $asctime(yyyy-mm-dd)
+  }
+}
+
+alias timeformat {
+  if (%ctcp.timeformat !isnum) {
+    echo -atc Info * Time format reset
+    %ctcp.timeformat = 1
+  }
+
+  else {
+    return %ctcp.timeformat
+  }
+}
+
+on *:CTCPREPLY:*: {
+  haltdef
+  echo -atc CTCP *  $+ $nick CTCP Reply:  $+ $1 $+  - $2-
+}
+
+;; undesirable gobbledigook that brand new users won't need to try and understant
+#connectbullshit on
+raw 004:*: halt
+raw 005:*: halt
+on ^*:ERROR:CAP*: haltdef | halt
+#connectbullshit end
+
+raw 401:*: .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($chr(124),0) server response¿ $+ $2 $+ $crlf $crlf $+ $3-
+raw 421:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) command¿There was a problem using the command / $+ $2 $+ $crlf $crlf $+ $3-
+raw 464:*: .timer -m 1 1 deny.oper $$1-
+
+raw 481:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$2-
+raw 491:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) network engineer login¿ $+ $$2-
+raw 432:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) nick error¿Unable to use nickname $2 $+ $+ $crlf $crlf $+ $3-
+raw 437:*: {
+  if (%get.the.message != $2) {
+    echo -atc Nick * Unable to change your nickname. [ $+ $2 $+ ] $3-
+    %get.the.message = $2
+    .timer 1 28 unset %get.the.message
+  }
+}
+
+raw 438:*: {
+  .timer -m 1 1 too.quick.nick $$1-
+}
+
+alias -l too.quick.nick {
+  return $$decision(hog¿incorrigo syx $pipe change nickname error¿Unable to change nickname to $2 $+ $crlf $crlf $+ Server: $3-)
+}
+
+raw 439:*: {
+  .timer -m 1 1 wellnow $$1-
+}
+
+alias -l wellnow {
+  return $$decision(hog¿incorrigo syx $pipe belt tightening¿You are changing your message target too quickly and your message was not sent $+ $crlf $crlf $+ Server: $3-)
+}
+
+raw 440:*: .timer -m 1 1 dontlookdown $2 $$3-
+
+alias -l dontlookdown {
+  return $$decision(hugo¿incorrigo syx $pipe network manager¿Unable to reach $1 because the link with the network manager is down. $+ $crlf $crlf $+ Message $$2-)
+}
+
+;; SASL authentication and account login messages
+raw 903:*: {
+  ; whaddya do when you win?
+  haltdef
+  echo -stc Notify * SASL: $$2-
+}
+
+raw 904:*: {
+  ; whaddya do when you lose?
+  haltdef
+  echo -stc Notify * SASL: $$2-
+}
+
+raw 900:*: {
+  haltdef
+  ;; slows it down so it's not buried under a load of
+  ;; crap if new-ish user happened to use SASL
+  if ($calc($ctime - $eval(% $+ $server $+ . $+ $me $+ .connectid,2)) < 10) {
+    .timer 1 5 echo -stc Info2 * User Account: $$4- 
+    goto done
+  }
+  :doesntmatter
+  echo -stc Info2 * User Account: $$4-
+  :done
+  if ($left($server, 3) == irc) {
+    ; this introduces a race condition and should be "better"ed
+    .timer 1 5 fudgethefuckinglogin $3 $4-
+  }
+
+  else {
+    set -e % $+ $server $+ . $+ $me $+ .login $strip($3)
+  }
+
+}
+
+;;; contingency - this method doesn't throw a 900 message
+on nickserv:NOTICE:SSL certificate fingerprint accepted,*:?: {
+  set -e % $+ $server $+ . $+ $me $+ .login $strip($left($10,-1))
+  echo -stc Info2 * User Account: Your current TLS certificate has auto-logged you in as  $+ $eval(% $+ $server $+ . $+ $me $+ .login, 2) $+ 
+}
+
+
+alias -l fudgethefuckinglogin {
+  ;; SASL makes mIRC actually believe that the
+  ;; current server is the "irc..." DNS RR
+  set -e % $+ $server $+ . $+ $me $+ .login $$1
+  echo -stc Info * Account Status: $$2-
+}
+
+raw 901:*: {
+  haltdef
+  echo -stc Info * Account Logout: $$3-
+  unset % $+ $server $+ . $+ $me $+ .login
+}
+
+raw 906:*: {
+  haltdef
+  echo -stc Notify * SASL Login: $$2- $iif(%spoon == feedme,[Use the command /whatissasl to learn about SASL],$null)
+}
+
+;; access denied channel messages
+raw 470:*: .timer -m 1 100 waylay $1-
+raw 471:*: .timer -m 1 100 channel.full $2
+raw 475:*: .timer -m 1 100 channel.key $2
+raw 473:*: .timer -m 1 100 channel.knock $2
+raw 474:*: .timer -m 1 100 no.chance $2
+raw 460:*: .timer -m 1 100 mode.halfop $$2-
+raw 448:*: .timer -m 1 100 deny.channel $$1-
+raw 518:*: .timer -m 1 100 deny.invite $$1-
+raw 520:*: .timer -m 1 100 oper.channel $$1-
+raw 531:*Cannot DCC SEND*: {
+  echo -stc Mode * DCC Send: $$3-
+  .timer -m 1 100 no.dcc $$1-
+  halt
+}
+raw 531:*: {
+  echo -stc Mode * DCC: $1-
+  .timer -m 1 100 no.privates $$1-
+
+}
+raw 972:*: .timer -m 1 100 chmode.q $$1-
+raw 974:*: .timer -m 1 100 chmode.not.irc.op $$1-
+
+raw 482:*: .timer -m 1 100 decision bog¿incorrigo syx $eval($chr(124), 0) channel info¿Permission denied in $2 $+ $crlf $crlf $+ $3-
+raw 499:*: .timer -m 1 100 decision bog¿incorrigo syx $eval($chr(124), 0) channel info¿Permission denied in $2 $+ $crlf $crlf $+ $3-
+
+alias -l no.privates {
+  if (CTCP !isincs $$1-) {
+    noop $decision(owbg¿incorrigo syx $pipe private messages¿Your private message could not be sent to $$2 $+ $crlf $crlf $+ $$3-)
+    halt
+  }
+
+  else { noop $decision(owbg¿incorrigo syx $pipe ctcp request¿Your CTCP request could not be sent to $$2 $+ $crlf $crlf $+ $$3-) }
+}
+
+alias -l no.dcc {
+  noop $decision(uoh¿incorrigo syx $pipe dcc send¿Your file transfer to $2 was stopped by the server $+ $crlf $crlf $+ $$7-)
+}
+
+alias -l deny.invite {
+  noop $decision(ugo¿incorrigo syx $pipe invitation denied¿Permission to send your invite was denied: $+ $crlf $crlf $+ $2- $+ )
+}
+
+alias mode.halfop {
+  decision ubg¿incorrigo syx $pipe interesting fact¿Error message: $+ $crlf $crlf $+ $1-
+}
+;; /WHOIS detailed information
+raw 311:*: {
+  haltdef
+  set %scan.nick $2
+  set %scan.ident $false
+  set %scan.sgstr $false
+  set %scan.groups $false
+  set %scan.netservice $false
+  set %scan.groupconcat $false
+  set %scan.reputation $false
+  set %scan.ident $false
+  set %scan.gecos $false
+  set %scan.away $false
+  set %scan.certfp $false
+  set %scan.umodes $false
+  set %scan.snomask $false
+  set %scan.realuserhost $false
+  set %scan.realip $false
+  set %scan.isbot $false
+  set %scan.srv $false
+  set %scan.oline $false
+  set %scan.netservice $false
+  set %scan.operclass $false
+  set %scan.channels $false
+  set %scan.account $false
+  set %scan.isid $false
+  set %scan.asid $false
+  set %scan.oper $false
+  set %scan.ident $3
+  set %scan.xhost $4
+  set %scan.gecos $6-
+  echo -act Whois *** This is $2 $+   $+ $chr(91) $+  $+ $3 $+ @ $+ $4 $+  $+ $chr(93) $+   $+ $6- $+ 
+  if ($4 == bot.incorrigo.io) {
+    .timer -m 1 100 rawbak.d info incorrigo syx $eval($chr(124),0) botserv client¿ $+ $2 is a network services bot provided by botserv $+ $crlf $crlf $+ For more information: /query botserv help
+  }
+
+  if ($4 == t-bot.incorrigo.io) {
+    .timer -m 1 100 quik.d warnin incorrigo syx $eval($chr(124),0) operator's bot¿ $+ $2 is an executive channel bot $+ $crlf $crlf $+ This bot can only be assigned or configured by a services operator
+  }
+}
+
+raw 320:*: {
+  haltdef
+  if ($9 $10 == reputation score) {
+    haltdef
+    %scan.reputation = $12
+    echo -atc Whois * Reputation Score: %scan.nick reputation score is %scan.reputation
+    halt
+  }
+  if ($numtok($6, 44) > 1) {
+    haltdef
+    %scan.sgstr = $6
+    %scan.groups = $numtok($6, 44)
+    %scan.counter = 0
+    %scan.groupconcat = $null
+    while (%scan.counter <= %scan.groups) {
+      inc %scan.counter
+      %scan.groupconcat = %scan.groupconcat $gettok(%scan.sgstr, %scan.counter, 44)
+    }
+    echo -atc Whois * Security Groups: %scan.nick is in %scan.groups security group $+ $iif(%scan.groups > 1,s,$null) $+ : %scan.groupconcat
+    ;; .timer -m 1 100 decision ogb¿incorrigo syx $eval($chr(124), 0) security group info¿ $+ %scan.nick is in the following security groups: $+ $crlf $crlf $+ %scan.groupconcat
+    return
+  }
+  else {
+    .timer -m 1 100 decision ogb¿incorrigo syx $eval($chr(124), 0) in particular¿ $+ $$2-
+  }
+
+}
+
+raw 301:*: {
+  haltdef
+  %scan.away = $3-
+  echo -act Whois * Away From Keyboard:: $2 is away ( $+ $3- $+ )
+}
+
+
+raw 307:*: {
+  haltdef
+  %scan.isid = $true
+  echo -act Whois * Registered Nickname:  $+ %scan.nick $+  $3  $+ $4- $+ 
+}
+
+raw 569:*: {
+  haltdef
+  %scan.asid = $3
+  echo -act Whois * Service Provider ID: AS $+ %scan.asid  $+ $chr(91) $+  $+ $remove($8-,$chr(91),$chr(93)) $+  $+ $chr(93) $+ 
+}
+
+raw 312:*: {
+  haltdef
+  %scan.srv = $3
+  echo -act Whois * Server: %scan.srv  $+ $chr(91) $+  $+ $4- $+  $+ $chr(93) $+ 
+}
+raw 313:*: {
+  haltdef
+  if ($5 $6 == IRC Operator) { %scan.oper = $true }
+  if ($5 $6 == Network Service) { %scan.netservice = $true }
+  if ($7) { %scan.oline = $remove($7,$obk,$cbk) }
+  if ($8) { %scan.operclass = $remove($8,$chr(91),$chr(93)) }
+  echo -act Whois * Operator: $2 $3 $4 $5 $6 $iif($7,O-Line: $remove($7,$obk,$cbk),$null) $iif($8,Operclass: $remove($8,$chr(91),$chr(93)),$null)
+  if ($2 == nickserv) { text-reader incorrigo-syx\docu-mental\nickserv.tr Account Registration and Protection Service }
+  if ($2 == chanserv) { .timer -m 1 1 whois.chanserv }
+  if ($2 == operserv) { .timer -m 1 1 whois.operserv }
+  if ($2 == memoserv) { whois.memoserv }
+  if ($2 == hostserv) { whois.hostserv }
+  if ($2 == botserv) { text-reader incorrigo-syx\docu-mental\botserv.tr Extra Empowering Channel Bot Service} }
+}
+
+alias -l whois.operserv {
+  .timer -m 1 1 noop $decision(gbo¿incorrigo syx $pipe executive service¿Operserv is the executive service $+ $c and can only be used by a services operator $+ $crlf $crlf $+ $&
+    For a full list of services available when you're logged into a user account $+ $c /join #services)
+
+}
+
+alias -l whois.chanserv {
+  if ($decision(yvg¿incorrigo syx $pipe channel service¿Chanserv is one of the network services $+ $c handling the registration and management of channels $+ $crlf $crlf $+ $&
+    Menus when you right-click the channel window / a nickname in the list $+ $c will become available when you log into a services account $+ $crlf $crlf $+ $&
+    Would you like to read more information about chanserv?) == $yes) {
+    text-reader incorrigo-syx\docu-mental\chanserv.tr Chanserv: Own Your Channels
+  }
+}
+
+alias -l whois.memoserv {
+  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) memoserv¿You use memoserv to send and receive messages $+ $c whether the recipient [registered user / channel] is currently online or not $&
+    $+ $crlf $crlf $+ You must be logged into an account / have operator permissions on a channel; to use memoserv
+}
+
+alias -l whois.hostserv {
+  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) hostserv¿Hostserv is the vHost manager. When a registered user logs into their account $+ $c hostserv applies a vanity hostname [vHost] that will be shown to other users in their user lookups and ban lists $+ $crlf $crlf $+ For more information about using hostserv for the nicknames in your account $+ $c use this command: $+ $crlf $crlf $+ /query hostserv help
+}
+
+alias -l whois.botserv {
+  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) botserv¿Botserv is a service that gives you a fully functioning and configurable bot for your registered channel $+ $crlf $crlf $+ $&
+    Your bot will perform all the commands that chanserv does $+ $c accepts your !commands you say in the channel $+ $c gives the ability to enforce your channel rules which will kick in even if you're not there $&
+    $+ $crlf $crlf
+}
+
+raw 742:*active MLOCK restriction*: {
+  .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($pipe, 0) channel mode¿Unable to change mode $3 in $2 $+ $crlf $crlf $+ Mode $+ $iif($len($4) > 1,s, $null) $iif($len($4) > 1,$left($4, -2) and $right($4, 1), $4) cannot be changed because of a mode lock set by services
+}
+
+raw 317:*: {
+  haltdef
+  echo -atc Whois * Time Speculation: $2 has been idle for  $+ $duration($3) $+   $+ $chr(91) $+  $+ Signed on:  $+ $asctime($4,yyyy-mm-dd dddd @ HH:nn) $+ $chr(93) $+ 
+}
+raw 318:*: {
+  haltdef
+  echo -atc Whois *** That was  $+ $2 $+ .
+}
+raw 319:*: {
+  haltdef
+  %scan.channels = $3-
+  %scan.numchannels = $numtok(%scan.channels, 32)
+  if (%scan.numchannels == 0) { %scan.numchannels = 1 }
+  echo -atc Whois * On %scan.numchannels Channel $+ $iif(%scan.numchannels > 1,s,$null) $+ : %scan.channels
+}
+raw 276:*: {
+  haltdef
+  %scan.certfp = $7
+  echo -atc Whois * Client Certificate Fingerprint: %scan.certfp
+}
+raw 330:*: {
+  haltdef
+  %scan.account = $3
+  echo -act Whois * Account: $2 is logged in as  $+ $3 $+ 
+}
+raw 335:*: {
+  haltdef
+  %scan.isbot = $true
+  echo -act Whois *  $+ $2 $+  $3-
+}
+
+
+raw 378:*: {
+  haltdef
+  if ($2 == $me && %selfr == $true) { set %selfr $false | .timer -m 1 100 decision iog¿incorrigo syx $eval($chr(124),0) real user host¿Only you or a systems operator can see the real IP in your whois response }
+  %scan.realuserhost = $6
+  %scan.realip = $7
+  echo -atc Whois * Real Userhost: %scan.realuserhost IP Address: %scan.realip
+}
+raw 379:*: {
+  haltdef
+  %scan.umodes = $6
+  if ($7) { %scan.snomask = $7 }
+  else { %scan.snomask = $null }
+  echo -act Whois * User Modes: %scan.umodes $iif(%scan.snomask != $null,Snomask: %scan.snomask,$null)
+}
+raw 671:*: { haltdef | echo -atc Whois * Secure Line: $2 is connected securely with TLS  $+ $remove($8,$chr(91),$chr(93)) $+  }
+
+;; services account login / sasl and other authentication messages from raw numeric
+raw 381:*: .timer -m 1 100 decision ogt¿incorrigo syx $eval($chr(124), 0) network engineer¿ $+ $$2-
+raw 382:*: {
+  haltdef
+  echo -astc Info * Server $3 $+ : [ $+ $nick $+ ] [ Path: $2 $+ ]
+}
+raw 396:*: {
+  haltdef
+  $iif(![% $+ $server $+ . $+ $me $+ .connectid],.timer 1 3,$null) echo -stc Info2 * Host / IP:  $+ $chr(91) $+  $+ $2 $+  $+ $chr(93) $+  $3-
+}
+
+on ^*:SNOTICE:*Your vhost is now*: {
+  haltdef
+  echo -atc Notice *  $+ $nick $+ : $2-
+}
+
+;; channel list read-out / report
+raw INVITE:*: {
+  haltdef
+  %invite-notify.by = $right($gettok($rawmsg,1,33), -1)
+  %invite-notify.on = $2
+  %invite-notify.to = $1
+  if ($me ison %invite-notify.on) { echo -tc Info2 %invite-notify.on * Invite: %invite-notify.by has invited %invite-notify.to to join %invite-notify.on }
+}
+
+raw SILENCE:*: {
+  haltdef
+  echo -astc Info2 * Silence: $iif($left($1, 1) == +,Added silence for $1-,Removed silence for $1-)
+}
+
+raw 271:*: {
+  haltdef
+  echo -astc Info * Silence: $2
+}
+
+raw 272:*: {
+  haltdef
+  echo -astc Info * End of Silence List.
+}
+
+on *:CONNECT: {
+  ;; don't wanna accidentally wipe an entire listmode
+  ;; just because these were out of alignment ;)
+  %link.certfp = $false
+  .enable #switchbanlist
+  .enable #switchinvitelist
+  .enable #switchexceptlist
+  .disable #switchclearbans
+  .disable #switchclearexcepts
+  .disable #switchclearinvites
+  if (%wallops) { mode $me +w }
+  if (%spoon != thereisno) { echo -stc * Connected: Right click the blank space in this / channel windows / user in channel list, to perform commands }
+  ;; a timestamp of $online for current nickname on connect time
+}
+
+#switchbanlist on
+raw 367:*: {
+  haltdef
+  if ($me ison $2) {
+    if (%mode.report == $2) { goto already }
+    if (%mode.report == $null || %mode.report != $2) {
+      %mode.report = $2
+      %mode.counter = 0
+      echo -tc Invite $2 *  $+ $2 $+  channel ban list:
+    }
+    :already
+    inc %mode.counter
+    echo -tc Invite $2 *  $+ %mode.counter $+  - ban: $3 by: $4 banned on: $asctime($5,yyyy-mm-dd hh:nnTT)
+  }
+}
+
+raw 368:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.report) {
+      echo -tc Invite $2 * - - - - -
+      echo -tc Invite $2 * Ban List: The ban list for  $+ $2 $+  is empty
+    }
+    echo -tc Invite $2 *  $+ $2 $+  end of channel ban list.
+    echo -tc Invite $2 * - - - - -
+    unset %mode.report
+    unset %mode.counter
+  }
+}
+#switchbanlist end
+
+alias clear.bans {
+  if ($group(#switchbanlist) == on) {
+    switchclear.bans
+    mode $$1 +b
+    return 0
+  }
+}
+
+alias -l switchover.bans {
+  .enable #switchbanlist
+  .disable #switchclearbans
+}
+
+alias -l switchclear.bans {
+  .enable #switchclearbans
+  .disable #switchbanlist
+}
+
+#switchclearbans off
+raw 367:*: {
+  haltdef
+  if ($me ison $2) {
+    if (%mode.report == $2) { goto already }
+    if (!%mode.report ^ %mode.report != $2) {
+      %mode.report = $2
+      %mode.counter = 0
+      echo -tc Mode $2 *  $+ $2 $+  clearing all bans ...
+    }
+    :already
+    inc %mode.counter
+    mode %mode.report -b $3
+  }
+}
+
+raw 368:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.report) {
+      echo -tc Mode $2 * Ban List: There are no bans in  $+ $2 $+  to remove
+    }
+    unset %mode.report
+    unset %mode.counter
+    switchover.bans
+  }
+}
+#switchclearbans end
+
+#switchinvitelist on
+raw 346:*: {
+  haltdef
+  if ($me ison $2) {
+    if (%mode.report == $2) { goto already }
+    if (!%mode.report ^ %mode.report != $2) {
+      %mode.report = $2
+      %mode.counter = 0
+      echo -tc Invite $2 * - - - - -
+      echo -tc Invite $2 *  $+ $2 $+  channel invitation list:
+    }
+    :already
+    inc %mode.counter
+    echo -tc Invite $2 *  $+ %mode.counter $+  - invitation: $3 by: $4 added on: $asctime($5,yyyy-mm-dd hh:nnTT)
+  }
+}
+
+raw 347:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.report) {
+      echo -tc Invite $2 * - - - - -
+      echo -tc Invite $2 * Invite List: The invitation list for  $+ $2 $+  is empty
+    }
+    echo -tc Invite $2 *  $+ $2 $+  end of channel invitation list.
+    echo -tc Invite $2 * - - - - -
+    unset %mode.report
+    unset %mode.counter
+  }
+}
+#switchinvitelist end
+
+alias clear.invites {
+  if ($group(#switchinvitelist) == on) {
+    switchclear.invites
+    mode $$1 +I
+    return 0
+  }
+}
+
+alias -l switchover.invites {
+  .enable #switchinvitelist
+  .disable #switchclearinvites
+}
+
+alias -l switchclear.invites {
+  .enable #switchclearinvites
+  .disable #switchinvitelist
+}
+
+#switchclearinvites off
+raw 346:*: {
+  haltdef
+  if ($me ison $2) {
+    if (%mode.report == $2) { goto already }
+    if (!%mode.report ^ %mode.report != $2) {
+      %mode.report = $2
+      %mode.counter = 0
+      echo -tc Mode $2 *  $+ $2 $+  clearing all invites ...
+    }
+    :already
+    inc %mode.counter
+    mode %mode.report -I $3
+  }
+}
+
+raw 347:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.report) {
+      echo -tc Mode $2 * Invite List: There are no invites in  $+ $2 $+  to remove
+    }
+    unset %mode.report
+    unset %mode.counter
+    switchover.invites
+  }
+}
+#switchclearinvites end
+
+#switchexceptlist on
+raw 348:*: {
+  haltdef
+  if ($me ison $2) {
+    if (%mode.report == $2) { goto already }
+    if (!%mode.report ^ %mode.report != $2) {
+      %mode.report = $2
+      %mode.counter = 0
+      echo -tc Invite $2 * - - - - -
+      echo -tc Invite $2 *  $+ $2 $+  channel exception list:
+    }
+    :already
+    inc %mode.counter
+    echo -tc Invite $2 * %mode.counter - exception: $3 by: $4 added on: $asctime($5,yyyy-mm-dd hh:nnTT)
+  }
+}
+
+raw 349:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.report) {
+      echo -tc Invite $2 * - - - - -
+      echo -tc Invite $2 * Exception List: The exception list for  $+ $2 $+  is empty
+    }
+    echo -tc Invite $2 *  $+ $2 $+  end of channel exception list.
+    echo -tc Invite $2 * - - - - -
+    unset %mode.report
+    unset %mode.counter
+  }
+}
+#switchexceptlist end
+
+alias clear.exceptions {
+  if ($group(#switchexceptlist) == on) {
+    switchclear.excepts
+    mode $$1 +e
+    return 0
+  }
+}
+
+alias -l switchover.excepts {
+  .enable #switchexceptlist
+  .disable #switchclearexcepts
+}
+
+alias -l switchclear.excepts {
+  .enable #switchclearexcepts
+  .disable #switchexceptlist
+}
+
+#switchclearexcepts off
+raw 348:*: {
+  haltdef
+  if ($me ison $2) {
+    if (%mode.report == $2) { goto already }
+    if (!%mode.report ^ %mode.report != $2) {
+      %mode.report = $2
+      %mode.counter = 0
+      echo -tc Mode $2 *  $+ $2 $+  clearing all exceptions ...
+    }
+    :already
+    inc %mode.counter
+    mode %mode.report -e $3
+  }
+}
+
+raw 349:*: {
+  haltdef
+  if ($me ison $2) {
+    if (!%mode.report) {
+      echo -tc Mode $2 * Exception List: There are no exceptions in  $+ $2 $+  to remove
+    }
+    unset %mode.report
+    unset %mode.counter
+    switchover.excepts
+  }
+}
+#switchclearexcepts end
+
+;; general channel error messages
+raw 441:*: .timer -m 1 100 on.channel.fool $$1-
+raw 443:*: .timer -m 1 100 channel.fool $2 $3
+raw 404:*: {
+  ;; this handles several use cases where you are unable to join / speak on the channel
+  haltdef
+  if ($6 == wait) { .timer -m 1 100 explain Being kicked from $2 has a $9 second delay to try and re-join the channel | halt }
+  if (%get.the.message != $2) {
+    echo -astc Info2 # *  $+ $2 $+  You $iif($me ison $2,are being silenced:,can't message the channel:) $3-
+    %get.the.message = $2
+    .timer 1 6 unset %get.the.message
+  }
+  else halt
+}
+
+on ^*:SNOTICE:*Cannot join*the virus-help-channe*: {
+  haltdef
+  .timer -m 1 1 no.virus.channel $$1-
+}
+
+alias -l no.virus.channel {
+  return $$decision(hog¿incorrigo syx $pipe access denied¿Unable to join $left($right($4, -1), -1) $+ : Access denied $+ $crlf $crlf $+ Message: $2-)
+}
+
+raw 405:*: {
+  haltdef
+  .timer -m 1 100 nomore.channels $$1-
+}
+
+raw 617:*: {
+  haltdef
+  echo -atc Mode * DCC Allow: $2-
+}
+
+alias -l nomore.channels {
+  return $$decision(hgo¿incorrigo syx $pipe access denied¿Access denied to $2 $+ $crlf $crlf $+ Server: $3-)
+}
+
+on *:DISCONNECT: {
+  unset %get.the.message
+  unset % $+ $server $+ . $+ $me $+ .login
+  unset % $+ $server $+ . $+ $me $+ .connectid
+}
+
+alias -l bringup13chans {
+  %tmp.counter = 0
+  while (%tmp.counter <= 13) {
+    window -a $rhash $+ $r(1,13)
+    inc %tmp.counter
+  }  
+}
+
+alias -l channel.key {
+  if ($$decision(yvgb¿incorrigo syx $pipe channel key¿Couldn't join $$1 $+ ; Need correct key $+ $crlf $crlf $+ $$1 requires a password. Do you wish to enter one?) == $yes) {
+    join $$1 $$decision(pgq¿incorrigo syx $pipe need correct key¿Enter password to join $1 $+ :)
+  }
+}
+
+alias -l channel.knock {
+  if ($$decision(yvgb¿incorrigo syx $pipe channel invite only¿ $+ $$1 is invite only. You can knock to ask a channel operator to let you in $+ $crlf $crlf $+ Knock on?) == $yes) {
+    knock $$1 $decision(egb¿incorrigo syx $pipe knock message¿Enter a knock message: $+ $crlf $crlf $+ $chr(91) $+ You can leave this blank $+ $chr(93))
+  }
+}
+
+alias -l on.channel.fool {
+  return $$decision(og¿incorrigo syx $pipe slight error in plan¿Error with $$2 and $$3 $+ $crlf $crlf $+ $$4-)
+}
+
+alias -l channel.fool {
+  return $$decision(iog¿incorrigo syx $pipe human error¿ $+ $$1 is already on $$2 $+ !)
+}
+
+alias -l channel.full {
+  return $$decision(hog¿incorrigo syx $pipe mode +l error¿ $+ Unable to join $$1 $+ $crlf $crlf $+ The channel is full)
+}
+
+alias -l no.chance {
+  return $$decision(hog¿incorrigo syx $pipe access denied¿Unable to join $$1 $+ $crlf $crlf $+ You have been banned from the channel)
+}
+
+alias -l chmode.q {
+  if ($6 === Service) {
+    return $$decision(hugo¿incorrigo syx $pipe kick denied¿Permission denied to kick $3 $+ $crlf $crlf $+ $3 is part of the network services and cannot be kicked)
+  }
+
+  else {
+    return $$decision(hugo¿incorrigo syx $pipe kick denied¿Server denied your attempt to $2 $+ $crlf $crlf $+ Message: $3-)
+  }
+}
+
+alias -l chmode.not.irc.op {
+  return $$decision(hugo¿incorrigo syx $pipe mode change denied¿Permission was denied to set mode $2 $+ $crlf $crlf $+ Message: $3-)
+}
+
+alias -l rejection-b {
+  return $$decision(hog¿incorrigo syx $pipe link denied¿You have been $2 from $1 $+ $crlf $crlf $+ Reason: $3- )
+}
+
+alias -l waylay {
+  ;; scoops the shite out of channels with +L errors
+  %waylay.failed = $2
+  %waylay.sentto = $3
+  %waylay.excuse = $4-
+  %waylay.search = $numtok(%waylay.excuse,32)
+  %waylay.counts = 1
+  %waylay.actual = $null
+  while (%waylay.counts <= %waylay.search) {
+    if ($gettok(%waylay.excuse, %waylay.counts, 32) != --) {
+      %waylay.actual = $addtok(%waylay.actual, $gettok(%waylay.excuse, %waylay.counts, 32), 32)
+      inc %waylay.counts
+    }
+
+    else {
+      %waylay.actual = $remove(%waylay.actual,$obk,$cbk)
+      return $$decision(ogu¿incorrigo syx $pipe channel link¿You were not permitted to join %waylay.failed $+ $crlf $crlf $+ %waylay.actual $+ . $+ $crlf $crlf $+ You have been forwarded to linked channel %waylay.sentto)
+    }
+  }  
+}
+
+alias -l deny.channel {
+  return $$decision(og¿incorrigo syx $pipe denied by server¿Unable to join $$2 $+ $crlf $crlf $+ $$6-)
+}
+
+alias -l deny.oper {
+  return $$decision(ogt¿incorrigo syx $pipe operator¿Credentials unauthorised: $+ $crlf $crlf $+ $$2-)
+}
+
+alias -l oper.channel {
+  return $$decision(of¿incorrigo syx $pipe server message¿Unable to join channel $$5 $+ $crlf $crlf $+ This channel requires network operator authorisation to gain entry $$6-)
+}
+
+alias chanq {
+  notice services !gimme $+ $$1 #
+}
+
+;; cmd <nick> <ch>
+alias -l invite.rigamarole {
+  if ($decision(yvgb¿incorrigo syx $pipe invite¿ $+ $$1 has invited you to join $$2 $+ $crlf $crlf $+ Do you accept?) == $yes) { join $$2 }
+  else { if ($decision(yvgb¿incorrigo syx $pipe rejection¿Do you wish to ignore future invitations from $$1 $+ ?) == $yes) { .ignore -i $address($1, 2) | echo -astc Invite *  $+ $address($1, 2) $+  can no longer ask you to join a channel with invitations } }
+}
+
+;; full on raw
+
+on *:INVITE:#: .timer -m 1 100 invite.rigamarole $nick $chan
+
+;; channel scan [triggers just after join]
+on *:CONNECT: .enable #chreport | .norevery
+on *:DISCONNECT: .disable #chreport | .norevery
+on *:EXIT: .disable #chreport | .norevery
+
+alias -l norevery {
+  set %selfr $true
+  unset %rever*
+}
+
+alias -l warnmodeD {
+  if ($me ison $$1) {
+    echo -tc Topic $$1 is mode D
+  }
+}
+
+#chreport on
+raw 324:*: if (($me ison $2) && (%reverx != $2)) {
+  set %reverx $2
+  echo -tc Mode $2 *  $+ $2 $+  modes: $3-
+  if (D isincs $3) {
+    .timer -m 1 750 if ($me ison $3 && $me !isop $3) {
+      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Users who join this channel are hidden until they speak
+    }
+  }
+
+  if (H isincs $3) {
+    .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
+      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : This channel uses chat history playback
+    }
+  }
+
+  if (G isincs $3) {
+    .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
+      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : Messages containing profanity will be censored
+    }
+  }
+
+  if (M isincs $3) {
+    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Unregistered users that do not have voice can not speak
+  }
+
+  if (m isincs $3) {
+    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : This channel requires 3+voice or higher to speak
+  }
+
+  if (T isincs $3) {
+    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Channel notices are not allowed
+  }
+
+}
+raw 329:*: if (($me ison $2) && (%revery != $3)) { set %revery $3 | echo -tc Mode $2 * created: $asctime($3, yyyy-mm-dd HH:nnTT $chr(91) $+ dddd $+ $chr(93)) existed: $duration($calc($ctime - %revery)) }
+#chreport end

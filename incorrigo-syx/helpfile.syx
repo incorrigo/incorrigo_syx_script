@@ -1,0 +1,52 @@
+;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; Documentation File Reader
+
+dialog documentation {
+  title "incorrigo syx | documentation"
+  size -1 -1 296 199
+  option dbu
+  icon $mircdirincorrigo-syx\img\favicon.png, 0 
+  box "Help File Information", 1, 4 4 288 174
+  button "E&xit", 2, 242 182 50 12, default flat ok cancel
+  edit "- INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS -", 3, 9 13 278 160, read multi return vsbar
+}
+
+;; $1 is file, $2- is group box header
+alias text-reader {
+  lh-reader $$1-
+}
+
+alias -l lh-reader {
+  ; initialise text processing variables
+  set %text-reader.counter 1
+  set %text-reader.lines 0
+  set %text-reader.file $$1
+  set %text-reader.title $$2-
+
+  ; close if some clever twat already has it open
+  if ($dialog(documentation)) { dialog -x documentation }
+
+  if ($exists(%text-reader.file)) {
+    set %text-reader.lines $lines(%text-reader.file)
+    dialog -mao documentation documentation
+    did -ra documentation 1 %text-reader.title
+    did -r documentation 3
+    if (%text-reader.lines == 0) { did -a documentation 3 This file is empty. $chr(91) $+ %text-reader.file $+ $chr(93) $crlf }
+    if (%text-reader.lines > 0) {
+      lh-ln Incorrigo Syx: %text-reader.title $+ $crlf
+      while (%text-reader.counter <= %text-reader.lines) {
+        if $len($read(%text-reader.file, n, %text-reader.counter)) > 0 { lh-ln $read(%text-reader.file, n, %text-reader.counter) }
+        else { did -a documentation 3 $crlf }
+        inc %text-reader.counter
+      }
+    }
+  }
+
+  else {
+    noop $$decision(uhog¿incorrigo syx $pipe documentation reader¿ $+ %text-reader.file $+ $crlf $crlf $+ This file could not be opened because it does not exist.)
+  }
+}
+
+alias -l lh-ln {
+  did -a documentation 3 $$1- $+ $crlf
+}

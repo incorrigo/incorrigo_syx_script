@@ -1,0 +1,15 @@
+DCC stands for Direct Client to Client - and provides some functions that involve connecting to someone else over the internet
+
+When you log onto the network, your real IP / hostname is hidden or cloaked, replaced by your vHost - no one can use it to connect to you
+
+If you send or accept a DCC request, this information will be shared (their address will be visible too)
+
+There are two main things that you can do with DCC ...
+
+Chat - This creates an intimate p2p conversation between you and the other user, which can not be moderated by our network, even if you disconnect from our network... the conversation will still continue until the link is closed
+
+Send / Get - You can send and receive files using DCC sens
+
+Some file names can be detected and blocked before a file transfer can be set up. To get around this you must add somoene to your DCC Allow list
+
+Also, the DCC trust list. When you have added an address to your DCC trust list, files and chats will be automatically accepted without needing your approval to begin

@@ -1,0 +1,18 @@
+;;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; DIRECT CLIENT-TO-CLIENT
+;;
+;; file sending and P2P chat features
+;;;
+;; trusted users will be able to automatically
+;; initiate file sending with you, but still subject
+;; to the DCC deny settings of the network
+
+alias dcc-entrust {
+  .dcc trust $$1
+  echo -at Notify * DCC Trust: Added  $+ $$1 $+  to trusted user list
+}
+
+alias dcc-detrust {
+  .dcc trust -r $$1
+  echo -at Notify * DCC Trust: Removed  $+ $$1 $+  from trusted user list
+}

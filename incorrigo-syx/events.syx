@@ -1,0 +1,217 @@
+;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; SCRIPT DESIGNED FOR mIRC
+
+;; locops and globops [with services specialisation] handler
+on ^*:SNOTICE:from *: {
+  if ($nick == ekko.incorrigo.io) { 
+    haltdef
+    echo -astc notice * services - $left($$2,-1) $+ : $$3-
+    halt
+  }
+
+  if (.incorrigo.io isin $nick && $me isincs $2) { 
+    haltdef
+    echo -astc info * ops - $left($$2, -1) $+ : $$3-
+    halt
+  }
+
+  if (.incorrigo.io isin $nick) { 
+    haltdef
+    echo -astc notice * ops - $left($$2, -1) $+ : $$3-
+    halt
+  }
+}
+
+on ^*:SNOTICE:*Your TLS certificate*: {
+  haltdef
+  set %link.certfp $7
+  .timer 1 3 echo -stc Own * TLS Certificate: %link.certfp
+}
+
+;; AOPper is a convenient way to grant you full access to a user's
+;; (actually every single, not just a normal their) channel on join
+
+;; mode change disabled
+on ^*:SNOTICE:Setting/removing of usermode(s) 'x' has been disabled.: {
+  haltdef
+  .timer -m 1 100 text-reader incorrigo-syx\docu-mental\address-cloaking.tr Setting/removing of usermode(s) 'x' has been disabled
+}
+on ^*:SNOTICE:Setting/removing*: haltdef | .timer -m 1 100 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$1-
+
+#statusmodechange on
+on ^*:RAWMODE:#: {
+  ;; as you can see this didn't turn out to be an exact science
+  ;; case sensitive may seem overcomplicated at first but modes are case sensitive anyway and it cuts the number of use cases to test
+  if ($1 === +ao && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel admin | halt }
+  if (ao isincs $1 && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel admin | halt }
+  if ($1 === -oa && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel admin | halt }
+  if ($1 === -oq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === -o && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is no longer a channel operator | haltdef | halt }
+  if ($1 === +qo && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
+  if ($1 === +qo && $nick != chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel owner $chr(91) $+ given by $nick $+ $chr(93) | halt }
+  if ($1 === +ao && $nick != chanserv && . !isin $nick) { echo -ct mode # * $mode(1) is now a channel admin $chr(91) $+ given by $nick $+ $chr(93) | halt }
+  if ($1 === -ao && $nick != chanserv && . !isin $nick) { echo -ct mode # * $mode(1) is no longer a channel admin }
+  if ($1 === -oa && $nick != chanserv && . !isin $nick) { echo -ct mode # * $mode(1) is no longer a channel admin $chr(91) $+ removed by $nick $+ $chr(93) | halt }
+  if ($1 === -oq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === -qao && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === -oaq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === +a && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is now a channel admin | halt }
+  if ($1 === +a && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel admin | halt }
+  if ($1 === +a) { haltdef | echo -ct mode # * $mode(1) is now a channel admin $chr(91) $+ given by $nick $+ $chr(93) | halt }
+  if ($1 === +h && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is now an half-operator | halt }
+  if ($1 === -a && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel admin | halt }
+  if ($1 === -a && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is no longer a channel admin | halt }
+  if ($1 === -a) { haltdef | echo -ct mode # * $mode(1) is no longer a channel admin $chr(91) $+ removed by $nick $+ $chr(93) | halt }
+  if ($1 === -h && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer an half-operator | halt }
+  if ($1 === -h && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is no longer an half-operator | halt }
+  if ($1 === +q && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
+  if ($1 === +rq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) has just registered this channel | halt }
+  if ($1 === +q && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
+  if ($1 === +q) { haltdef | echo -ct mode # * $mode(1) is now a channel owner $chr(91) $+ given by $nick $+ $chr(93) | halt }
+  if ($1 === -q && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === -q && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === -q) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner $chr(91) $+ removed by $nick $+ $chr(93) | halt }
+  if (($left($1,1) == +) && (qo isincs $1) && ($nick == chanserv || $chr(46) isin $nick)) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
+
+  ;; read out registered channel re-created activation
+  if ($1 == -nt && $nick == ekko.incorrigo.io) { haltdef | set %reverx # | echo -ct mode # * This channel is registered. Services has cleared all modes ... }
+}
+
+on ^*:VOICE:#: {
+  if ($1 == +v) haltdef
+  if ($1 == +v && $nick == chanserv) {
+    echo -ct mode # * $vnick now has voice to speak
+    halt
+  }
+  if ($1 == +v && . isin $nick) {
+    echo -ct mode # * $vnick now has voice to speak
+    halt
+  }
+  echo -ct mode # * $nick has given voice to $vnick
+}
+on ^*:HELP:#: if ($1 == +h) haltdef | if ($1 == +h && $nick == chanserv) { echo -ct mode # * $hnick now has half-op | halt } | if ($1 == +h) { haltdef | echo -ct mode # * $mode(1) is now an half-operator $chr(91) $+ given by $nick $+ $chr(93) | halt } | echo -ct mode # * $nick has given half-op to $hnick
+on ^*:OP:#: {
+  ;; because [my network] services issues +o with status modes [i.e. +qo / +ao] i covered it all
+  ;; using rawmode. it turns out both events [and have to do it all backwards with DEOP] are triggered
+  haltdef
+  if ($1 == +o && $nick != chanserv && . !isin $nick) {
+    echo -ct mode # * $opnick is now a channel operator $chr(91) $+ given by $nick $+ $chr(93)
+    halt
+  }
+
+  if ($1 === +o && $nick == operserv) { echo -ct mode # * $opnick is now a channel operator | halt }
+
+  if ($1 === +o && $nick == chanserv) {
+    echo -ct mode # * $opnick is now a channel operator
+    halt
+  }
+
+  if ($1 === +o && $nick == operserv) {
+    echo -ct mode # * $opnick is now a channel operator
+    halt
+  }
+
+  if ($1 === +qo && $nick == chanserv) {
+    ;; in rawmode event
+    halt
+  }
+
+  if ($1 === +qo && $nick != chanserv) {
+    ;; in rawmode event
+    halt
+  }
+
+  if ($1 === +ao && $nick == chanserv) {
+    ;; in rawmode event
+    halt
+  }
+
+  if (ao isincs $1 && $nick == chanserv) {
+    ;; in rawmode event
+    halt
+  }
+
+  if ($1 === +ao && $nick != chanserv) {
+    ;; in rawmode event
+    halt
+  }
+
+  if (qo isincs $1 && $nick == chanserv) {
+    ;; in rawmode event
+    halt
+  }
+
+  if ($nick == chanserv) {
+    haltdef
+    echo -ct mode # * $opnick is now a channel operator
+    halt
+  }
+
+  echo -ct mode # * $opnick is now a channel operator $chr(91) $+ given by $nick $+ $chr(93)
+}
+
+on ^*:SERVEROP:#: {
+  ;; i.e. 'syx.incorrigo.io sets mode: +o smarmytwat'
+  if ($1 == +o) haltdef
+  echo -ct mode # * $opnick is now a channel operator
+}
+
+on ^*:SERVERDEOP:#: {
+  ;; i.e. 'amok.incorrigo.io sets mode: -o some_wanker'
+  if ($1 == -o) { haltdef }
+  echo -ct mode # * $opnick is no longer a channel operator
+}
+
+on ^*:DEVOICE:#: {
+  if ($1 == -v) haltdef
+  if ($1 == -v && $nick == chanserv) {
+    echo -ct mode # * $vnick no longer has voice
+    halt
+  }
+
+  if ($1 == -v && . isin $nick) {
+    echo -ct mode # * $vnick no longer has voice
+    halt
+  }
+
+  echo -ct mode # * $nick has removed voice from $vnick
+}
+
+;; carries your signon time to a new nick and between concurrent sessions
+;; works with forced nickname changes
+on ^*:NICK: if ($nick == $me) {
+  set -e % $+ $server $+ . $+ $newnick $+ .connectid $eval(% $+ $server $+ . $+ $me $+ .connectid,2)
+  unset % $+ $server $+ . $+ $nick $+ .connectid
+  if ($ironnik(login) != $null) {
+    set -e % $+ $server $+ . $+ $newnick $+ .login $strip($getuserID)
+    unset % $+ $server $+ . $+ $me $+ .login
+  }
+}
+
+on ^*:DEHELP:#: if ($1 == -h) haltdef | if ($1 == -h && $nick == chanserv) { echo -ct mode # * $hnick no longer has half-op | halt } | if ($1 == -h) { haltdef | echo -ct mode # * $mode(1) is no longer an half-operator $chr(91) $+ removed by $nick $+ $chr(93) | halt } | echo -ct mode # * $nick removed half-op from $hnick
+on ^*:DEOP:#: {
+  haltdef
+
+  if (. isin $nick) { haltdef | halt }
+
+  if ($1 == -oa && $nick == chanserv) { halt }
+  if ($1 == -oq && $nick == chanserv) { halt }
+  if ($1 == -qao && $nick == chanserv) { halt }
+  if ($1 == -oaq && $nick == chanserv) { halt }
+  if ($1 == -o && $nick == chanserv) { echo -ct mode # * $opnick is no longer a channel operator | halt }
+  if ($1 === -oa && $nick != chanserv) { halt }
+  if ($1 == -o && $nick != chanserv) { echo -ct mode # * $opnick is no longer a channel operator $chr(91) $+ removed by $nick $+ $chr(93) | halt }
+  if ($1 == -oq && $nick != chanserv) { echo -ct mode # * $opnick is no longer a channel owner $chr(91) $+ removed by $nick $+ $chr(93) | halt }
+}
+#statusmodechange end
+
+alias togglewallops {
+  ;; wallops rememberer
+  if (%wallops) { %wallops = $false | return }
+  if (!%wallops) { %wallops = $true | return }
+}
+
+on ^*:WALLOPS:*: {
+  haltdef
+  echo -astc Wallops * wallops - $nick $+ : $$1-
+}

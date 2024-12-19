@@ -1,0 +1,16 @@
+This is an explanation that will answer your questons that might happen to you about the commands in the menu when you right-click a channel window
+
+- - - - -
+Q) All these things toward the bottom of the channel menu are disabled "greyed out"
+
+A) You will notice this particularly if you are a new user - the answer is that these are services commands and you can't use any of the services if you have not registered an account with us
+- - - - -
+
+Q) On the contrary, I have no privileges or permissions to do any of these things on the list - Why are they available?
+
+A) If you're not a channel operator on the channel we can detect that status and follow it through with the rules
+
+If you're logged into an account
+(a) that's all we can detect, beyone your channel operator status
+(b) you can still use your services commands even if you have no permissions on the channel
+(c) there's a foregone conclusion ... all you will get it "access denied"

@@ -1,0 +1,22 @@
+SA Commands are for IRC operators so that they can control join / part / channel mode - at the server level
+
+There are three commands:
+
+/SAJOIN <nickname> <channel>
+Forces a user to join the channel name specified. This will override non-invited, bans, passwords, full-channel limit, redirect, server deny channel config, extended bans, registered-user only, and IRC operator only
+
+Example: /SAJOIN westid #balcony
+
+If you have privileges to use this command, you can use it on yourself and overcome these circumstances. A server notice will be sent out to inform all operators with this in their snomask
+
+/SAPART <nickname> <channel> [message]
+Forces a user to leave the channel specified, if they are on it. There will be a part message featuring your nickname
+
+Example: /SAPART tin_bobbin #channelname
+
+/SAMODE #channelname <+/-modes> [parameters]
+This command will effect a mode change on the channel. Instead of you, the mode change will appear as though it was done by the server you are connected to [not the server the channel currently exists on]
+
+Example: /SAMODE #channelname +M
+
+You do not need to be on the channel when you use either of these commands

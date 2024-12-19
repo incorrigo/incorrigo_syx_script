@@ -1,0 +1,44 @@
+Understanding operator permissions on the channel and on the server
+
+A channel has five levels of permissions:
+Mode +q is owner (symbol next to name in member list is ~)
+Mode +a is channel admin (&)
+Mode +o is channel operator (@)
+Mode +h is half-op (%)
+Mode +v is voice
+
+A channel operator (or higher) can:
+- kick / ban you from a channel (so can half-op)
+- configure the channel settings using modes (some also half-op)
+- see /KNOCK and other activity
+
+A channel operator can't:
+- see your real hostname or IP address
+- check which security groups you're in
+- find out what private / secret channels you're in (unless they are in it too)
+
+A systems (IRC) operator can:
+- use powers that they have in all channels
+- disconnect users
+- see your real hostname / IP
+- ban users by any criteria usually temporarily (even if that temporary = a long time) from connecting in the first place
+
+A services operator is different:
+- attach info to nicks and channels that only service operators can see
+- suspend channels from being used for a certain length of time
+- ban certain "real names" from being used
+** you are under no obligation to provide your real name ever **
+- invite / channel key / remove bans from registered channels to gain entry
+- AKILL (auto kill (+ ban for default duration)) users on the AKILL list
+- ban nicknames from being used on any server
+
+General points of confusion:
+- A channel operator and an IRC operator are very different
+- It is not our policy (nor should it be) to deal with channel matters - the channel owner's decision is final and we will support their right to govern themselves
+- That doesn't mean you can't come to us for guidance or general #help
+- We encourage and welcome new users but there will be some limitations / waiting period because the first priority is to protect the network against morons with their python scripts using compromised / badly configured macines
+- It is an objective to make incorrigo syx a safe place for people to contact confidential services... so if you are incidentally working for such a service, please let us know because we are interested in your participation
+
+Incorrigo Syx is a project, we realise we're not going to be anything like the bigger networks but that doesn't mean we should give up so easily. It is possible to be connected to multiple networks at the same time simultaneously therefore not a competition, but standards / accomplishments, to aim at
+
+(however, incorrigo syx is designed for newcomers and doesn't really work well in some ways if you have more than one IRC session running with it at once - mostly because of variables and things)

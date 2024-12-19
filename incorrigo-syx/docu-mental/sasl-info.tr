@@ -1,0 +1,23 @@
+Incorrigo Syx IRC Network
+What is SASL?
+
+Basically SASL is the power to log into your account and connect at the same time, instead of waiting until you have completely connected and using /ID yourpassword during the time that nickserv gives you
+
+Easiest example:
+The web chat we provide https://incorrigo.io/web has a "I have a password" on the login screen
+
+If you tick that box and put your password in and then connect? That's SASL
+
+There are other ways, like using a certificate file to set up password-less automatic login, to log in via SASL
+
+Server / services will recognise you as a verified and legitimate user straight away, which means there's no need to try and find that out
+
+Although you wouldn't notice unless you started joining every channel on the network and sending private messages to multiple users all at the same time - having a new IP will be something that needs to let you in gently
+
+Being a regular internet user your IP probably changes all the time, which an unregistered person will be considered a completely new user. There are some situations where new users are not accepted, like emergency mode. It is impossible to tell if you don't log in until you're connected, using /ID etc. but if you use SASL then it's like someone will "wave you through"
+
+Channel owners / channel operators, have every right to refuse entry to whoever they life. Refusing entry to unregistered users [mode +R] or silencing them from speaking [mode +M] - this is considered a channel matter. You have to remember, we don't get involved in channel matters; if something doesn't go beyond the scope of a channel, then it's an established etiquette that system operators do not override channel owners or get involved
+
+If you are an unregistered user and your IP changes, you may find it a bit oppressive until you have been on for a while using your new IP. If you log-in using SASL you can /nickserv recover without using your password [to stop services hold on your nickname], and you will be accepted as an established legit user during [and not after] the connection process
+
+SASL options are available in the connection settings, which you can access by pressing F3 - you can create a certificate [use a file as a password] using mIRC - but no need to concern yourself with this if you're a beginner

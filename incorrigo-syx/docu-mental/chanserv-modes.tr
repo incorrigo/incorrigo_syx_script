@@ -1,0 +1,17 @@
+Once you have registered a channel, two addititonal channel operator modes are unlocked: channel admin [mode +a / &] and channel owner [mode +q / ~] - you are automatically given [~] when the channel becomes registered
+
+This gives a registered channel five status modes:
++v +h +o +a +q
+voice, half-op, operator, (channel) admin, owner
+
+If you own the channel, you can make chanserv give you any of these - if you're not the owner but are given one of these on someone else's channel, the UP and DOWN commands [when used without another nickname, chanserv commands generally apply to yourself] to gain and remove your status modes as you want them
+
+Unregistered channels only go up to [@] because until a channel is registered, no one owns it
+
+Services & Network operators [in the script made for incorrigo syx] should appear as a different colour, in the channel member list. These operators are different from channel operators, and are not part of this whole registered channel management thing
+
+There is so much control gifted to you by chanserv, and then on top of that the additional basically omnipotence of botserv, you have everything that you need to run your own community; a series of nicknames to an account, a set-top box full of channels you can own and operate - but if you need help how to use these services [i.e. how you do something, not do something for you] then you should come along and mention it in #help
+
+If an operator joins your channel, it's probably because they want to join your channel. There is no higher purpose, you would know if there was long before anyone at incorrigo syx joins the channel that's for sure
+
+Anyway, dominance asserted. Go and own yourself.

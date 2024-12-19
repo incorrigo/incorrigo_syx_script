@@ -1,0 +1,17 @@
+Channel Permissions (or Status Modes)
+
+There are 5 levels of control you can have on a channel. Owner, admin, operator, half-op, and voice
+
+Voice - This will allow the user to talk in situations where they otherwise could not
+
+Half-Op - An half-op can kick / ban / edit some of the channel settings, but not all
+
+Channel Operator - This allows someone to change all the channel settings / can give other people channel operator permissions as well
+
+Channel Admin - Can do everything a channel operator can do but is protected. This mode can only be set by services or a channel owner
+
+Owner - This level is for the user who has registered the channel, and their most trusted co-owners
+
+Channel Admin / Owner levels are not available on unregistered channels. You must be a channel operator to register a channel using chanserv
+Server messages help system:				/helpop register-channel
+Using the help system with chanserv:				/query chanserv help register

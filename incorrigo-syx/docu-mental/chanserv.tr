@@ -1,0 +1,17 @@
+chanserv is the channel registration service
+
+You create a channel by /JOINing one that doesn't exist yet. When you do this, the server you are on creates the channel / sets default modes / you start off as a channel operator
+
+If someone else comes in, and you are disconnected or have to leave the channel for any other reason, you can not get your channel operator status back when you return ... and if more people who came in are still there, then no one will be able to control the channel
+
+When you're a channel operator, you can register a channel so it belongs to your services account
+
+Everyone leaving a channel [whether it's registered or not] will cause the channel to automatically be destroyed. All modes / settings are gone, anyone who /JOINs the channel will be the operator as it will be created again
+
+If you're taken away from an unregistered channel, the other user who comes in can just leave/rejoin and then they will be the channel operator before you return
+
+Registered channels are stored in the services database and whenever someone creates the channel, all of the configuration [modes, ban / except / invite lists, channel operators] will be restored by chanserv. This will stop people from 'taking over' your channel, and allow you to control who gets to run the place, and what settings to put in place / enforce
+
+Chanserv takes care of all this, even when you're not there! You could be living your best life somewhere and chanserv will still be keeping your channel the way you wanted it to be
+
+Get acquainted with chanserv: /query chanserv help

@@ -1,0 +1,37 @@
+This only describes the colours of the default colour profile, at the time of writing this - other colour profiles have not been implemented yet
+
+Channel permissions:
+
+Green - Users with voice will have a + symbol next to their nickname and are coloured in green
+
+Cyan - Half-operators have % [percent / modulus] and coloured in cyan
+
+Blue - Channel Operators have @ [at] and are coloured in blue
+
+Claret - Channel Admins have & [ampersand] and are coloured in claret
+
+Pink - Channel Owners have ~ [tylde] and are coloured in pink
+
+Users with active ignores:
+
+If there are active ignores on a user, their nickname will be greyed out. This colour applies to all permissions in a channel, but if someone is a network services bot / an operator, their nickname will not be coloured any differently
+
+You:
+
+You will be coloured in navy blue, with the exception of being a network operator / having a vHost that's configured on the server and not hostserv
+
+Network Service Bots:
+
+Network service bots are coloured in brown, it doesn't matter what permissions they have in the channel - they will be coloured in the same way
+
+Executive service and network:
+
+The executive service - operserv - and the announcement bot - network - will be coloured in orange. These are differently coloured because they carry out network-wide announcements and interventions
+
+Server level vHost:
+
+Some users may have a vHost that's configured by logging into a server using the /VHOST command. Although their nickname will be coloured normally throughout the channel messages, their nickname may appear in red in the nickname list
+
+Network operators:
+
+If someone is a network / services operator or admin, their nickname will be coloured in purple no matter what permissions they have

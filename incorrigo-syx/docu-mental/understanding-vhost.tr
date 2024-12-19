@@ -1,0 +1,37 @@
+Everyone connecting to the network has an lH number. To other users doing /WHOIS <you> they will see something like ~username@lH-1359ABCD.your-isp.nxt
+
+If the server could not resolve your hostname before it times out, your address will look something like this: @372DD8CA.419019F2.40FE459A.IP - this is only to mask your IP securely and you are still eligible to request a vHost for any nickname(s) registered to your account
+
+The address you are given can be more personalised. When you request _anything_ from hostserv, you will be assigned an lH- number no matter what, so you might as well pick a good one
+
+Here are two example requests:
+vHost Address:			/hostserv request my.pseudo.identity.xxx
+vHost with username:		/hostserv request newuser@lH00001101.my.pseudo.identity.xxx
+
+Example Assigned Hostname:	lH-12345678.my.pseudo.identity.xxx
+Requests are vetted by systems operator. You can choose your own lH number or otherwise a randomly generated one will be issued instead. User ID ("newuser@") can only be a maximum of 10 characters long
+
+Why will we do this?
+An lH number assigned to you by default on connect is called 'cloaking' What this means is you have a visible address that's still unique enough to ban / issue privileges - but at the same time it can not be used to identify / connect to your broadband router / your computer over the internet
+
+vHost fills up the entire address with your customised hostserv request. This is the address that other users see when they manage their channel invite list, look you up via /WHOIS
+
+To make this more simple to understand:
+
+Assume this is your real ISP's address: 3f016da2.btroadband.net
+
+Cloaked Address:		lH-F3D924A3.btroadband.net			Automatically given on connect
+vHost:			lH-59596959.clown-job.iamthegreatest.viz	Requested via /hostserv as above
+
+The cloaked address is applied to all users on connect with no need to apply for one / without account registration. It is a fundamental security measure.
+
+Once your hostserv request is approved, the vHost address will be automatically set when you successfully log in to your account
+
+Here are some facts about vHost:
+
+- The cloaked address is given automatically to all users
+- You can still use hostserv if your host looks something like: BLAHBLAH.23891799.43842098.F9D9A9D8.IP - actually, it's important to pick a name that doesn't resolve
+- The cloak doesn't prohibit you from sending / accepting file transfers [but will not stop you from disclosing your real one by sending / accepting a request]
+- All accepted requests will be assigned an lH number to keep your address unique
+- Banning / Except / Inviting your real address, or the cloaked one, or the one requested & issued by hostserv, will _all_ work so there's no need to worry about which one you want to use
+- You can generate a series of lH numbers at any time by using the command /LHNUMBER while using the Incorrigo Syx mIRC Script

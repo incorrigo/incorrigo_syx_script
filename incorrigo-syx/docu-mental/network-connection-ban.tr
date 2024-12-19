@@ -1,0 +1,56 @@
+Getting banned from the network can be for a number of reasons, any length of time, and in differend kinds of ways - all of these should factor into your consideration if you find yourself banned
+
+CONTENTS
+1. Types of Ban
+2. How Ban Type is Decided
+3. Length of Time
+4. Reasons You Can Get Banned
+
+01 - TYPES OF BAN
+The different ban types are called "* line" - this is because bans are reported to /STATS G as one single line for each ban. There can be an unlimited number of bans - some of them don't even close your connection - but all are not particularly desirable (except e-lines but we will get around to that)
+
+01.1A
+K-LINE: This is a kind of ban that stops you from using [a parcitular server] on the network. Since the network is load-balanced with a spinning DNS it is highly likely that this method of ban is not used, save for exceptional things that somehow only seem to affect one server on the network
+
+01.1B
+G-LINE: The same as K-LINE, but for ALL servers on the network. You won't be coming back from that particularly easily, but please remember - however you would struggle to see things that way when you are G-LINED and every server is giving you the same 'Closing Link' error
+
+Not everyone is the intended target of a [K / G] line. Sometimes, because it always happens at some point, a network ban will - usually because of an unfair / wrongly placed wild card in the user's hostname or IP address
+
+When hostname or IP is mentioned here, and although we will do our utmost to ensure and protect your privacy. If you can't get back on the network but feel that you've done nothing wrong - you may have to tell us your real IP address, and we will add an E-LINE, which brings us onto that
+
+01.C
+E-LINE:
+This literally means an 'exception line' and provides [the more honest you are the more we can protect you from other too-blanket bans] immunity from _CERTAIN_ other types of ban which can be placed on someone but was so widely sweeping something silly, such as an entire ISP (that you incidentally could also be on) - just let us know your user detailed information by sending an email to banned@incorrigo.io
+
+01.D
+Z-LINE:
+This is a completely different kettle of fish, and doesn't work the same way as other types of ban there are and where it is used will be carefully chosen. No hostnames attempt to be resolved, once the IP (range) is recognised - and unlike k/g lines - a connection to the server doesn't even start being negotiated
+
+When someone is Z-LINED - espescially when the original Z-LINE comes to take the person(s) connection offline - will probably be the only encounter the reason message when the ban disconnects them from. Any banned address / range that is incoming after that won't be given a reason or anything - it will just look like a connection failure. This is mainly used to protect the network from denial of service attacks by botnets and such
+
+Becaused it's so quirky / nuanced - a Z-LINE can use wildcards, but only like this example: 207.46.216.26 or an entire address range: 207.46.216.* ... because a DNS lookup isn't attempted, this type of ban can only be used on an IP address, not a case of user*.host.name.of.isp - if you are banned in this way, it can be difficult to realise that it's a ban. If you suspect this, it might be a good idea to pursue your IRC connection on someone else's phone / broadband connection
+
+Z-LINE can only placed on someone's IP - simply because when a Z-LINED user tries to conect, the server you are Z-LINED on, or _the whole network_ in the case of GZLINE [GZLINE is to Z-LINE and G-LINE is to K-LINE]
+
+02 - HOW BAN TYPE IS DECIDED
+From the previous list, the two main types of ban that will be used are G-LINE and GZ-LINE - because all the servers on our network use a shared config for almost everything, K-LINE is pointless. So when the type of ban is being decided, it can either be automatic [network services enforcing an AKILL] which will ban someone on detection for a short period of time, but still allow you to connect enough to give you a ban message, or it can be a manual thing [i.e. an operator decides to G-LINE you for 28 days] - NB: There is a default ban-length in the shared network configuration, so the duration might not be personally motivated, simply the person setting the ban neglecting to specify how long the ban should remain in effect - in any case, you can always talk to us about your ban [it may be too vague, you could have been banned by accident] by emailing us at banned@incorrigo.io
+
+02.1A
+EXCEPTIONS:
+In the case of a ban that's too generalised so it ends up banning you by accident, depending on the reason of the ban / the magnitude of consequences that could happen by removing the ban completely, it could be easier to add you as an exception [E-LINE] so that the main ban is still in place, but you will be provided with a banwalk. You may be given a special authorisation code that will work on all servers, so it wouldn't be hopeless if you could get in touch with us. We're all human beings after all
+
+02.1B
+GZ-LINE DECISION
+This is probably what happen if an IP [address / range] needs to be disregarded without using up any server load - "black holed" is the term, I believe - this will be more important than sending some sort of big message, because all requests from a Z-lined address will go unanswered]
+
+02.1C
+G-LINE vs. A-KILL
+Everything else that doesn't fit into the Z-LINE category [i.e. some famous villain wreaking havoc to innocent unsuspecting channel owners] will either be A-KILLed [this is a SERVICES ban, that will G-LINE a user when one on the AKILL list is detected]
+
+For everything else that doesn't involve services, what you are left with is a G-LINE, which will tell a user who matches a G-LINE the message why the ban is in place
+
+In the case of an A-KILL, the message will be included in the G-LINE that it temporarily creates when a user who is detected by the network manager is automatically banned
+
+More information? Go on then: banned@incorrigo.io
+
