@@ -6,6 +6,7 @@ https://incorrigo.io/script
 ircs://irc.incorrigo.io:+6697/
 
 Here are the instructions to install:
+
 **(a)** Download mIRC
 **(b)** During setup **_check "Run as Portable Application_** and make sure it does
 **(c)** Complete setup, but don't run mIRC
