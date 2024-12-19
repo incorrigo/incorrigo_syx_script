@@ -3,7 +3,6 @@
 
 ;; use - //msg # good $timeofdaynow !
 timeofdaynow {
-  ;Sets a catch-all in case time check fails
   set %timeofday day to you
   if ($time(t) == a) { set %timeofday morning }
   else if ($time(t) == p) {
@@ -11,10 +10,6 @@ timeofdaynow {
     else { set %timeofday afternoon }
   }
   return %timeofday
-}
-
-ctrl+H {
-  echo -atc Own ctrl + h
 }
 
 gettime {
@@ -46,19 +41,14 @@ gettime {
 }
 
 ronnik {
-  ;; set a variable unique to the current session
-  ;; using -e for all of them keeps things nice and tidy
   set -e % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $$1 ] ] [ [ $2- ] ]
 }
 
 ironnik {
-  ;; retrieves a variable name unique to the current session
-  ;; usage $ironnik(trump) will return domald
   return % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $1 ] ]
 }
 
 timewy {
-  ;; check time zone menu setting
   if ($timeformat == $$1) {
     return $style(1) $+
   }
@@ -124,8 +114,8 @@ aopper.details {
 }
 
 ;; CODEFIELDS SWAY LAZILY
-;; NOTE: you will be given a unique identifier anyway, so you might as well choose your own
 lhnumber {
+  ;; network specific quirk
   echo -atc Own *** lH Numbers and lH hex numbers [more realistic]
   echo -atc Own * lH Numbers: $lHngen $lHngen $lHngen Hex: $lHxgen $lHxgen $lHxgen
   echo -atc Own * lH Numbers: $lHngen $lHngen $lHngen Hex: $lHxgen $lHxgen $lHxgen
@@ -133,6 +123,7 @@ lhnumber {
 }
 
 thematrix {
+  ;; debug window you can type commands into
   window -ae[0] @the.matrix
   .debug @the.matrix
   echo -tc Info @the.matrix Debug: All
@@ -143,13 +134,11 @@ spreadtheword {
 }
 
 sysop {
-  ;; irc operator bool identifier
   if (o isincs $usermode) { return $true }
   else return $false
 }
 
 changeposition {
-  ;; moves permission up or down
   mode $$1 -qaohv $$2 $$2 $$2 $$2 $$2
   %modechg = +
   if ($$3 == top) {
@@ -158,6 +147,7 @@ changeposition {
 }
 
 fatseagal {
+  ;; light a fat one
   msg $$1  0,7:.` ,:;0,0;::1,0TEST CIGARETTE0,0::::::4,1:4,1;`15~~~~~~
 }
 
@@ -171,12 +161,6 @@ getit {
 
 cF12 {
   exit -rn
-}
-
-;; line separator
-lhsep {
-  if ($$1 == -s) { echo -sc $2 - | return }
-  if ($$1 == -a) { echo -a $2 - | return }
 }
 
 ;; lH- NGEN
@@ -214,7 +198,6 @@ anycgen {
 }
 
 strgen {
-  ; generates a string of characters X characters long
   %cgen.min = $$1
   %cgen.max = $$2
   %cgen.str = $null
@@ -231,7 +214,6 @@ strgen {
 }
 
 hexgen {
-  ; generates a string of characters X characters long
   %cgen.min = $$1
   %cgen.max = $$2
   %cgen.str = $null
@@ -251,8 +233,6 @@ genguestnick {
 }
 
 lHxgen {
-  ;; generate a single lH number
-  ;; same as other alias but this one uses A-E instead of A-Z
   %lH.look = lH-
   :k0ng
   %lH.hook = $r(0,1)
@@ -291,6 +271,7 @@ lHxgen {
 ; c - "bin" icon
 
 decision {
+  ;; $decision(combine above letters¿title bar¿main prompt or message)
   return $input($gettok($$1-, 3, 191), $gettok($$1-, 1, 191), $gettok($$1-, 2, 191))
 }
 
@@ -305,6 +286,7 @@ deprecation {
 
 
 explain {
+  ;; there was a lot to explain
   return $$decision(ogb¿incorrigo syx $pipe what's this?¿ $+ $$1-)
 }
 
@@ -314,12 +296,6 @@ implain {
 
 ;; shocking lack of escape characters work-around
 c {
-  ; quickest way to use a comma in a string of text
-  ; without causing the current command to mistake
-  ; the syntax of an alias when it is used as an identifier
-  ; so it can return a value into thinking it is being
-  ; asked to parse an additional argument when it only
-  ; needs to put a comma into a string of text .. $c
   return $chr(44)
 }
 
@@ -335,7 +311,6 @@ idf {
     }
   }
 
-  ;; otherwise however
   return $false
 }
 
@@ -350,8 +325,6 @@ idfr {
 }
 
 idfc {
-  ;; disable popup menus when
-  ;; no account is logged into
   if ($idf) { return $null }
   return $style(2) $+
 }
@@ -366,17 +339,14 @@ checkme {
 }
 
 obk {
-  ; even more pathetic .... 'open bracket'
   return $chr(40)
 }
 
 rhash {
-  ; an actual hash
   return $chr(35)
 }
 
 cbk {
-  ; duhh what comes next deorge?
   return $chr(41)
 }
 
@@ -389,24 +359,21 @@ go {
 }
 
 pipe {
-  ; vertical '|' line (aka "pipe")
+  ;; pipe, not next command
   return $eval(|,0)
 }
 
 ampersand {
-  ; an ampersand symbol (&)
   return $eval(&, 0)
 }
 
 percenti {
-  ; an actual percent symbol
   return $eval(%, 0)
 }
 
-;;; secret passenge command
 cap.snaffle {
   if (!%main.lkey) {
-    %main.lkey = $strgen(12,24)
+    %main.lkey = $strgen(34,65)
     echo -etcs Mode * Cap Snaffler: Your new loanword is %main.lkey
   }
   %caps.loanword = $$1-
@@ -420,7 +387,7 @@ cap.ds {
 
 capsnaffler {
   noop $strgen(5,35)
-  %main.lkey = $strgen(21, 29)
+  %main.lkey = $strgen(29, 48)
   return %main.lkey
 }
 
@@ -434,17 +401,15 @@ cap.truba {
 
 
 quik.d {
-  ; pre-fabricated straight forward input prompts
   set -e %yaword $$1
-  ; click a button quik
+  ; amphetamine will do that to people
   if (%yaword == death) { return $decision(ogtb¿ $+ $$2-) }
   if (%yaword == crucial) { return $decision(hvnf¿ $+ $$2-) }
   if (%yaword == binary) { return $decision(qvybf¿ $+ $$2-) }
   if (%yaword == warnin) { .timer -m 1 100 return $decision(wovgb¿ $+ $$2-) }
   if (%yaword == info) { .timer -m 1 100 return $decision(iovg¿ $+ $$2-) }
   if (%yaword == problem) { return $decision(hrgbvf¿ $+ $$2-) }
-  ; type an answer quik - text / $cancel / (test for $ok / blank input)
-  ; double dollar $$ should fuck the entire thing off if input not indulged
+
   if (%yaword == tellme) { return $decision(fqgbe¿ $+ $$2-) }
   if (%yaword == doubled) {
     set %inputmem $$decision(fqgbe¿ $+ $$2-)
@@ -453,7 +418,6 @@ quik.d {
       return %inputmem
     }
   }
-  ; type hidden characters [with little 'eye' toggle] quik
   if (%yaword == passgrip) { return $decision(qpfgbv¿ $+ $$2-) }
   if (%yaword == pdoubled) {
     set %inputmem $$decision(qpfgb¿ $+ $$2-)
@@ -465,7 +429,6 @@ quik.d {
 }
 
 rawbak.d {
-  ; general info and error messages for raw responses
   %yaword = $$1
 
   ; different icon images
@@ -476,7 +439,6 @@ rawbak.d {
 }
 
 quik.demo {
-  ;; first get button shit out the way
   set %lovelyhead incorrigo syx $chr(124)
   echo -stc own * Quik-demo of decision system 2.0 who d fuk needz vicky p after today it will be vicky me
   echo -stc own * Four button icon combo test:
@@ -494,7 +456,6 @@ decision.test {
   if (%decided == $cancel) { echo -atc mode * Man from del monte, he fuck off not even bother ses so ???? | return %decided }
 }
 
-;; grey out menu for channels you don't control
 wdy {
   if ($sysop) { return $null }
   if ($me !isop $$1) { return $style(2) }
@@ -522,8 +483,6 @@ wzy {
   return $style(2)
 }
 
-
-;; read status [in channel] mode changes in plain english
 smc {
   return $iif($group(#statusmodechange).status == on, $style(1), $null) $+
 }
@@ -533,13 +492,11 @@ togglesmc {
   else .enable #statusmodechange
 }
 
-;; grey out if not channel operator $notop
 notop {
   if ($me !isop $$1) { return $style(2) }
   return $null
 }
 
-;; check online status (decision identifier)
 nln {
   if ($server != $null) { return $true }
   if ($server == $null) { return $false }
@@ -550,11 +507,9 @@ pnln {
 }
 
 pnlnf {
-  ; online AND registered AND identified
   return $iif($nln && $idf, $null, $style(2)) $+
 }
 
-;; return 'grey out' if not on channel $1
 wwy {
   if ($me !ison $$1) { return $style(2) }
   return $null
@@ -565,10 +520,6 @@ wwk {
   else return $false
 }
 
-;; internal encryption layer
-;; 
-
-;; connect duration
 getconnectid {
   return $duration($calc($ctime - $eval(% $+ $server $+ . $+ $me $+ .connectid,2)))
 }
@@ -581,7 +532,6 @@ getctcp-x {
   return $eval(% $+ $server $+ . $+ $me $+ .ctcp-x,2)
 }
 
-;; access mIRC channel settings depending on channel operator status
 ls {
   %aktiv = #
   if ($1) { %aktiv = $1 }
