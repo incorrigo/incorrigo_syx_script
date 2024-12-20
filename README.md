@@ -36,11 +36,13 @@ It's quite simple to detail the features of the network - it's a map of nodes ru
 There are a number of targets that have been reached by this classic honest-to-god script for mIRC, and this has led to some defining results not possible with other scripts
 
 ### IRCv3 +draft/reply Supported by mIRC
-* Update: +reply now supported also
+* Update: +reply now supported also  
 There is no reason to suspect that this feature - already successfully implemented and supported by a range of leading IRC clients in the v3 movement - awaits any further refinement than removing _draft/_ from the tag name. So now +reply is supported as well (but it will only process one of these tags, not both of them, so don't get clever)
   
-This is not a joke, mIRC now officially supports +draft/reply= and it's all thanks to this glorious script. It works with other clients in exactly the same way that they support it. Having tested and deployed - in private and channel context - you would have to implement something very spiteful and unreasonable to dodge this kind of client compatibility
-![A screenshot demonstrating the original layout of the completed +draft/reply implementation once it had successfully met all of the specifications and confirmed as being compatible with any other client](https://incorrigo.io/script/screeni11.png)
+mIRC now officially supports +draft/reply= and it's all thanks to this glorious script. It works with other clients in exactly the same way that they support it  
+![A screenshot demonstrating the original layout of the completed +draft/reply implementation once it had successfully met all of the specifications and confirmed as being compatible with any other client](https://incorrigo.io/script/screeni11.png)  
+
+This felt like something that was going to elude mIRC for a while but some classic features it supported already for many years, combined with chat history playback / playback on join, made it quite straightforward to implement and in just the right compatibility to function well with other clients  
 
 ### Away Manager Reminders
 It's difficult to tell you the good points about our script without mentioning **_away manager_**, which brings raw functionality right down to the command level so when someone mentions your name in a channel that you're on, they can be certain their witty retort to what you said a few hours ago definitely didn't land
