@@ -1,5 +1,5 @@
 # incorrigo_syx_script
-A script created for new users to get their hands on a real-life IRC client [i.e. mIRC]
+A mIRC script created for an UnrealIRCd network, that deploys anope services
 
 ## Find us on IRC
 Incorrigo Syx IRC network is relatively new, even though it has been around for several years. My favourite IRC client is mIRC, you do the maths.
