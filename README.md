@@ -13,9 +13,18 @@ Here are the instructions to install:
 - **(b)** During setup **_check "Run as Portable Application_** and make sure it does
 - **(c)** Complete setup, but don't run mIRC
 - **(d)** Download the latest copy of Incorrigo Syx
-- **(e)** Extract all the folders and files into the same folder as **mirc.exe**
-- **(f)** Overwrite all files, replacing them from the archive
-- **(g)** Run _mirc.exe_ ... you may need to register mIRC before you can continue
+- **(e)** Extract all files and folders into same dir as **mirc.exe** ... here's how you do it
+- Click the following link to download as a ZIP file:  
+  https://github.com/incorrigo/incorrigo_syx_script/archive/refs/heads/main.zip  
+
+  Here are the files you need to drag into the **_mirc.exe folder_** and you **must overwrite all files and replace** before you    first run mirc.exe  
+
+  Note that you need to go into the first folder and copy across the **_files and folders selected in the screenshot_**
+
+  ![A screenshot of the files you need to drag in WinRAR](https://incorrigo.io/script/screeni20.png)  
+  Once you have done this part, the rest is relatively simple
+- **(f)** Overwrite all files, replacing them from the archive as detailed above
+- **(g)** Run _mirc.exe_ ... you may need to use your registration code to continue
 - **(h)** This is the part where the script kicks in and gives it to you
 
 Some of the messages / the way that things are laid out might come across as _patronising_. But I prefer the term _better_. I will try to keep up with IRC each time it is re-made in another very competitive way
@@ -43,3 +52,7 @@ Modes seldom change throughout the course of a given day when in an IRC session,
 
 ### Your Journey Starts Here
 Unfortunately I can't provide anyone with [mIRC](https://www.mirc.com/) and it is not free software. You will have to make that arrangement separately - but once you have done, this script will give you your money's worth
+
+### Release notes for github debut -- v2.1a7
+
+https://github.com/incorrigo/incorrigo_syx_script/releases/tag/incorrigo-syx
