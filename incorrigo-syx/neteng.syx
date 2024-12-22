@@ -23,7 +23,7 @@ on *:JOIN:#: {
 }
 #svcsaop end
 
-#selfaop on
+#selfaop off
 on *:JOIN:#: {
   ;; Use your own (oper override was the intended) permssion to establish yourself in a channel
   if ($nick == $me && $sysop) {
@@ -32,7 +32,7 @@ on *:JOIN:#: {
 }
 #selfaop end
 
-#csvcaop off
+#csvcaop on
 on *:JOIN:#: {
   ;; Use chanserv [registered channels only!]
   if ($nick == $me && $sysop) {

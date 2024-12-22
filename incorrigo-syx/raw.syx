@@ -18,6 +18,14 @@ raw 344:*: {
   echo -astc Whois * Geographical Location: [ $+ $$3 $+ ] $$7-
 }
 
+#extendedjoin off
+on *:JOIN:#: extended.join $rawmsg
+
+alias -l extended.join {
+  echo -tc Join $3 * $4 is $right($$5-, -1)
+}
+#extendedjoin end
+
 ;; chat history retrieval
 raw BATCH:*chathistory*: {
   if ($2 == chathistory && $left($1, 1) == +) {
