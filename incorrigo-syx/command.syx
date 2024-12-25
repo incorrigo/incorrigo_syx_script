@@ -250,6 +250,9 @@ lHxgen {
   return %lH.look
 }
 
+next {
+  return $eval($+ $crlf $crlf $+, 1) $+
+}
 
 ;; input mode letters
 ;; combine these letters to form a prompt
