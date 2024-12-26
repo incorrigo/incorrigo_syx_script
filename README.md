@@ -13,7 +13,8 @@ Here are the instructions to install:
 - **(b)** During setup **_check "Run as Portable Application_** and make sure it does
 - **(c)** Complete setup, but don't run mIRC
 - **(d)** Download the latest copy of Incorrigo Syx
-- **(e)** Extract all files and folders into same dir as **mirc.exe** ... here's how you do it
+- **(e)** _(i)_ go into the main folder of the archive (where you will find _mirc.ini_)
+- _(ii)_ from this position in the repository, select all files and folders and drop them into the same folder as **mirc.exe** ... here's how you do it  
 - Click the following link to download as a ZIP file:  
   https://github.com/incorrigo/incorrigo_syx_script/archive/refs/heads/main.zip  
 
