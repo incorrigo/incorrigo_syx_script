@@ -141,7 +141,7 @@ on *:DIALOG:away-manager:init:0: {
 
   if (!%away.areason || %away.areason == $false) {
     ;; separate reason for auto-away
-    %away.areason = auto away: saession is idle.
+    %away.areason = auto away: session is idle.
   }
 
   if (%away.idletime == $null || %away.idletime == $false) {
@@ -271,7 +271,7 @@ on 1:NOTICE:*:?: {
   ;; private notices only
   if ($away == $true && %away.on-notice && $timer($server $+ . $+ $me $+ .wap) == $null) {
     if (reply: !isin $1-) {
-      .notice $nick auto reply: away from keyboard  $+ $chr(91) $+  $+ $awaymsg  $+ $chr(93) $+   $+ $chr(91) $+ timer: $duration($awaytime) $+  $+ $chr(93) $+ 
+      .notice $nick auto reply: away from keyboard  $+ $chr(91) $+  $+ $awaymsg  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+ 
       .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop
     }
   }
@@ -282,7 +282,7 @@ on 1:TEXT:*:?: {
   ;; respond to open query
   if ($away == $true && %away.on-msg && $timer($server $+ . $+ $me $+ .wap) == $null) {
     if (reply: !isin $1-) {
-      msg $nick auto reply: i'm currently away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ timer: $duration($awaytime) $+  $+ $chr(93) $+ 
+      msg $nick auto reply: i'm currently away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+ 
       .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop
     }
   }
@@ -294,7 +294,7 @@ on 1:TEXT:*:#: {
   ;; nick mentioned in channel
   if ($msgtags(batch).key == $null) {
     if ($me isin $strip($1-) && $away == $true && $timer($server $+ . $+ $me $+ .wap) == $null) {
-      .notice $nick auto reply: i'm away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ timer: $duration($awaytime) $+  $+ $chr(93) $+ 
+      .privmsg # $chr(1) $+ ACTION is away  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+  $+ $chr(1)
       .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop    
     }
   }
@@ -302,7 +302,15 @@ on 1:TEXT:*:#: {
 
 ctcp 1:*:?: {
   if ($away == $true && %away.on-ctcp && $timer($server $+ . $+ $me $+ .wap) == $null) {
-    .ctcpreply $nick AWAY away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ timer: $duration($awaytime) $+  $+ $chr(93) $+  
+    .ctcpreply $nick AWAY away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+  
     .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop
+  }
+}
+
+;; raw 306 away 305 back
+
+raw 306:*: {
+  if ($ironnik(isaway)) {
+    ame is away [ $+ $awaymsg $+ ] $iif($idle != 0,[idle: $duration($idle) $+ ],$null)
   }
 }
