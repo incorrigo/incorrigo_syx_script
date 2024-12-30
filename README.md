@@ -15,7 +15,7 @@ Here are the instructions to install:
 - **(d)** Download the latest copy of Incorrigo Syx
 - **(e)** _(i)_ go into the main folder of the archive (where you will find _mirc.ini_)
 - _(ii)_ from this position in the repository, select all files and folders and drop them into the same folder as **mirc.exe** ... here's how you do it  
-- Click the following link to download as a ZIP file:  
+- This link will always give you the most recent files for Incorrigo Syx:  
   https://github.com/incorrigo/incorrigo_syx_script/archive/refs/heads/main.zip  
 
   Here are the files you need to drag into the **_mirc.exe folder_** and you **must overwrite all files and replace** before you    first run mirc.exe  
