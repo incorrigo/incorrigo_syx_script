@@ -92,7 +92,7 @@ alias clientmsgs {
 
     if ($0 >= 3) {
       ;; this is a response
-      echo -atc CTCP $1  $+ $upper($2) $+  response: $gogat($3-)
+      echo -atc CTCP $1  $+ $upper($gogat($2)) $+  response: $gogat($3-)
     }
   }
 }
@@ -115,6 +115,10 @@ alias -l ctcp.aud {
 
 alias ctcp-x {
   .raw @+ctcp= $+ $2 TAGMSG $1
+}
+
+alias ctcp-ix {
+  raw @+ctcp= $+ $gatgo($gettok($$2-,1,161)) $+ ;+ctcp-x= $+ $gatgo($gettok($$2-,2,161)) TAGMSG $1
 }
 
 alias -l clientxrp {

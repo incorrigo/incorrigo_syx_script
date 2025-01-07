@@ -376,7 +376,7 @@ raw 320:*: {
 raw 301:*: {
   haltdef
   %scan.away = $3-
-  echo -act Whois * Away From Keyboard:: $2 is away ( $+ $3- $+ )
+  echo -act Whois * Away From Keyboard: $2 is away ( $+ $3- $+ )
 }
 
 
@@ -945,7 +945,7 @@ alias -l warnmodeD {
   }
 }
 
-#chreport on
+#chreport off
 raw 324:*: if (($me ison $2) && (%reverx != $2)) {
   set %reverx $2
   echo -tc Mode $2 *  $+ $2 $+  modes: $3-

@@ -44,6 +44,10 @@ ronnik {
   set -e % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $$1 ] ] [ [ $2- ] ]
 }
 
+xronnik {
+  unset % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $1 ] ]
+}
+
 ironnik {
   return % [ $+ [ $server ] $+ . $+ [ $me ] $+ . $+ [ $1 ] ]
 }
@@ -251,7 +255,7 @@ lHxgen {
 }
 
 next {
-  return $eval($+ $crlf $crlf $+, 1) $+
+  return $eval($+ $crlf $+ $crlf $+, 1) $+
 }
 
 ;; input mode letters
@@ -542,7 +546,7 @@ ls {
   if ($server) {
     if ($me ison %aktiv) {
       if ($me !isop %aktiv) {
-        if ($me !ishop %aktiv) {
+        if ($me !ishop %aktiv && !$sysop) {
           rawbak.d words incorrigo syx $pipe channel settings¿You're not a channel operator on %aktiv $+ $c so the channel settings are read only.
         }
       }

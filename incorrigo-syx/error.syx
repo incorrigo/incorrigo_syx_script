@@ -37,6 +37,7 @@ on *:ERROR:ERROR Closing Link*Banned*: {
     %netban.srv = $server
     %netban.excuse = $left($7-, -1)
     clear -s
+    if (%netban.type == realname) { %netban.type = N-Lined }
     echo -stc Info2 * Banned: Connection has been closed by %netban.srv because you have been $lower(%netban.type)
     echo -stc Info2 * Reason: %netban.excuse
     unset % $+ $server $+ . $+ $me $+ .login

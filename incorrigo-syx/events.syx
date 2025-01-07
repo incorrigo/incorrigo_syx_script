@@ -90,7 +90,19 @@ on ^*:VOICE:#: {
   }
   echo -ct mode # * $nick has given voice to $vnick
 }
-on ^*:HELP:#: if ($1 == +h) haltdef | if ($1 == +h && $nick == chanserv) { echo -ct mode # * $hnick now has half-op | halt } | if ($1 == +h) { haltdef | echo -ct mode # * $mode(1) is now an half-operator $chr(91) $+ given by $nick $+ $chr(93) | halt } | echo -ct mode # * $nick has given half-op to $hnick
+on ^*:HELP:#: {
+  if ($1 == +h) haltdef
+  if ($1 == +h && $nick == chanserv) {
+    echo -ct mode # * $hnick now has half-op
+    halt
+  }
+
+  if ($1 === +h && $nick != chanserv && . !isin $nick) {
+    haltdef
+    echo -ct mode # * $mode(1) is now an half-operator $chr(91) $+ given by $nick $+ $chr(93)
+    halt
+  }
+}
 on ^*:OP:#: {
   ;; because [my network] services issues +o with status modes [i.e. +qo / +ao] i covered it all
   ;; using rawmode. it turns out both events [and have to do it all backwards with DEOP] are triggered
