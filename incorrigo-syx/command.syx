@@ -12,6 +12,11 @@ timeofdaynow {
   return %timeofday
 }
 
+endofyear {
+  var %newyear $ctime($calc($asctime(yyyy) + 1) $+ /01/01 00:00:00)
+  echo -atc Mode * Year Remaining: $duration($calc(%newyear - $ctime))
+}
+
 gettime {
   if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
     %ctcp.timeformat = 1
@@ -61,7 +66,7 @@ timewy {
 }
 
 aopper {
-  if ($group(aopper).status == on( {
+  if ($group(aopper).status == on) {
     return $true
   }
 
@@ -406,6 +411,77 @@ cap.truba {
   return $null
 }
 
+;; retrieve the plain text output of a php function
+;; and pass it to a temporary global variable
+xphp {
+  var %output.file incorrigo-syx\chicken-oriental\xphp-in.tr
+
+  if ($1) {
+    if ($1 isnum) { 
+      if ($urlget($1).state == fail) {
+        echo -stc Mode * xphp: file retrieval failure
+        halt
+      }
+
+      ;; give single line target text to temporary variable
+      ronnik xphp0 $read(%output.file, 1)
+      echo -stc Mode * xphp: Retrieved value: $ironnik(xphp0)
+    }
+
+    else {
+      write -c %output.file
+      return $urlget($1, gf, %output.file, xphp)
+    }
+  }
+}
+
+hostchars-set {
+  return abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-][/_
+}
+
+inhost {
+  if ($1 !isin $hostchars-set) {
+    return $null
+  }
+
+  return $1
+}
+
+fvhost {
+  var %fvline $$1
+  var %fvcount $len(%fvline)
+  var %fvconcat $null
+  if (%fvcount >= 1) {
+    var %fvcounter 1
+    while (%fvcounter <= %fvcount) {
+      %fvconcat = %fvconcat $+ $inhost($mid(%fvline, %fvcounter, 1))
+      inc %fvcounter
+    }
+  }
+
+  return %fvconcat
+
+
+}
+
+fvsuggest {
+  ;; user-id vhost failed because unusable characters are in $account (nickname)
+  var %fvquest $decision(qyvg¿incorrgo syx $pipe vhost error¿You couldn't be given a user-id vhost because there are unusable characters in your nickname $&
+    $+ $crlf $crlf $+ Do you want to generate one?)
+  if (%fvquest == $yes) {
+    var %fvtruth $false
+    while (%fvtruth == $false || %fvtruth == $no) {
+      var %fvask $fvhost($ironnik(login)) $+ .v-id.incorrigo.io/ $+ $strgen(6, 19))
+      %fvtruth = $decision(rvyh¿incorrigo syx $pipe vhost¿You can't have an account vHost because there are unusable letters in your nickname $&
+        $+ $crlf $crlf $+ Will you accept this suggestion: $crlf $+ %fvask)
+    }
+
+    echo -st * vhost accepted: %fvask
+    hostserv request %fvask
+  }
+
+
+}
 
 quik.d {
   set -e %yaword $$1
