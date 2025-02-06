@@ -119,6 +119,35 @@ alias -l spam-fool-alert {
   echo -atc Mode only a sentient being would understand why a channel lets you in but wants you to leave
 }
 
+;; Access Denied
+on chanserv:NOTICE:Access denied.:?: {
+  if (!$timer(denied)) {
+    .timer -m 1 100 access.deniedcs
+    .timerdenied 1 13 noop do nothing
+  }
+}
+
+on operserv:NOTICE:Access denied.:?: {
+  if (!$timer(denied)) {
+    .timer -m 1 100 access.deniedos
+    .timerdenied 1 13 noop do nothing
+  }
+}
+
+alias access.deniedcs {
+  noop $decision(ogi¿incorrigo syx $pipe chanserv¿You need to have the permission on a channel to use that command)
+}
+
+alias access.deniedos {
+  if (!$sysop) {
+    noop $decision(ogh¿incorrigo syx $pipe operserv¿operserv is the executive service and for services operators only)
+  }
+
+  if ($sysop) {
+    return
+  }
+}
+
 ;; Dialog Variable Test
 
 dialog eevar {

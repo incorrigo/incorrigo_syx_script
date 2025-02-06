@@ -951,7 +951,7 @@ raw 324:*: if (($me ison $2) && (%reverx != $2)) {
   echo -tc Mode $2 *  $+ $2 $+  modes: $3-
   if (D isincs $3) {
     .timer -m 1 750 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Users who join this channel are hidden until they speak
+      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Some users are not shown until they speak
     }
   }
 
@@ -963,20 +963,20 @@ raw 324:*: if (($me ison $2) && (%reverx != $2)) {
 
   if (G isincs $3) {
     .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : Messages containing profanity will be censored
+      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : Profanity in channel messages will be censored
     }
   }
 
   if (M isincs $3) {
-    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Unregistered users that do not have voice can not speak
+    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Users will need 3+voice if they are not registered
   }
 
   if (m isincs $3) {
-    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : This channel requires 3+voice or higher to speak
+    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Normal users will need 3+voice or higher to speak
   }
 
   if (T isincs $3) {
-    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Channel notices are not allowed
+    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Channel notices are prohibited
   }
 
 }

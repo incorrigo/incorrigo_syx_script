@@ -17,6 +17,43 @@ endofyear {
   echo -atc Mode * Year Remaining: $duration($calc(%newyear - $ctime))
 }
 
+;; light / dark mode
+golight {
+  %dark.mode = $false
+  color -s Incorrigo-Syx-LT
+  .timercheckdark off
+}
+
+godark {
+  %dark.mode = $true
+  color -s Incorrigo-Syx-DARK
+  .timercheckdark off
+}
+
+goauto {
+  %dark.mode = auto
+  .timercheckdark -o 0 8 checkdark
+}
+
+dark.mode {
+  if (%dark.mode == $null) {
+    %dark.mode = auto
+  }
+
+  return %dark.mode
+}
+
+checkdark {
+  ;; auto change light/dark colour when windows does
+  if ($dark.mode == auto) {
+    color -s $iif($darkmode == $true, Incorrigo-Syx-DARK, Incorrigo-Syx-LT)
+  }
+
+  if ($dark.mode != auto) {
+    .timnercheckdark off
+  }
+}
+
 gettime {
   if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
     %ctcp.timeformat = 1
@@ -642,6 +679,6 @@ ls {
 }
 
 if (!$server) {
-  rawbak.d error incorrigoo syx $pipe channel settings¿You must be connected to the network to look at the settings of any channel
+  rawbak.d error incorrigo syx $pipe channel settings¿You must be connected to the network to look at the settings of any channel
 
 }

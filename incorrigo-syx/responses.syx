@@ -1,7 +1,7 @@
 ;;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
-;;; making a new feature before it exists yet
+;;; ircs://irc.incorrigo.io:+6697/westid
 
-;; +draft/reply using mIRC
+;; +draft/reply and +reply
 
 on *:START: {
   titlebar :: Incorrigo Syx
@@ -54,6 +54,13 @@ alias r {
   }
 }
 
+on *:ACTIVE:@reply: noop when this becomes the active window
+on *:ACTIVE:*: {
+  if ($active != @reply) {
+    .window -c @reply
+  }
+}
+
 alias send-reply-line {
   echo -tc Mode $2 * < $+ $3 $+ > $4-
 }
@@ -98,7 +105,7 @@ on ^*:TEXT:*:#: {
 
 on ^*:TEXT:*:?: {
   if ($msgtags(msgid)) {
-    query $nick
+    $iif($query($nick),noop,query -n $nick)
     cachewr $nick $msgtags(msgid).key $nick $1-
     if ($ini(%main.id-cache, $nick, 0) >= 101) {
       lopoff $nick
@@ -151,7 +158,7 @@ on ^*:ACTION:*:#: {
 }
 
 on ^*:ACTION:*:?: {
-  query $nick
+  $iif($query($nick),noop,query -n $nick)
   if ($msgtags(msgid)) {
     cachewr $nick $msgtags(msgid).key $nick ACTION $1- $+ 
     if ($ini(%main.id-cache, $nick, 0) >= 101) {

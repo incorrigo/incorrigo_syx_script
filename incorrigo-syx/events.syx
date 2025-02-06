@@ -29,6 +29,27 @@ on ^*:SNOTICE:*Your TLS certificate*: {
   .timer 1 3 echo -stc Own * TLS Certificate: %link.certfp
 }
 
+on ^*:SNOTICE:*Unable to apply vhost automatically: {
+  .timer 1 9 badvhost.check
+}
+
+alias -l badvhost.check {
+  ;; check if vhost error from SASL
+  if ($ironnik(login) == $null) {
+    xronnik bad-vhost
+    return
+  }
+
+  if ($ironnik(login) != $null) {
+    if (t !isincs $usermode) {
+      ronnik uid-vhost $fvhost($ironnik(login)) $+ $strgen(6, 19) $+ .v-id.incorrigo.io)
+      echo -satc Mode * vhost: Your user-id vhost can't be set because of unusable characters in your nickname [Use /fvsuggest to request a usable one]
+      ;; uncomment next line to activate unused feature
+      ;; fvsuggest
+    }
+  }
+}
+
 ;; AOPper is a convenient way to grant you full access to a user's
 ;; (actually every single, not just a normal their) channel on join
 
