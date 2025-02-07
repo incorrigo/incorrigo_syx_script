@@ -65,12 +65,16 @@ alias cF5 {
 }
 #firstusereset end
 
-on *:CONNECT: {
+on ^*:LOGON:*: {
   if ($right($server, 12) != incorrigo.io) {
-    quit 14,1incorrigo15,1syx IRC network ircs://irc.incorrigo.io/
-    .timer -o 1 1 clear -s
-    .timer -o 1 2 echo -atc Info2 server: connecting you to incorrigo syx
-    .timer -o 1 3 server irc.incorrigo.io
+    server -r $server $iif($network != Incorrigo-Syx && $network != Incorrigo-Syx-Autoconnect,-g $network,$null))
+    server -a irc.incorrigo.io -d Random Server -p +6697 -g Incorrigo-Syx
+
+    ;; prevent accidental connection to wrong network
+    disconnect
+    .timer -om 1 150 clear -s
+    .timer -om 1 300 echo -atc Info2 server: logon error. using correct info ...
+    .timer -om 1 750 server Incorrigo-Syx-Autoconnect
   }
 }
 
