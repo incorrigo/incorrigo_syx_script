@@ -67,13 +67,14 @@ alias cF5 {
 
 on ^*:LOGON:*: {
   if ($right($server, 12) != incorrigo.io) {
+    ;; eliminate server
     server -r $server $iif($network != Incorrigo-Syx && $network != Incorrigo-Syx-Autoconnect,-g $network,$null))
     server -a irc.incorrigo.io -d Random Server -p +6697 -g Incorrigo-Syx
 
-    ;; prevent accidental connection to wrong network
+    ;; all connections lead to incorrigo syx
     disconnect
     .timer -om 1 150 clear -s
-    .timer -om 1 300 echo -atc Info2 server: logon error. using correct info ...
+    .timer -om 1 300 echo -atc Info2 server: connecting. please wait ...
     .timer -om 1 750 server Incorrigo-Syx-Autoconnect
   }
 }
@@ -342,7 +343,6 @@ on *:START: {
   if (%dark.mode != $null) {
     if (%dark.mode == auto) {
       color -s $iif($darkmode == $true, Incorrigo-Syx-DARK, Incorrigo-Syx-LT)
-      .timercheckdark -o 0 8 checkdark
       goto rentboy
     }
 
@@ -579,25 +579,26 @@ on *:DIALOG:bingowing:close:0: {
 }
 
 on *:DIALOG:bingowing:sclick:15: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe connection settings¿Your nickname is the main name that identifies you what people go by. Generally it is the first impression that anyone gets of you $&
-    $crlf $crlf $+ Nicknames should start with a letter and consist of up to 30 letters and numbers)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe connection settings¿Your nickname is a one word identity that starts with a letter and goes up to 30 characters $+ $crlf $crlf $+ $&
+    When you make an account you can register a nickname so that only you are allowed to use it)
 }
 
 on *:DIALOG:bingowing:sclick:16: {
-  .timer -m 1 1 noop $decision(uigo¿incorrigo syx $pipe alias / alternate nickname¿An alias nickname is the one that will be used if your "main" nickname is already being used)
+  .timer -m 1 1 noop $decision(uigo¿incorrigo syx $pipe alias / alternate nickname¿The alternate nickname is what you will use if the "main" nickname you have chosen is blocked or already being used)
 }
 
 on *:DIALOG:bingowing:sclick:17: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe friendly name / gecos¿Although you are not required to use your full name at all $+ $c you can set a friendly name that will show up in your /WHOIS response $+ $crlf $crlf $+ Most users find this an apt opportunity to say something clever about themself)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe friendly name / gecos¿Your friendly name [sometimes known as "gecos"] is where you can put a more personalised name for yourself that can use spaces)
 }
 
 on *:DIALOG:bingowing:sclick:18: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe username¿Your username is a short secondary ID that is shown in your overall address: $crlf $crlf $+ %main.nick $+ !~ $+ %main.username $+ @host.name.or.ip)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe username¿Your username is a short secondary ID that is shown in your overall address: $crlf $crlf $+ %main.nick $+ !~ $+ %main.username $+ @host.name.or.ip $&
+    $+ $crlf $crlf $+ This ID can be up to 10 characters long)
 }
 
 ;; login method
 on *:DIALOG:bingowing:sclick:22: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe login method¿None - You will need to identify manually when connected $+ $c and none of these details will be used $+ $crlf $crlf $+ Your Password - Your password will be used as part of the connection process $+ $crlf $crlf $+ TLS Certificate - Your certificate file will be used but no login will be attempted $+ $c this option should be used when your certificate hasn't been added to your account yet. If it is added to your account then nickserv will auto-detect when connected $+ $crlf $crlf $+ Nickserv - No login will be attempted during connection but your password will automatically be sent to nickserv once the normal connection with the standard checks has succeeded)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe login method¿None - If you don't provide your password [using /ID yourpassword] within the time allowed $+ $c your nickname will be held by services and need to be released $+ $crlf $crlf $+ Your Password - Log into your account with the password during connection process (high priority login) $+ $crlf $crlf $+ TLS Certificate - Attaches the certificate fingerprint to your connection. If it works it will be visible in your /whois response $+ $crlf $crlf $+ Nickserv - Your password will be given to nickserv after you have made a (low priority) connection)
 }
 
 ;; password field
