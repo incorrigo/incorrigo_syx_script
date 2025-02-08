@@ -76,7 +76,7 @@ on ^*:USERMODE: {
 
   haltdef
   if ($$1 === -r) {
-    echo -estc info * Unregistered Nickname: Identified status removed by  $+ $nick $+ 
+    echo -estc info * Registered Nickname: Identified status removed by  $+ $nick $+ 
     goto done
   }
 
@@ -115,7 +115,7 @@ ctcp ^*:VERSION:?: {
 ctcp ^*:TIME:*: {
   haltdef  
   if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
-    %ctcp.timeformat = 1
+    %ctcp.timeformat = 2
   }
   if (%ctcp.timeformat == 1) {
     .ctcpreply $nick TIME [ $+ $asctime(dddd) $+ $c $asctime(doo) of $asctime(mmmm) $asctime(yyyy) $+ ] [ $+ $asctime(HH:nnTT) - GMT $asctime(z) $+ ] [ $+ $asctime(dddd) $timeofdaynow $+ ] [ $+ $asctime(yyyy-mm-dd) $+ ]
@@ -140,8 +140,8 @@ ctcp ^*:TIME:*: {
 
 alias timeformat {
   if (%ctcp.timeformat !isnum) {
-    echo -atc Info * Time format reset
-    %ctcp.timeformat = 1
+    echo -atc Info * Time format reset to: Long Date && Time (setting 2)
+    %ctcp.timeformat = 2
   }
 
   else {
@@ -167,10 +167,27 @@ raw 464:*: .timer -m 1 1 deny.oper $$1-
 
 raw 481:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$2-
 raw 491:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) network engineer login¿ $+ $$2-
-raw 432:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) nick error¿Unable to use nickname $2 $+ $+ $crlf $crlf $+ $3-
+raw 432:*: {
+  var %910 $9-
+  if (%910 === registered user) {
+    .timer -m 1 1 nick.recovery $2
+    goto cocknocker
+  }
+  .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) banned nickname¿Your nickname $chr(91) $+ $2 $+ $chr(93) has been blocked $+ $+ $crlf $crlf $+ $3-
+  :cocknocker
+}
+
+alias -l nick.recovery {
+  var %recover.nick $$1
+  var %recover.pass $$decision(pgbw¿incorrigo syx $pipe nickname release¿Your nickname $chr(91) $+ %recover.nick $+ $chr(93) is protected by a services hold $+ $crlf $crlf $+ To release your nickname $+ $c enter your password:)
+  recover %recover.nick %recover.pass
+  .timer -m 1 800 nick %recover.nick
+  .timer -m 1 1300 id %recover.pass
+}
+
 raw 437:*: {
   if (%get.the.message != $2) {
-    echo -atc Nick * Unable to change your nickname. [ $+ $2 $+ ] $3-
+    echo -tc Nick $2 * Nickname: $3- [ $+ $2 $+ ]
     %get.the.message = $2
     .timer 1 28 unset %get.the.message
   }
@@ -181,6 +198,8 @@ raw 438:*: {
 }
 
 alias -l too.quick.nick {
+  var %920 $9-
+  if (%920 === registered user
   return $$decision(hog¿incorrigo syx $pipe change nickname error¿Unable to change nickname to $2 $+ $crlf $crlf $+ Server: $3-)
 }
 
@@ -787,6 +806,7 @@ raw 349:*: {
 ;; general channel error messages
 raw 441:*: .timer -m 1 100 on.channel.fool $$1-
 raw 443:*: .timer -m 1 100 channel.fool $2 $3
+raw 447:*: echo -tc Nick $8 * Nickname: No nick changes are allowed on  $+ $8 $+  $9
 raw 404:*: {
   ;; this handles several use cases where you are unable to join / speak on the channel
   haltdef
@@ -797,6 +817,10 @@ raw 404:*: {
     .timer 1 6 unset %get.the.message
   }
   else halt
+}
+
+alias -l nonick.change {
+  return $$decision(ogh¿incorrigo syx $pipe nickname error¿Unable to change your nickname $+ $crlf $crlf $+ Message: $2-)
 }
 
 on ^*:SNOTICE:*Cannot join*the virus-help-channe*: {
@@ -945,7 +969,7 @@ alias -l warnmodeD {
   }
 }
 
-#chreport off
+#chreport on
 raw 324:*: if (($me ison $2) && (%reverx != $2)) {
   set %reverx $2
   echo -tc Mode $2 *  $+ $2 $+  modes: $3-
