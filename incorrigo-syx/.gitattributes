@@ -1,2 +1,2 @@
-*.syx = mIRC Script
-*.tr = incorrigo syx text file
+*.syx linguist-language=mIRC
+*.tr linguist-language=mIRC
