@@ -1,4 +1,1 @@
-incorrigo_syx_script linguist-language=mIRC
-*.syx linguist-language=mIRC
-*.tr linguist-language=mIRC
-*.ini linguist-language=mIRC
+* linguist-language=mIRC
