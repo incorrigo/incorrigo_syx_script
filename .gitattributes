@@ -1,2 +1,3 @@
-* linguist-language=mIRC
+*.syx linguist-language=mIRC
+*.tr linguist-language=mIRC
 * linguist-language=mIRC
