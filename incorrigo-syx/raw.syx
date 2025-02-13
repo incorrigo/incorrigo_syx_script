@@ -985,6 +985,12 @@ raw 324:*: if (($me ison $2) && (%reverx != $2)) {
     }
   }
 
+  if (N isincs $3) {
+    .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
+      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : You can't change your nickname while you are on this channel
+    }
+  }
+
   if (G isincs $3) {
     .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
       .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : Profanity in channel messages will be censored
