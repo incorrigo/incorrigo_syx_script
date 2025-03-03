@@ -56,6 +56,10 @@ Modes seldom change throughout the course of a given day when in an IRC session,
 ### Your Journey Starts Here
 Unfortunately I can't provide anyone with [mIRC](https://www.mirc.com/) and it is not free software. You will have to make that arrangement separately - but once you have done, this script will give you your money's worth
 
+### Release notes for 2025-03-03 -- v2.1a8
+
+https://github.com/incorrigo/incorrigo_syx_script/releases/tag/v2.1a8
+
 ### Release notes for github debut -- v2.1a7
 
 https://github.com/incorrigo/incorrigo_syx_script/releases/tag/incorrigo-syx
