@@ -1,0 +1,358 @@
+;;; INCORRIGO SYX DIGITAL COMMUNICATION SYSTEMS
+;; TECHNICAL SUPPORT MANAGER
+;; 
+;; This is an optional feature that is switched
+;; OFF by default (first use / factory reset)
+;;
+;; From the point where this feature is released
+;; users at level 50 or higher have special status
+;; but the features have to be enabled
+
+;;; Explanations
+alias explain.ra {
+  ;; explanations that are context-specific when the user happens across one of the features to explain
+  if ($$1 == nicklist) {
+    noop $decision(gio¿incorrigo syx $pipe remote assist¿You can use this menu to give or remove the high trust level that enables a user to remotely assist $&
+      $+ $crlf $crlf $+ You must enable the functions in the first place = whether you have given someone permission or not - for this feature to work)
+  }
+
+  if ($$1 == channel) {
+    noop $decision(oig¿incorrigo syx $pipe remote assist¿Starting with the 2.1a8 release $+ $c we are going to start rolling out features that work using mIRC levels. $&
+      $+ $crlf $crlf $+ In mIRC a new user you never met before is default level 1. Then $+ $c trust goes up ... level goes up $+ $crlf $crlf $+ $&
+      With _remote assist_ we are starting at level 50. When you "show remote assist" you will have a give / take permission in the channel nickname list $&
+      $+ $crlf $crlf $+ Another thing that will appear in the channel menu is the _remote assist settings_ where you have to enable specific things before $&
+      anyone - even if you have give them level 50 already - is able to do a thihng)
+  }
+
+  if ($$1 == status) {
+    noop $decision(oig¿incorrigo syx $pipe remote assist¿Remote assist is a feature that enables users you have trusted to do things remotely over your IRC session $&
+      $+ $crlf $crlf $+ The settings for remote assist and the options in the channel nick list will appear if you choose to show remote assist in this menu)
+  }
+}
+
+on ^50:NOTICE:.*:?: {
+  if ($window(@assist. $+ $nick) == $null) {
+    window -ni @assist. $+ $nick
+    background -f @assist. [ $+ [ $nick ] ] incorrigo-syx\workaround.bmp
+    echo 9 -t @assist. [ $+ [ $nick ] ] Incoming remote assist requests from  $+ $nick $+ , to  $+ $me $+ :
+  }
+  haltdef
+  echo 9 -t @assist. $+ $nick  $+ $nick $+ : $$1-
+}
+
+on ^1:NOTICE:.*:?: {
+  haltdef
+}
+
+dialog rah {
+  title "incorrigo syx | remote assist manager"
+  size -1 -1 201 100
+  option dbu
+  tab "Enable", 1, 6 3 190 78
+  box "Important", 2, 8 19 183 56, tab 1
+  text "If you switch remote assist off ... no one will be able to give you any remote assistance. Even if you have given them permission, or they have a level of 50 or higher on your user list", 3, 16 30 167 22, tab 1
+  combo 4, 47 54 97 50, tab 1 size drop
+  link "User Levels", 77, 152 57 33 8, tab 1
+  tab "IRC Session", 5
+  check "(Select All)", 7, 10 22 50 10, tab 5 flat
+  check "Private Message", 9, 15 42 50 10, tab 5 flat
+  check "Channel Message", 8, 15 32 56 10, tab 5 flat
+  text "No-one can read your mesages", 10, 7 64 88 8, disable tab 5 center
+  check "Nickserv", 11, 103 29 40 10, tab 5 flat
+  text "Run Services Commands", 12, 98 19 92 8, tab 5
+  check "Chanserv", 13, 103 37 40 10, tab 5 flat
+  check "Hostserv", 14, 103 45 40 10, tab 5 flat
+  check "Memoserv", 15, 103 53 40 10, tab 5 flat
+  check "Botserv", 16, 103 61 40 10, tab 5 flat
+  check "Operserv", 17, 103 69 40 10, tab 5 flat
+  check "Tag Messages", 21, 15 52 50 10, tab 5 flat
+  link "[?]", 52, 146 30 14 8, tab 5
+  link "[?]", 53, 146 38 14 8, tab 5
+  link "[?]", 54, 146 46 14 8, tab 5
+  link "[?]", 55, 146 54 14 8, tab 5
+  link "[?]", 56, 146 62 14 8, tab 5
+  link "[?]", 57, 146 70 14 8, tab 5
+  link "[?]", 71, 75 34 14 8, tab 5
+  link "[?]", 72, 75 43 14 8, tab 5
+  link "[?]", 73, 75 52 14 8, tab 5
+  tab "Values", 18
+  text "Session Variables are deleted when mIRC closes", 19, 23 21 155 8, tab 18 center
+  check "Set Variables", 20, 19 38 60 10, tab 18 flat
+  check "Connection Specific", 23, 19 56 60 10, tab 18 flat
+  check "Session Variables", 22, 19 47 60 10, tab 18 flat
+  box "Declare Variables", 24, 12 29 69 40, tab 18
+  box "Get Current Values", 25, 85 29 96 50, tab 18
+  check "Get Variable Value", 26, 90 37 58 10, tab 18 flat
+  check "Identifier Return Value", 27, 90 46 67 10, tab 18 flat
+  text "Local Commands Only", 29, 90 66 86 8, disable tab 18 center
+  check "Use Values in Command", 28, 90 55 69 10, tab 18 flat
+  link "[?]", 58, 162 37 14 8, tab 18
+  link "[?]", 59, 162 45 14 8, tab 18
+  link "[?]", 60, 162 53 14 8, tab 18
+  link "Variables and Types", 78, 18 70 54 8, tab 18
+  tab "Prompts", 30
+  text "These prompts are used to gather useful information quickly", 31, 22 61 154 8, tab 30
+  check "Enable Input Prompting", 32, 11 21 70 10, tab 30 flat
+  icon 33, 28 33 24 24,  incorrigo-syx\img\icon.png, 0, tab 30
+  icon 37, 140 33 24 24,  incorrigo-syx\img\sysop.png, 0, tab 30
+  icon 35, 84 33 24 24,  incorrigo-syx\img\triangle.png, 0, tab 30
+  icon 34, 56 33 24 24,  incorrigo-syx\img\question.png, 0, tab 30
+  icon 36, 112 33 24 24,  incorrigo-syx\img\cross.png, 0, tab 30
+  text "while they can be annoying if you're preoccupied with something else", 38, 11 71 166 8, tab 30 center
+  link "[?]", 61, 82 22 14 8, tab 30
+  tab "Executive", 39
+  check "Use /RAW", 40, 13 23 37 10, tab 39 flat
+  check "Get URL to file", 43, 13 58 49 10, tab 39 flat
+  check "Kick && Ban From Channel", 45, 100 20 71 10, tab 39 flat
+  check "Load Remote Scripts", 44, 13 67 64 10, tab 39 flat
+  check "Use /RUN", 41, 13 32 37 10, tab 39 flat
+  check "Master Command", 42, 13 41 57 10, tab 39 flat
+  text "(Run any command)", 51, 22 50 64 8, disable tab 39
+  check "/OPER up", 46, 100 29 37 10, tab 39 flat
+  check "Set Channel Modes", 47, 100 38 57 10, tab 39 flat
+  check "Set User Modes", 48, 100 47 50 10, tab 39 flat
+  check "Change Nickname", 49, 100 56 55 10, tab 39 flat
+  check "IRC Operator Commands", 50, 100 65 72 10, tab 39 flat
+  link "[?]", 62, 176 21 14 8, tab 39
+  link "[?]", 67, 176 65 14 8, tab 39
+  link "[?]", 66, 176 56 14 8, tab 39
+  link "[?]", 65, 176 47 14 8, tab 39
+  link "[?]", 64, 176 39 14 8, tab 39
+  link "[?]", 63, 176 30 14 8, tab 39
+  link "[?]", 70, 72 41 14 8, tab 39
+  link "[?]", 68, 72 24 14 8, tab 39
+  link "[?]", 69, 72 32 14 8, tab 39
+  link "[?]", 74, 81 59 14 8, tab 39
+  link "[?]", 75, 81 67 14 8, tab 39
+  text "Incorrigo Syx", 6, 6 86 119 8
+  button "D&one", 76, 147 85 50 12, default flat multi ok
+}
+
+
+alias remote.assist {
+  if (!$dialog(rah)) {
+    noop $dialog(rah, rah, u)
+  }
+}
+
+on *:DIALOG:rah:init:0: {
+  did -a rah 4 Enabled
+  did -a rah 4 Disabled
+  if (!%remote.assist) {
+    did -c rah 4 2
+  }
+
+  else {
+    did -c rah 4 1
+  }
+}
+
+on *:DIALOG:rah:sclick:4: {
+  if ($did(rah, 4).sel == 1) {
+    %remote.assist = $true
+  }
+
+  if ($did(rah, 4).sel == 2) {
+    %remote.assist = $false
+  }
+}
+
+;; Info Buttons
+on *:DIALOG:rah:sclick:77: {
+  noop $decision(iugo¿incorrigo syx $pipe user levels¿Users have a numeric level that goes higher the more you trust someone $&
+    $+ $crlf $crlf $+ Unknown / new users all start at the default level $+ $c which is level 1 $+ $crlf $crlf $+ $&
+    User levels are a key feature of mIRC which we have introduced into the latest release as the remote assist user list $&
+    $+ $crlf $crlf $+ Someone who is given remote assist permissions is set to level 50)
+}
+
+on *:DIALOG:rah:sclick:71: {
+  ;; tab 2 > channel messages
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿Allow the remote assist system to message channels that you are on $+ $crlf $crlf $+ $&
+    Because nearly all channels in the world are +n (no external messages) even you would probably not accomplish this otherwise)
+}
+
+on *:DIALOG:rah:sclick:72: {
+  ;; tab 2 > private messages
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿If this is enabled, remote assistant will be able to open up query windows to send private messages $&
+    $+ $crlf $crlf $+ You will be able to see the messages that are sent $+ $c and who it has been sent to)
+}
+
+on *:DIALOG:rah:sclick:73: {
+  ;; tab 2 > tag messages
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿There are unseen message tags mostly generated by the server in a vast number of things $+ $crlf $crlf $+ $&
+    There is also a command that sends _only_ tags $+ $c with no message. As with all the other messages - you will be able to see what is sent and the recipient)
+}
+
+
+on *:DIALOG:rah:sclick:52: {
+  ;; tab 2 > nickserv
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿This option will allow remote assist to issue /nickserv commands $&
+    $+ $crlf $crlf $+ nickserv is the user account registration and management service. you need to have an account with $&
+    nickserv to use any of the other network services)
+}
+
+on *:DIALOG:rah:sclick:53: {
+  ;; tab 2 > chanserv
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿This option will allow remote assist to issue /chanserv commands $&
+    $+ $crlf $crlf $+ chanserv is the network service that maintains the settings and ownership of registered channels)
+}
+
+on *:DIALOG:rah:sclick:54: {
+  ;; tab 2 > hostserv
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿This option will allow remote assist to issue /hostserv commands $&
+    $+ $crlf $crlf $+ hostserv handles vanity hostname (vHost) assignment for registered users $+ $c including vHost requests and settings)
+}
+
+on *:DIALOG:rah:sclick:55: {
+  ;; tab 2 > memoserv
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿This option will allow remote assist to issue /memoserv commands $&
+    $+ $crlf $crlf $+ memoserv provides an inbox for registered users - you also have an inbox for channels - and the $&
+    settings / functions used for handling memo messages)
+}
+
+on *:DIALOG:rah:sclick:56: {
+  ;; tab 2 > botserv
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿This option will allow remote assist to issue /botserv commands $&
+    $+ $crlf $crlf $+ botserv is a network service that lets registered channels have a bot that joins the channel and $&
+    provides an interactive range of extra features $ampersand settings $+ $crlf $crlf $+ When your channel has a bot $+ $c $&
+    it is operated by services so it has all the powers and protection that chanserv does. $+ $crlf $crlf $+ Type !help in $&
+    the channel where the bot has joined $+ $c to receive a list of commands you can use to manage the channel)
+}
+
+on *:DIALOG:rah:sclick:57: {
+  ;; tab 2 > operserv
+  noop $decision(iugo¿incorrigo syx $pipe irc assist¿This option will allow remote assist to issue /operserv commands $&
+    $+ $crlf $crlf $+ operserv is the executive service for the network manager - and can only be used by a services operator $+ $c $&
+    no matter what permissions you or the remote user may currently have)
+}
+
+on *:DIALOG:rah:sclick:58: {
+  ;; tab 3 > get variable value
+  noop $decision(iugo¿incorrigo syx $pipe data assist¿Enabling this will allow remote assistance to ask for the current value of a variable)
+}
+on *:DIALOG:rah:sclick:59: {
+  ;; tab 3 > identifier return value
+  noop $decision(iugo¿incorrigo syx $pipe data assist¿This setting will allow remote assist to retrieve the results of identifiers $&
+    $+ $crlf $crlf $+ Identifiers are different from variables mainly because the value returned by an identifier is the result of a command that is run)
+}
+on *:DIALOG:rah:sclick:60: {
+  ;; tab 3 > use values in command
+  noop $decision(iugo¿incorrigo syx $pipe data assist¿Aliases [local commands] can be manufactured to use variables and produce identifiers $&
+    $+ $crlf $crlf $+ Enabling this setting allows remote assist to put the variables / identifiers into small aliases so that the values can be used to solve a problem $&
+    $+ $crlf $crlf $+ This is the very essence of what scripting is and how it all fits together)
+}
+
+on *:DIALOG:rah:sclick:61: {
+  ;; tab 4 > icon
+  noop $decision(iugo¿incorrigo syx $pipe asking and telling¿99.9% of asking for assistance on the internet consists of gathering information for diagnostic purposes $&
+    $+ $crlf $crlf $+ Input and information prompts are a very useful way of gathering details quickly ... just remember to turn them off when you're done cos there's always one ...)
+}
+
+on *:DIALOG:rah:sclick:33: {
+  ;; tab 4 > icon
+  noop $decision(iugo¿incorrigo syx $pipe information¿A user who is assisting you remotely can send you an information prompt like this one $+ $c $&
+    which tells you something no matter what is currently going on $+ $crlf $crlf $+ A message like this one is an effective line of communication so you $&
+    know that your remote assistant wants you to do something $+ $c or is )
+}
+on *:DIALOG:rah:sclick:37: {
+  ;; tab 4 > star
+  noop $decision(tugo¿incorrigo syx $pipe star¿If you get a message like this and you're still connected to the network then it's probably good news)
+}
+on *:DIALOG:rah:sclick:35: {
+  ;; tab 4 > triangle
+  noop $decision(wugo¿incorrigo syx $pipe triangle¿This means it's not exactly the end of the world but might be something you need to take a look at)
+}
+on *:DIALOG:rah:sclick:36: {
+  ;; tab 4 > circle
+  noop $decision(hugr¿incorrigo syx $pipe circle¿Something has not worked properly or you have been banned from the channel / network)
+}
+
+on *:DIALOG:rah:sclick:34: {
+  ;; tab 4 > question symbol
+  var %parole $r(0,1)
+  noop $decision(iug $+ $iif(%parole == 1,p,e) $+ ¿incorrigo syx $pipe question mark¿What would you say this kind of prompt is used for?)
+}
+
+on *:DIALOG:rah:sclick:68: {
+  ;; tab 5 > use /RAW
+  noop $decision(ugo¿incorrigo syx $pipe executive assist¿Some IRC commands are actually handled by mIRC and not sent to the server as-is $&
+    $+ $crlf $crlf $+ When you use /RAW it sends the command [and all command arguments] straight to the server $+ $c bypassing the way it is $&
+    handled by the client $+ $crlf $crlf $+ Enabling this feature can be very useful for remote assistance $+ $c because it allows the remote user $&
+    to understand exactly what is being sent from you to the server)
+}
+
+on *:DIALOG:rah:sclick:69: {
+  ;; tab 5 > use /RUN
+  noop $decision(ugo¿incorrigo syx $pipe about /run¿What someone decides to do with remote access to the /RUN command can have connotations that affect $&
+    the situation on the whole computer $+ $crlf $crlf $+ The /RUN command is used to execute a program - or use a program to execute a file stored somewhere $&
+    on the computer $+ $crlf $crlf $+ This command enables a remote assistant to perform actions that can go much further beyond the scope of a mIRC related $&
+    issue $+ $crlf $crlf $+ If you are going to enable this to be used remotely $+ $c you should only do so when it is needed $+ $c and there is a clear enough $&
+    determination how it is going to be used)
+}
+
+on *:DIALOG:rah:sclick:70: {
+  ;; tab 5 > Master Command
+  noop $decision(ugo¿incorrigo syx $pipe master command¿Master command allows any command that can be typed in to be run remotely $+ $crlf $crlf $+ $&
+    All the functions that can be enabled in this tab were designed to be the most useful $+ $c therefore the most powerful $+ $crlf $crlf $+ $&
+    This is probably the main $&
+    setting made available by remote assist - since in essence enabling this setting allows your trusted remote user to manually perform all the others)
+}
+
+on *:DIALOG:rah:sclick:74: {
+  ;; tab 5 > Fetch File From URL
+  noop $decision(ugo¿incorrigo syx $pipe fetch file from URL¿This will allow the remote user to fetch a [text] file from an https location and save it in a local folder $+ $crlf $crlf $+ $&
+    As a remote assist function $+ $c it will not be available in the Incorrigo Syx 2.1a8 release. But it will be rolled out in subsequent updates to the repository ... $&
+    where it will co-incide with other developments that are currently being designed)
+}
+
+on *:DIALOG:rah:sclick:75: {
+  ;; tab 5 > Load Remote Scripts
+  noop $decision(ugo¿incorrigo syx $pipe remote assist¿This feature will not be available in the 2.1a8 release ... and there will probably be a lot more to it $&
+    as the remote assist system will be rolled out in subsequent updates to the repository $+ $crlf $crlf $+ By default - i.e. factory reset conditions - remote assist will not be visible. The $&
+    purpose of the release is to introduce the main mIRC settings - then you can just overwrite script files as they update $+ $crlf $crlf $+ As we get used to github $+ $c future releases are going $&
+    to address this. But for now $+ $c the settings and information are being released first)
+}
+
+on *:DIALOG:rah:sclick:62: {
+  ;; tab 5 > kick and ban people
+  noop $decision(ugo¿incorrigo syx $pipe executive commands¿Enabling this setting will let remote assist kick and ban people from channels you are an operator on)
+}
+
+on *:DIALOG:rah:sclick:63: {
+  ;; tab 5 > become an IRC operator
+  noop $decision(ugo¿incorrigo syx $pipe executive commands¿If you enable this setting then remote assist will accept attempts to log you in as an IRC operator with the credentials that are sent)
+
+}
+
+on *:DIALOG:rah:sclick:64: {
+  ;; tab 5 > set channel modes
+  noop $decision(ugo¿incorrigo syx $pipe executive commands¿When you are a channel operator and this setting is enabled $+ $c remote assist will accept commands to make mode changes)
+}
+
+on *:DIALOG:rah:sclick:65: {
+  ;; tab 5 > set user modes
+  noop $decision(ugo¿incorrigo syx $pipe executive commands¿On IRC you can only set user modes on yourself. However $+ $c if you trust the user[s] that you give remote access to - remote assist will respond to user mode commands by making such mode changes $&
+    $+ $crlf $crlf $+ ... to the server $+ $c it's exactly the same)
+}
+
+on *:DIALOG:rah:sclick:66: {
+  ;; tab 5 > change nickname
+  noop $decision(ugo¿incorrigo syx $pipe executive commands¿If you want to let your remote assist log you into an account etc. then you should enable nickserv etc. in the "IRC Session" tab $&
+    $+ $crlf $crlf $+ Enabling services commands is a good combination when you allow this setting - which will help your remote assist help you with account settings and login issues &c.)
+}
+
+on *:DIALOG:rah:sclick:67: {
+  ;; tab 5 > use IRC operator commands
+  noop $decision(ugo¿incorrigo syx $pipe executive commands¿Enabling this setting will let remote assist kick and ban people from channels you are an operator on)
+}
+
+on *:DIALOG:rah:sclick:78: {
+  ;; tab 3 variables and types
+  noop $decision(iugo¿incorrigo syx $pipe settings and values¿Variables are named containers where temporary / changeable values of data are stored $&
+    $+ $crlf $crlf $+ Most of the script's settings are stored in variables; and the factory reset command basically involves deleting them all. $&
+    There are a few types of variables that have different levels of importance in this script $+ $crlf $crlf $+ Variables - These can be set at any $&
+    time and will remain there until the value of it is changed or the variable is deleted $+ $crlf $crlf $+ Session Variables - These variables will be $&
+    automatically deleted when mIRC is closed so are only needed to temporarily store information in solving a specific problem $&
+    $+ $crlf $crlf $+ Connection specific variables are only relevant to the current connection that is receiving remote assist commands for the purposes of $&
+    multiple connections to the network at the same time (not perfect but is possible))
+}

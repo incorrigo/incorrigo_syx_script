@@ -18,7 +18,7 @@ on *:LOAD: {
 on *:JOIN:#: {
   ;; This requires operserv/mode permission on the network manager
   if ($nick == $me && $sysop) {
-    .operserv mode # +a $me
+    .operserv mode # %aopper.lev $me
   }
 }
 #svcsaop end
@@ -27,7 +27,7 @@ on *:JOIN:#: {
 on *:JOIN:#: {
   ;; Use your own (oper override was the intended) permssion to establish yourself in a channel
   if ($nick == $me && $sysop) {
-    .mode # +a $me
+    .mode # %aopper.lev $me
   }
 }
 #selfaop end
@@ -43,12 +43,25 @@ on *:JOIN:#: {
 
 #scmdaop off
 on *:JOIN:#: {
-  ;; Using /SAMODE will make the server _you are on_ give you +a status
+  ;; Using /SAMODE will make the server _you are on_ give you %aopper.lev status
   if ($nick == $me && $sysop) {
-    .samode # +a $me
+    .samode # %aopper.lev $me
   }
 }
 #scmdaop end
+
+alias aopper.what {
+  if ($1 == $null) {
+    if (%aopper.lev == $null) {
+      %aopper.lev = +o
+    }
+    return %aopper.lev
+  }
+  if ($1 == v) { %aopper.lev = +v }
+  if ($1 == h) { %aopper.lev = +h }
+  if ($1 == o) { %aopper.lev = +o }
+  if ($1 == a) { %aopper.lev = +a }
+}
 
 alias aopper.set {
   if ($0 == 1) {
@@ -116,6 +129,7 @@ alias aopper.set {
       ;; initialise default [self] setting
       %aopper.active = $true
       %aopper.mode = self
+      .aopper.what o
       .enable #selfaop
       .disable #svcsaop
       .disable #scmdaop

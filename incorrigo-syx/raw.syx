@@ -179,10 +179,20 @@ raw 432:*: {
 
 alias -l nick.recovery {
   var %recover.nick $$1
-  var %recover.pass $$decision(pgbw¿incorrigo syx $pipe nickname release¿Your nickname $chr(91) $+ %recover.nick $+ $chr(93) is protected by a services hold $+ $crlf $crlf $+ To release your nickname $+ $c enter your password:)
+  var %recover.pass $$decision(pgbw¿incorrigo syx $pipe nickname release¿Registered nickname $chr(91) $+ %recover.nick $+ $chr(93) is protected by a services hold $+ $crlf $crlf $+ $&
+    To release your nickname and auto-login $+ $c enter your password:)
   recover %recover.nick %recover.pass
-  .timer -m 1 800 nick %recover.nick
-  .timer -m 1 1300 id %recover.pass
+  .timer -m 1 400 nickserv identify %recover.nick %recover.pass
+  .timer -m 1 950 nick %recover.nick
+}
+
+on nickserv:NOTICE:*nickname has been registered*not use*:?: {
+  .timer -m 1 1 nickslap
+}
+
+alias -l nickslap {
+  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿The nickname $me $iif($ironnik(login) == $null,already belongs to someone else,is not registered under your account) $+ $crlf $crlf $+ $&
+    If you don't want a random guest nickname $+ $c then you can try using a different one here $+ $crlf $crlf $+ Enter a new nickname:)
 }
 
 raw 437:*: {
@@ -199,7 +209,7 @@ raw 438:*: {
 
 alias -l too.quick.nick {
   var %920 $9-
-  if (%920 === registered user
+  if (%920 === registered user)
   return $$decision(hog¿incorrigo syx $pipe change nickname error¿Unable to change nickname to $2 $+ $crlf $crlf $+ Server: $3-)
 }
 
@@ -899,7 +909,7 @@ alias -l chmode.q {
 }
 
 alias -l chmode.not.irc.op {
-  return $$decision(hugo¿incorrigo syx $pipe mode change denied¿Permission was denied to set mode $2 $+ $crlf $crlf $+ Message: $3-)
+  return $$decision(hugo¿incorrigo syx $pipe mode change denied¿Your attempt to remove mode $2 from $3 was declined $+ $crlf $crlf $+ Message: $3-)
 }
 
 alias -l rejection-b {
