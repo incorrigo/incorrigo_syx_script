@@ -504,8 +504,6 @@ fvhost {
   }
 
   return %fvconcat
-
-
 }
 
 fvsuggest {
