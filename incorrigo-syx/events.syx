@@ -222,6 +222,12 @@ on ^*:NICK: if ($nick == $me) {
   }
 }
 
+on *:EXIT: {
+  if (!%main.quitmsg) {
+    quit 14,1incorrigo15,1syx script - https://incorrigo.io/script -
+  }
+}
+
 on ^*:DEHELP:#: if ($1 == -h) haltdef | if ($1 == -h && $nick == chanserv) { echo -ct mode # * $hnick no longer has half-op | halt } | if ($1 == -h) { haltdef | echo -ct mode # * $mode(1) is no longer an half-operator $chr(91) $+ removed by $nick $+ $chr(93) | halt } | echo -ct mode # * $nick removed half-op from $hnick
 on ^*:DEOP:#: {
   haltdef

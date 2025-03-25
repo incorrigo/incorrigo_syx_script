@@ -257,22 +257,22 @@ raw 900:*: {
   }
 
   else {
-    set -e % $+ $server $+ . $+ $me $+ .login $strip($3)
+    ronnik login $strip($3)
   }
 
 }
 
 ;;; contingency - this method doesn't throw a 900 message
 on nickserv:NOTICE:SSL certificate fingerprint accepted,*:?: {
-  set -e % $+ $server $+ . $+ $me $+ .login $strip($left($10,-1))
-  echo -stc Info2 * User Account: Your current TLS certificate has auto-logged you in as  $+ $eval(% $+ $server $+ . $+ $me $+ .login, 2) $+ 
+  ronnik login $strip($left($10,-1))
+  echo -stc Info2 * User Account: Your current TLS certificate has auto-logged you in as  $+ $ironnik(login) $+ 
 }
 
 
 alias -l fudgethefuckinglogin {
   ;; SASL makes mIRC actually believe that the
   ;; current server is the "irc..." DNS RR
-  set -e % $+ $server $+ . $+ $me $+ .login $$1
+  ronnik login $$1
   echo -stc Info * Account Status: $$2-
 }
 
@@ -298,14 +298,17 @@ raw 448:*: .timer -m 1 100 deny.channel $$1-
 raw 518:*: .timer -m 1 100 deny.invite $$1-
 raw 520:*: .timer -m 1 100 oper.channel $$1-
 raw 531:*Cannot DCC SEND*: {
-  echo -stc Mode * DCC Send: $$3-
+  echo -astc Mode * DCC Send: $$3-
   .timer -m 1 100 no.dcc $$1-
   halt
 }
 raw 531:*: {
-  echo -stc Mode * DCC: $1-
-  .timer -m 1 100 no.privates $$1-
-
+  haltdef
+  if (%get.the.message != $2) {
+    %get.the.message = $2
+    echo -atc Mode * Silenced: $chr(91) $+ $2 $+ $chr(93) $3-
+    .timer 1 10 unset %get.the.message
+  }
 }
 raw 972:*: .timer -m 1 100 chmode.q $$1-
 raw 974:*: .timer -m 1 100 chmode.not.irc.op $$1-
@@ -985,7 +988,7 @@ raw 324:*: if (($me ison $2) && (%reverx != $2)) {
   echo -tc Mode $2 *  $+ $2 $+  modes: $3-
   if (D isincs $3) {
     .timer -m 1 750 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Some users are not shown until they speak
+      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Lurkers may not be shown in the user list
     }
   }
 

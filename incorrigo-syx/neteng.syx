@@ -23,7 +23,7 @@ on *:JOIN:#: {
 }
 #svcsaop end
 
-#selfaop on
+#selfaop off
 on *:JOIN:#: {
   ;; Use your own (oper override was the intended) permssion to establish yourself in a channel
   if ($nick == $me && $sysop) {
@@ -73,7 +73,7 @@ alias aopper.set {
       .disable #csvcaop
       .disable #svcsaop
       .disable #scmdaop
-      .echo -atc Info2 * Aopper: Current method is now oper override [se1f]
+      if ($sysop) { .echo -atc Info2 * Aopper: Current method is now oper override [se1f] }
       goto barrymore
     }
 
@@ -85,7 +85,7 @@ alias aopper.set {
       .disable #svcsaop
       .disable #selfaop
       .disable #scmdaop
-      .echo -atc Info2 * Aopper: Current method now set to chanserv [registered channels only]
+      if ($sysop) { .echo -atc Info2 * Aopper: Current method now set to chanserv [registered channels only] }
       goto barrymore
     }
 
@@ -98,7 +98,7 @@ alias aopper.set {
       %aopper.mode = svcs
       .disable #selfaop
       .disable #scmdaop
-      .echo -atc Info2 * Aopper: Current method now set to services operator [operserv / mode]
+      if ($sysop) { .echo -atc Info2 * Aopper: Current method now set to services operator [operserv / mode] }
       goto barrymore
     }
 
@@ -110,7 +110,7 @@ alias aopper.set {
       .enable #scmdaop
       %aopper.active = $true
       %aopper.mode = scmd
-      .echo -atc Info2 * Aopper: Current method now set to server mode [/SAMODE command]
+      if ($sysop) { .echo -atc Info2 * Aopper: Current method now set to server mode [/SAMODE command] }
       goto barrymore
     }
 
@@ -121,7 +121,7 @@ alias aopper.set {
       .disable #csvcaop
       %aopper.active = $false
       %aopper.mode = off
-      echo -atc Info2 * Aopper: Aopper has been de-activated
+      if ($sysop) { echo -atc Info2 * Aopper: Aopper has been de-activated }
       goto barrymore
     }
 
@@ -189,7 +189,7 @@ alias aopper.rmenu {
   ;; aopper current status will be shown on the menu so default is fully established simply by opening the menu in the first place. the settings will be the default setting in any case
   if (%aopper.active == $null || %aopper.mode == $null) {
     ;; either values being null will trigger activation with default setting
-    aopper.set on
+    aopper.set off
   }
 
   if ($$1 == svcs) {

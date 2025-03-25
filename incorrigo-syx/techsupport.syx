@@ -145,6 +145,129 @@ on *:DIALOG:rah:init:0: {
   else {
     did -c rah 4 1
   }
+
+  if (!$exists(incorrigo-syx\chicken-oriental\rah.syx)) {
+    init-rah
+  }
+}
+
+alias init-rah {
+  ;; this will load rah.syx with the default values which
+  ;; are all 0
+  %rf = incorrigo-syx\chicken-oriental\rah.syx
+
+  ;; session
+  rah session private 0
+  rah session channel 0
+  rah session tag 0
+  rah session nickserv 0
+  rah session chanserv 0
+  rah session hostserv 0
+  rah session memoserv 0
+  rah session botserv 0
+  rah session operserv 0
+
+  ;; values
+  rah var set 0
+  rah var connection 0
+  rah var session 0
+  rah var getvalue 0
+  rah var return 0
+  rah var useval 0
+
+  ;; prompt
+  rah prompts prompting 0
+
+  ;; executive
+  rah scr useraw 0
+  rah scr geturl 0
+  rah scr kickban 0
+  rah scr loadscript 0
+  rah scr userun 0
+  rah scr cmdmaster 0
+  rah scr oper 0
+  rah scr chmodes 0
+  rah scr umodes 0
+  rah scr chnick 0
+  rah scr opercmds 0
+}
+
+alias -l rah {
+  if (!%rf) { %rf = incorrigo-syx\chicken-oriental\rah.syx }
+  writeini %rf $$1-
+}
+
+;;; settings memory
+;; 01: SESSION
+on *:DIALOG:rah:sclick:9: {
+  rah session private $did(rah, 9).state
+}
+
+on *:DIALOG:rah:sclick:8: {
+  rah session channel $did(rah, 8).state
+}
+
+on *:DIALOG:rah:sclick:11: {
+  rah session nickserv $did(rah, 11).state
+}
+
+on *:DIALOG:rah:sclick:13: {
+  rah session chanserv $did(rah, 13).state
+}
+
+on *:DIALOG:rah:sclick:14: {
+  rah session hostserv $did(rah, 14).state
+}
+
+on *:DIALOG:rah:sclick:16: {
+  rah session botserv $did(rah, 16).state
+}
+
+on *:DIALOG:rah:sclick:17: {
+  rah session operserv $did(rah, 17).state
+}
+
+on *:DIALOG:rah:sclick:15: {
+  rah session memoserv $did(rah, 15).state
+}
+
+on *:DIALOG:rah:sclick:21: {
+  rah session tag $did(rah, 21).state
+}
+
+;; 02: VALUES
+
+on *:DIALOG:rah:sclick:20: {
+  rah values set $did(rah, 20).state
+}
+
+on *:DIALOG:rah:sclick:23: {
+  rah values connection $did(rah, 23).state
+}
+on *:DIALOG:rah:sclick:22: {
+  rah values session $did(rah, 22).state
+}
+on *:DIALOG:rah:sclick:26: {
+  rah values getvalue $did(rah, 26).state
+}
+on *:DIALOG:rah:sclick:27: {
+  rah values return $did(rah, 27).state
+}
+on *:DIALOG:rah:sclick:28: {
+  rah values useval $did(rah, 28).state
+}
+
+;; 03: PROMPTS
+;; (only one setting really)
+
+on *:DIALOG:rah:sclick:32: {
+  rah prompts prompting $did(rah, 32).state
+}
+
+;; 04: EXECUTIVE
+
+on *:DIALOG:rah:sclick:40: {
+  rah scr useraw 
 }
 
 on *:DIALOG:rah:sclick:4: {

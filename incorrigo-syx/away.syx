@@ -247,22 +247,22 @@ on *:START: {
 
   if (%away.reason == $null || %away.reason == $false) {
     ;; general away reason vary between session
-    %away.reason = not here right now. please try again later.
+    %away.reason = currently set myself as away [no reason given]
   }
 
-  if (!%away.on-notice || %away.on-notice == $False) {
+  if (!%away.on-notice || %away.on-notice == $false) {
     %away.on-notice = 1
   }
 
-  if (!%away.on-msg || %away.on-msg == $False) {
+  if (!%away.on-msg || %away.on-msg == $false) {
     %away.on-msg = 1
   }
 
-  if (!%away.on-mention || %away.on-mention == $False) {
+  if (!%away.on-mention || %away.on-mention == $false) {
     %away.on-mention = 1
   }
 
-  if (!%away.on-ctcp || %away.on-ctcp == $False) {
+  if (!%away.on-ctcp || %away.on-ctcp == $false) {
     %away.on-ctcp = 1
   }
 }

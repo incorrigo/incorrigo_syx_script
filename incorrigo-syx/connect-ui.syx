@@ -334,7 +334,40 @@ on *:DIALOG:bingowing:edit:24: {
   }
 }
 
+alias quit.manager {
+  noop $dialog(quit-manager,quit-manager,u)
+}
+
+dialog quit-manager {
+  title "Quit Message"
+  size -1 -1 251 81
+  option dbu
+  box "Enter Your Quit Message Here", 1, 4 4 241 55
+  text "This message will be shown to other users when you close mIRC or don't /quit with your own message", 2, 9 38 230 16
+  edit "", 3, 10 15 230 12, limit 395
+  button "Cl&ose", 4, 184 64 60 12, default flat ok
+  button "Default", 5, 139 64 40 12, default flat cancel
+}
+
+on *:DIALOG:quit-manager:edit:3: {
+  if ($did(quit-manager,3).len) > 0) {
+    %main.quitmsg = $did(quit-manager,3).text
+  }
+}
+
+on *:DIALOG:quit-manager:sclick:4: {
+  if ($did(quit-manager,3).len == 0) {
+    %main.quitmsg = 14,1incorrigo15,1syx script - https://incorrigo.io/script -
+
+  }
+}
+
+on *:DIALOG:quit-manager:sclick:5: {
+  %main.quitmsg = 14,1incorrigo15,1syx script - https://incorrigo.io/script -
+}
+
 on *:START: {
+  ;; this is the main default value setting block
   if (!%main.lkey || %main.lkey == $false) {
     echo -eatc Mode * Uniquey: Your new key is $capsnaffler
     unset %snaffle.*
@@ -350,6 +383,10 @@ on *:START: {
     ;; dark mode if it is not auto
     color -s $iif(%dark.mode == $true, Incorrigo-Syx-DARK, Incorrigo-Syx-LT)
     :rentboy
+  }
+
+  if (!%main.quitmsg) {
+    %main.quitmsg = 14,1incorrigo15,1syx script - https://incorrigo.io/script -
   }
 
   if (%dark.mode == $null) {

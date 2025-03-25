@@ -136,12 +136,12 @@ on operserv:NOTICE:Access denied.:?: {
 }
 
 alias access.deniedcs {
-  noop $decision(ogi¿incorrigo syx $pipe chanserv¿You need to have the permission on a channel to use that command)
+  noop $decision(ogi¿incorrigo syx $pipe chanserv¿Your account needs to have permission on the channel's access list to use that command)
 }
 
 alias access.deniedos {
   if (!$sysop) {
-    noop $decision(ogh¿incorrigo syx $pipe operserv¿operserv is the executive service and for services operators only)
+    noop $decision(ogh¿incorrigo syx $pipe operserv¿Executive commands provided by operserv are for services operators only)
   }
 
   if ($sysop) {
