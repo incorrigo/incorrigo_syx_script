@@ -21,7 +21,7 @@ alias explain.ra {
       $+ $crlf $crlf $+ In mIRC a new user you never met before is default level 1. Then $+ $c trust goes up ... level goes up $+ $crlf $crlf $+ $&
       With _remote assist_ we are starting at level 50. When you "show remote assist" you will have a give / take permission in the channel nickname list $&
       $+ $crlf $crlf $+ Another thing that will appear in the channel menu is the _remote assist settings_ where you have to enable specific things before $&
-      anyone - even if you have give them level 50 already - is able to do a thihng)
+      anyone - even if you have give them level 50 already - is able to do a thing)
   }
 
   if ($$1 == status) {
@@ -42,6 +42,126 @@ on ^50:NOTICE:.*:?: {
 
 on ^1:NOTICE:.*:?: {
   haltdef
+}
+
+
+;;; script display settings dialog
+dialog sd {
+  title "incorrigo syx | display options"
+  size -1 -1 200 136
+  option dbu
+  box "Options Autosave", 1, 4 2 190 115
+  button "Button", 2, 149 120 45 12, default flat ok
+  text "Options auto-save when they are changed", 3, 4 122 140 8
+  check "Read Out Permission Changes [Simplified Mode Change Read-out]", 4, 8 15 169 10, flat
+  combo 5, 67 29 80 50, size vsbar drop
+  text "Light / Dark Theme:", 6, 8 30 51 8
+  text "Local Time Mode:", 7, 8 42 51 8
+  combo 8, 67 42 80 50, size vsbar drop
+  edit "Loading Local Time", 9, 66 54 124 12, read limit 999 autohs
+  text "Local Time Example:", 10, 8 55 57 8
+  box "Menu Visibility", 11, 8 66 183 30
+  check "Half-Op", 12, 11 74 30 10, flat
+  check "Chan Op", 13, 43 74 33 10, flat
+  check "Registered User", 14, 76 74 51 10, flat
+  check "Identified Nickname", 15, 129 74 57 10, flat
+  check "Network Engineer", 16, 11 85 58 10, flat
+  check "Show Remote Assistance Options", 17, 8 98 94 10, flat
+}
+
+alias sd {
+  if (!$dialog(sd)) {
+    if ($me ison $$1) {
+      set -e %caps.ch $$1
+      noop $dialog(sd, sd, u)
+    }
+  }
+}
+
+on *:DIALOG:sd:init:0: {
+  ;; return smc setting
+  if ($issmc) { did -c sd 4 }
+
+  ;; generate combo options
+  ;; light / dark settings
+  did -ra sd 5 Auto Load
+  did -a sd 5 Light Theme (original)
+  did -a sd 5 Dark Theme (new)
+
+  if ($dark.mode == $true) { did -c sd 5 3 }
+  if ($dark.mode == $false) { did -c sd 5 2 }
+  if ($dark.mode == auto) { did -c sd 5 1 }
+
+  ;; local time settings
+  did -ra sd 8 Very Long Time & Date
+  did -a sd 8 Long Time & Date
+  did -a sd 8 Local Time Only
+  did -a sd 8 Brief Time & Date
+  did -a sd 8 Time of Day & Date
+  if (%ctcp.timeformat == $null) { %ctcp.timeformat = 2 }
+  if ($timetf(1)) { did -c sd 8 1 }
+  if ($timetf(2)) { did -c sd 8 2 }
+  if ($timetf(3)) { did -c sd 8 3 }
+  if ($timetf(4)) { did -c sd 8 4 }
+  if ($timetf(5)) { did -c sd 8 5 }
+  did -ra sd 9 $strip($gettime)
+
+  ;; menu visibility
+  did -ra sd 11 Menu Visibility: %caps.ch
+  if ($wzy(%caps.ch) == $null) { did -c sd 12 }
+  if ($wdy(%caps.ch) == $null) { did -c sd 13 }
+  if ($idf == $true) { did -c sd 14 }
+  if ($idfr == $true) { did -c sd 15 }
+  if ($sysop) { did -c sd 16 }
+
+  ;; show remote assist
+  if (%remote.assist == $null) { %remote.assist = $false }
+  if (%remote.assist == $true) { did -c sd 17 }
+}
+
+on *:DIALOG:sd:sclick:4: {
+  togglesmc
+}
+
+on *:DIALOG:sd:sclick:5: {
+  if ($did(sd, 5).sel == 1) { goauto }
+  if ($did(sd, 5).sel == 2) { golight }
+  if ($did(sd, 5).sel == 3) { godark }
+}
+
+on *:DIALOG:sd:sclick:8: {
+  %ctcp.timeformat = $did(sd, 8).sel
+  did -ra sd 9 $strip($gettime)
+}
+
+on *:DIALOG:sd:sclick:12: {
+  if ($wzy(%caps.ch) == $null) { did -c sd 12 }
+  if ($wzy(%caps.ch) != $null) { did -u sd 12 }
+}
+
+on *:DIALOG:sd:sclick:13: {
+  if ($wdy(%caps.ch) == $null) { did -c sd 13 }
+  if ($wdy(%caps.ch) != $null) { did -u sd 13 }
+}
+
+on *:DIALOG:sd:sclick:14: {
+  if ($idf == $true) { did -c sd 14 }
+  if ($idf != $true) { did -u sd 14 }
+}
+
+on *:DIALOG:sd:sclick:15: {
+  if ($idfr == $true) { did -c sd 15 }
+  if ($idfr != $true) { did -u sd 15 }
+}
+
+on *:DIALOG:sd:sclick:16: {
+  if ($sysop) { did -c sd 16 }
+  if (!$sysop) { did -u sd 16 }
+}
+
+on *:DIALOG:sd:sclick:16: {
+  if ($did(sd, 16) == 1) { %remote.assist = $true }
+  if ($did(sd, 16) == 0) { %remote.assist = $false }
 }
 
 dialog rah {
