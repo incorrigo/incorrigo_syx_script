@@ -189,10 +189,15 @@ on *:DIALOG:bingowing:sclick:26: {
 
     ;; load login method
     if (!%main.method || %main.method == $false) {
-      %main.method = none
+      if ($len($did(bingowing, 24).text) >= 2) {
+        set %main.method sasl
+        goto crilley
+      }
+      set %main.method none
+      :crilley
     }
     if (%main.method == none) {
-      did -c bingowing 21 1
+      did -c bingowing 21 2
     }
 
     if (%main.method == sasl) {
@@ -311,6 +316,9 @@ on *:DIALOG:bingowing:sclick:12: {
     did -v bingowing 25
     %main.tlsext = 0
     did -u bingowing 19
+    did -e bingowing 24
+    did -c bingowing 21 2
+    :guernsey
   }
   jig
 }
@@ -321,7 +329,37 @@ on *:DIALOG:bingowing:sclick:23: {
     %main.deliver = 2
     did -e bingowing 14,13,19,21
     did -v bingowing 17,27,25
+    did -b bingowing 24
     %main.tlsext = 0
+  }
+
+  if (!$exists(%main.tlsfile)) {
+    %main.tlsfile = $sfile($mircdirtls-client\*.pem,Choose Certificate File, Use &File)
+  }
+  if ($exists(%main.tlsfile)) {
+    did -ra bingowing 13 %main.tlsfile
+    set %main.method TLSdrop
+    did -c bingowing 21 3
+  }
+  if (!$exists(%main.tlsfile)) {
+    ;; still doesn't exist ... idiot proof time
+    set %main.method none
+    did -c bingowing 21 1
+    did -u bingowing 23
+    did -c bingowing 12
+    did -ra bingowing 13 TLS Certificate File
+
+    if ($did(bingowing, 12).state == 1) {
+      %main.deliver = 1
+      did -b bingowing 14,13,19
+      did -e bingowing 20-21
+      did -h bingowing 27
+      did -v bingowing 25
+      %main.tlsext = 0
+      did -u bingowing 19
+      did -e bingowing 24
+      did -c bingowing 21 1
+    }
   }
   jig
 }
@@ -331,6 +369,12 @@ on *:DIALOG:bingowing:edit:24: {
     did -ra bingowing 24 $remove($did(bingowing, 24).text, $chr(32))
     %caps.llwd = $encode($did(bingowing, 24).text, cl, %main.lkey)
     jig
+  }
+  if ($len($did(bingowing, 24).text) < 2) {
+    did -c bingowing 21 1
+  }
+  if ($len($did(bingowing, 24).text) >= 2) {
+    did -c bingowing 21 2
   }
 }
 
@@ -557,6 +601,9 @@ on *:DIALOG:bingowing:sclick:21: {
   }
 
   if ($did(bingowing, 21).sel == 2) {
+    did -e bingowing 12
+    did -e bingowing 24
+    did -c bingowing 12
     if ($len($did(bingowing, 24).text) >= 2) {
       set %main.method sasl
     }
