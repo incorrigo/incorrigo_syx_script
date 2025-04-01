@@ -60,7 +60,7 @@ on ^*:SNOTICE:Setting/removing of usermode(s) 'x' has been disabled.: {
 }
 on ^*:SNOTICE:Setting/removing*: haltdef | .timer -m 1 100 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$1-
 
-#statusmodechange on
+#statusmodechange off
 on ^*:RAWMODE:#: {
   ;; as you can see this didn't turn out to be an exact science
   ;; case sensitive may seem overcomplicated at first but modes are case sensitive anyway and it cuts the number of use cases to test
@@ -68,6 +68,7 @@ on ^*:RAWMODE:#: {
   if (ao isincs $1 && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel admin | halt }
   if ($1 === -oa && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel admin | halt }
   if ($1 === -oq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
+  if ($1 === -qo && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
   if ($1 === -o && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is no longer a channel operator | haltdef | halt }
   if ($1 === +qo && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
   if ($1 === +qo && $nick != chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel owner $chr(91) $+ given by $nick $+ $chr(93) | halt }

@@ -51,7 +51,7 @@ dialog sd {
   size -1 -1 200 136
   option dbu
   box "Options Autosave", 1, 4 2 190 115
-  button "Button", 2, 149 120 45 12, default flat ok
+  button "E&xit", 2, 149 120 45 12, default flat ok
   text "Options auto-save when they are changed", 3, 4 122 140 8
   check "Read Out Permission Changes [Simplified Mode Change Read-out]", 4, 8 15 169 10, flat
   combo 5, 67 29 80 50, size vsbar drop

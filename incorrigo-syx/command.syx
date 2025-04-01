@@ -109,6 +109,14 @@ timewy {
   else return $null $+
 }
 
+timetf {
+  if ($timeformat == $$1) {
+    return $true
+  }
+
+  else return $false
+}
+
 aopper {
   if ($group(aopper).status == on) {
     return $true
@@ -612,6 +620,11 @@ smc {
   return $iif($group(#statusmodechange).status == on, $style(1), $null) $+
 }
 
+issmc {
+  if ($group(#statusmodechange).status == on) { return $true }
+  return $false
+}
+
 togglesmc {
   if ($group(#statusmodechange).status == on) { .disable #statusmodechange | return }
   else .enable #statusmodechange
@@ -636,6 +649,7 @@ pnlnf {
 }
 
 wwy {
+  if ($sysop) { return $null }
   if ($me !ison $$1) { return $style(2) }
   return $null
 }

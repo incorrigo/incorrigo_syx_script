@@ -136,7 +136,7 @@ on operserv:NOTICE:Access denied.:?: {
 }
 
 alias access.deniedcs {
-  noop $decision(ogi¿incorrigo syx $pipe chanserv¿Your account needs to have permission on the channel's access list to use that command)
+  noop $decision(ogi¿incorrigo syx $pipe chanserv¿Access denied.)
 }
 
 alias access.deniedos {
