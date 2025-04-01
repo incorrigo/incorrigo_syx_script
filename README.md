@@ -22,7 +22,7 @@ Here are the instructions to install:
 
   Note that you need to go into the first folder and copy across the **_files and folders selected in the screenshot_**
 
-  ![A screenshot of the files you need to drag in WinRAR](https://incorrigo.io/script/screeni20.png)  
+  ![A screenshot of the files you need to drag in WinRAR](https://incorrigo.io/script/screeni2-005.png)  
   Once you have done this part, the rest is relatively simple
 - **(f)** Overwrite all files, replacing them from the archive as detailed above
 - **(g)** Run _mirc.exe_ ... you may need to use your registration code to continue
@@ -42,7 +42,11 @@ If you want to put this feature into your own script, I have created a standalon
 [mIRC replies script by Incorrigo Syx](https://github.com/incorrigo/mIRC_replies)  
   
 It works with other clients in exactly the same way that they support it, so when they reply to messages you can see what they're replying to ... and they can see what you're replying to  
-![A screenshot demonstrating the original layout of the completed +draft/reply implementation once it had successfully met all of the specifications and confirmed as being compatible with any other client](https://incorrigo.io/script/screeni11.png)
+![Our ongoing and powerful addition to mIRC which is still not listed as supporting message replies](https://incorrigo.io/script/screeni2-004.png)  
+
+### Dark / Light Mode Support  
+You can force the theme to be dark / light - or use the auto setting that changes whenever windows does  
+![Also showcasing our support for dark / light mode](https://incorrigo.io/script/screeni2-006.png)
 
 ### Away Manager Reminders
 A good script would be nothing without a proper away manager...  
@@ -50,6 +54,22 @@ A good script would be nothing without a proper away manager...
 
 ### Readable Mode Activity (for new users / can be toggled)
 By default it is assumed that the user is new to mIRC and doesn't understand modes yet. This can be switched back to normal modes  
+![Fast Recovery](https://incorrigo.io/script/screeni2-000.png)  
+Getting slapped by an immediate nickname change  
+
+  
+![Tactile Response](https://incorrigo.io/script/screeni2-001.png)  
+Driven identity recovery  
+
+![Process Simplification](https://incorrigo.io/script/screeni2-002.png)  
+Does all the obvious things i.e. releases the hold _and_ changes your nickname without having to log in again twice  
+
+### Unrivalled Client Controls  
+![No one has the care and dedication it takes to create such a comprehensive and working architecture of control, and raw power](https://incorrigo.io/script/screeni2-003.png)  
+No one has the care and dedication it takes to create such a comprehensive and working architecture of control, and raw power  
+
+### Rapid Reaction Routines
+When things don't go right, go left  
 ![An example of how mode activity can be simplified to report only what matters is going on in the channel](https://incorrigo.io/script/screeni14.png)
 
 ### Your Journey Starts Here
