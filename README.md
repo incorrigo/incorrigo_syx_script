@@ -75,6 +75,31 @@ When things don't go right, go left
 ### Your Journey Starts Here
 You need [mIRC](https://www.mirc.com/) to set up this script, and it's not free software. The cost to register mIRC is barely noticeable and - aside from this script - can open doors for a new IRC user, with an experience that grows more advanced as the user does
 
+## Appraisal of the Incorrigo Syx Script
+
+The **Incorrigo Syx IRC script** - as maintained here - is not simply a script in the traditional sense. It is a fully formed communications architecture; a behavioural framework masquerading as a collection of mIRC menus, aliases, and event hooks. It is, in every meaningful way, a **self-contained operating environment** for IRC—a digital exosuit for the sysop who refuses to operate within the defaults of mediocrity
+
+This script was not designed for the casual user, nor for the passively curious. It is a deliberate, sophisticated, and sometimes confrontational piece of software that expects you to understand what you're doing. And if you don't, it makes no apologies for letting you fall flat on your face
+
+At its core, the Incorrigo Syx system does what IRC itself never attempted: **it renders the unstructured into the structured**. The chaos of channels, the arbitrariness of mode changes, the mute dumbness of /msg—all of it is transformed into a **semantic layer** where context is king, and action is always intentional. This is accomplished through an extensive, context-aware popup system that adapts to channel ownership, user modes, SASL state, and even TLS certificate bindings. Every menu item serves a purpose. Nothing is placed arbitrarily
+
+The script embraces a level of **operational paranoia** that borders on artistic. Unknown users are quietly sandboxed. Channels configured with `+L #` are not just traps—they are mirrors. Users who enter them are told, in so many words, that they have failed an unspoken test. And that failure is logged, processed, and dealt with, quietly, and without ceremony
+
+From a technical perspective, the script exploits the full range of mIRC's capabilities—and then some. It builds custom identifier stacks, conditional access tiers, event sanitisation layers, and real-time mode feedback systems. The rawmode logic alone constitutes a near complete reinterpretation of how IRC ought to describe itself to humans. Rather than echoing unintelligible server gibberish, the script intercepts, rephrases, and contextualises every +o, -h, +q, or +a. It doesn’t just tell you what changed. It tells you why, and who did it
+
+The `/r` system, leveraging IRCv3 tags like `+reply` and `msgid`, pushes the limits of what can be achieved in mIRC. It tracks conversations, caches them, allows visual playback via popups and side windows, and builds a temporary memory for ephemeral exchanges. Echo-message, one of the more misunderstood IRCv3 features, is harnessed here with surgical precision. Message flow is not merely logged—it is sculpted, threaded, echoed, and displayed with context-rich formatting that makes the user feel like they’re navigating a structured interface, not a scrolling log
+
+And then there’s the language. The script does not pretend to be neutral. It speaks in tone, in stance. It mocks you gently when you leave a setting on that you shouldn’t. It warns you with unvarnished candour when you’ve breached a social contract. It lets you know, quite clearly, when you've been billed
+
+All of this is woven together with a visual design that, despite the limits of mIRC, manages to *feel* modern. Unicode glyphs, styled output, layered themes (including dark/light/auto detection), and even time-of-day sensitivity make this script feel alive. There is nothing generic about it. No part of it feels copied or adapted from some scripting archive of the past
+
+To use the Incorrigo Syx script is to submit to a worldview. It is to accept that your interactions—commands, joins, kicks, messages—will be interpreted, filtered, and sometimes vetoed by a system that knows what it’s doing better than you do. It is *opinionated software*, and in an age of soulless AI-generated scaffolds and generic templates, that is perhaps its greatest strength
+
+The Incorrigo Syx script doesn’t just work. It **thinks**, it **critiques**, and it **remembers**
+
+It is, in every way that matters, *alive*
+
+
 ### Release notes for 2025-03-29 -- v2.1a8.1
 https://github.com/incorrigo/incorrigo_syx_script/releases/tag/v2.1a8.1
 
