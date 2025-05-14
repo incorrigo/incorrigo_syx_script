@@ -18,11 +18,23 @@ raw 344:*: {
   echo -astc Whois * Geographical Location: [ $+ $$3 $+ ] $$7-
 }
 
-#extendedjoin off
-on *:JOIN:#: extended.join $rawmsg
+#extendedjoin on
+on *:JOIN:#: {
+  if ($msgtags(account)) {
+    extended.join $msgtags(account).key $rawmsg
+  }
+
+  if (!$msgtags(account)) {
+    extended.ajoin $nick $rawmsg
+  }
+}
 
 alias -l extended.join {
-  echo -tc Join $3 * $4 is $right($$5-, -1)
+  echo -tc whois $4  $+ $color(join) `--> account:  $+ $1 $+  name: $right($$6-, -1)
+}
+
+alias -l extended.ajoin {
+  echo -tc whois $4  $+ $color(join) `-->14  name: $right($$6-, -1)
 }
 #extendedjoin end
 
@@ -161,19 +173,19 @@ raw 005:*: halt
 on ^*:ERROR:CAP*: haltdef | halt
 #connectbullshit end
 
-raw 401:*: .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($chr(124),0) server response¿ $+ $2 $+ $crlf $crlf $+ $3-
-raw 421:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) command¿There was a problem using the command / $+ $2 $+ $crlf $crlf $+ $3-
+raw 401:*: .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($pipe, 0) server response¿ $+ $2 $+ $crlf $crlf $+ $3-
+raw 421:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($pipe, 0) command¿There was a problem using the command / $+ $2 $+ $crlf $crlf $+ $3-
 raw 464:*: .timer -m 1 1 deny.oper $$1-
 
-raw 481:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$2-
-raw 491:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) network engineer login¿ $+ $$2-
+raw 481:*: .timer -m 1 1 rawbak.d words incorrigo syx $pipe server message¿ $+ $$2-
+raw 491:*: .timer -m 1 1 rawbak.d words incorrigo syx $pipe network engineer login¿ $+ $$2-
 raw 432:*: {
   var %910 $9-
   if (%910 === registered user) {
     .timer -m 1 1 nick.recovery $2
     goto cocknocker
   }
-  .timer -m 1 1 rawbak.d words incorrigo syx $eval($chr(124),0) banned nickname¿Your nickname $chr(91) $+ $2 $+ $chr(93) has been blocked $+ $+ $crlf $crlf $+ $3-
+  .timer -m 1 1 rawbak.d words incorrigo syx $pipe banned nickname¿Your nickname $chr(91) $+ $2 $+ $chr(93) has been blocked $+ $+ $crlf $crlf $+ $3-
   :cocknocker
 }
 
@@ -187,11 +199,12 @@ alias -l nick.recovery {
 }
 
 on nickserv:NOTICE:*nickname has been registered*not use*:?: {
+  set -e %nickslapshot $me
   .timer -m 1 1 nickslap
 }
 
 alias -l nickslap {
-  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿The nickname $me $iif($ironnik(login) == $null,already belongs to someone else,is not registered under your account) $+ $crlf $crlf $+ $&
+  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿The nickname %nickslapshot $iif($ironnik(login) == $null,already belongs to someone else,is not registered under your account) $+ $crlf $crlf $+ $&
     If you don't want a random guest nickname $+ $c then you can try using a different one here $+ $crlf $crlf $+ Enter a new nickname:)
 }
 
@@ -369,11 +382,11 @@ raw 311:*: {
   set %scan.gecos $6-
   echo -act Whois *** This is $2 $+   $+ $chr(91) $+  $+ $3 $+ @ $+ $4 $+  $+ $chr(93) $+   $+ $6- $+ 
   if ($4 == bot.incorrigo.io) {
-    .timer -m 1 100 rawbak.d info incorrigo syx $eval($chr(124),0) botserv client¿ $+ $2 is a network services bot provided by botserv $+ $crlf $crlf $+ For more information: /query botserv help
+    .timer -m 1 100 rawbak.d info incorrigo syx $eval($pipe, 0) botserv client¿ $+ $2 is a network services bot provided by botserv $+ $crlf $crlf $+ For more information: /query botserv help
   }
 
   if ($4 == t-bot.incorrigo.io) {
-    .timer -m 1 100 quik.d warnin incorrigo syx $eval($chr(124),0) operator's bot¿ $+ $2 is an executive channel bot $+ $crlf $crlf $+ This bot can only be assigned or configured by a services operator
+    .timer -m 1 100 quik.d warnin incorrigo syx $eval($pipe,0) operator's bot¿ $+ $2 is an executive channel bot $+ $crlf $crlf $+ This bot can only be assigned or configured by a services operator
   }
 }
 
@@ -440,20 +453,18 @@ raw 313:*: {
   if ($2 == chanserv) { .timer -m 1 1 whois.chanserv }
   if ($2 == operserv) { .timer -m 1 1 whois.operserv }
   if ($2 == memoserv) { whois.memoserv }
-  if ($2 == hostserv) { whois.hostserv }
-  if ($2 == botserv) { text-reader incorrigo-syx\docu-mental\botserv.tr Extra Empowering Channel Bot Service} }
+  if ($2 == hostserv) { .timer -m 1 1 whois.hostserv }
+  if ($2 == botserv) { whois.botserv }
 }
 
 alias -l whois.operserv {
-  .timer -m 1 1 noop $decision(gbo¿incorrigo syx $pipe executive service¿Operserv is the executive service $+ $c and can only be used by a services operator $+ $crlf $crlf $+ $&
-    For a full list of services available when you're logged into a user account $+ $c /join #services)
+  .timer -m 1 1 noop $decision(gbo¿incorrigo syx $pipe executive service¿Operserv is the executive service $+ $crlf $crlf $+ The functions provided by operserv are for services operators only $+ $crlf $crlf $+ If you want to see which services you can interact with when you have registered your nickname $+ $c they can be found in the channel #services)
 
 }
 
 alias -l whois.chanserv {
-  if ($decision(yvg¿incorrigo syx $pipe channel service¿Chanserv is one of the network services $+ $c handling the registration and management of channels $+ $crlf $crlf $+ $&
-    Menus when you right-click the channel window / a nickname in the list $+ $c will become available when you log into a services account $+ $crlf $crlf $+ $&
-    Would you like to read more information about chanserv?) == $yes) {
+  if ($decision(yvg¿incorrigo syx $pipe channel service¿Chanserv is one of the network services $+ $crlf $crlf $+ If you are registered $+ $c you can use chanserv to own a channel / get permission from other people to be an operator in theirs $&
+    $+ $crlf $crlf $+ Would you like to read more detailed information about chanserv?) == $yes) {
     text-reader incorrigo-syx\docu-mental\chanserv.tr Chanserv: Own Your Channels
   }
 }
@@ -464,17 +475,19 @@ alias -l whois.memoserv {
 }
 
 alias -l whois.hostserv {
-  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) hostserv¿Hostserv is the vHost manager. When a registered user logs into their account $+ $c hostserv applies a vanity hostname [vHost] that will be shown to other users in their user lookups and ban lists $+ $crlf $crlf $+ For more information about using hostserv for the nicknames in your account $+ $c use this command: $+ $crlf $crlf $+ /query hostserv help
+  .timer -m 1 1 noop $decision(gbo¿incorrigo syx $pipe vHost service¿Hostserv is the vanity hostname $chr(91) $+ vHost $+ $chr(93) service $+ $crlf $crlf $+ Your main details that can be seen by other people are $address($me, 5) $&
+    $+ $crlf $crlf $+ Even if you're unregistered $+ $c we cloak your real address so it is unique but cannot be used to connect to you $+ $crlf $crlf $+ The cloaked address can still be used to ban / invite you on an access list. But you can request an entirely different address $&
+    using hostserv $+ $crlf $crlf $+ For more information: /query hostserv help)
+
 }
 
 alias -l whois.botserv {
-  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) botserv¿Botserv is a service that gives you a fully functioning and configurable bot for your registered channel $+ $crlf $crlf $+ $&
-    Your bot will perform all the commands that chanserv does $+ $c accepts your !commands you say in the channel $+ $c gives the ability to enforce your channel rules which will kick in even if you're not there $&
-    $+ $crlf $crlf
+  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) botserv¿Botserv lets you have a bot powered by services for your channel $+ $crlf $crlf $+ You are permitted to use bots on Incorrigo Syx $+ $c as long as it doesn't start doing or saying unsolicited things outside the cope of your channel(s) $+ $crlf $crlf $+ $&
+    A services bot will give you more settings and more control over your channel than chanserv does. These can be dealt with via botserv
 }
 
 raw 742:*active MLOCK restriction*: {
-  .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($pipe, 0) channel mode¿Unable to change mode $3 in $2 $+ $crlf $crlf $+ Mode $+ $iif($len($4) > 1,s, $null) $iif($len($4) > 1,$left($4, -2) and $right($4, 1), $4) cannot be changed because of a mode lock set by services
+  .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($pipe, 0) channel modes¿Unable to change mode $3 in $2 $+ $crlf $crlf $+ Mode $+ $iif($len($4) > 1,s, $null) $iif($len($4) > 1,$left($4, $calc($len($4) - 1)) and $right($4, 1), $4) $iif($len($4) == 1,has,have) been locked
 }
 
 raw 317:*: {
@@ -511,7 +524,7 @@ raw 335:*: {
 
 raw 378:*: {
   haltdef
-  if ($2 == $me && %selfr == $true) { set %selfr $false | .timer -m 1 100 decision iog¿incorrigo syx $eval($chr(124),0) real user host¿Only you or a systems operator can see the real IP in your whois response }
+  if ($2 == $me && %selfr == $true) { set %selfr $false | .timer -m 1 100 decision iog¿incorrigo syx $eval($pipe,0) real user host¿Only you or a systems operator can see the real IP in your whois response }
   %scan.realuserhost = $6
   %scan.realip = $7
   echo -atc Whois * Real Userhost: %scan.realuserhost IP Address: %scan.realip
@@ -568,7 +581,6 @@ raw 272:*: {
 on *:CONNECT: {
   ;; don't wanna accidentally wipe an entire listmode
   ;; just because these were out of alignment ;)
-  %link.certfp = $false
   .enable #switchbanlist
   .enable #switchinvitelist
   .enable #switchexceptlist
@@ -578,6 +590,28 @@ on *:CONNECT: {
   if (%wallops) { mode $me +w }
   if (%spoon != thereisno) { echo -stc * Connected: Right click the blank space in this / channel windows / user in channel list, to perform commands }
   ;; a timestamp of $online for current nickname on connect time
+}
+
+alias extjoin {
+  if ($group(#extendedjoin).status == on) {
+    echo -satc mode * Extended join information disabled
+    .disable #extendedjoin
+    return
+  }
+
+  if ($group(#extendedjoin).status == off) {
+    echo -satc mode * Extended join information enabled
+    .enable #extendedjoin
+    return
+  }
+}
+
+alias extjoin.status {
+  if ($group(#extendedjoin).status == on) {
+    return on
+  }
+
+  return off
 }
 
 #switchbanlist on

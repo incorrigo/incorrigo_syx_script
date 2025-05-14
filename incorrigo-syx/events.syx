@@ -25,8 +25,8 @@ on ^*:SNOTICE:from *: {
 
 on ^*:SNOTICE:*Your TLS certificate*: {
   haltdef
-  set %link.certfp $7
-  .timer 1 3 echo -stc Own * TLS Certificate: %link.certfp
+  ronnik link.certfp $7
+  .timer 1 3 echo -stc Own * TLS Certificate: $ironnik(link.certfp)
 }
 
 on ^*:SNOTICE:*Unable to apply vhost automatically: {
@@ -60,7 +60,7 @@ on ^*:SNOTICE:Setting/removing of usermode(s) 'x' has been disabled.: {
 }
 on ^*:SNOTICE:Setting/removing*: haltdef | .timer -m 1 100 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$1-
 
-#statusmodechange off
+#statusmodechange on
 on ^*:RAWMODE:#: {
   ;; as you can see this didn't turn out to be an exact science
   ;; case sensitive may seem overcomplicated at first but modes are case sensitive anyway and it cuts the number of use cases to test
@@ -220,6 +220,10 @@ on ^*:NICK: if ($nick == $me) {
   if ($ironnik(login) != $null) {
     set -e % $+ $server $+ . $+ $newnick $+ .login $strip($getuserID)
     unset % $+ $server $+ . $+ $me $+ .login
+  }
+  if ($ironnik(link.certfp) != $null) {
+    set -e % $+ $server $+ . $+ $newnick $+ .link.certfp $ironnik(link.certfp)
+    unset % $+ $server $+ . $+ $me $+ .link.certfp
   }
 }
 

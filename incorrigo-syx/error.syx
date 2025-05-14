@@ -104,6 +104,10 @@ on *:START: {
   if ($gettok($readini(mirc.ini,options,n2),2,44) == 1) {
     pillock
   }
+
+  ;; Load New Script Files
+  .load -rs incorrigo-syx\techsupport.syx
+  .load -rs incorrigo-syx\modemanager.syx
 }
 
 on *:JOIN:#: {
@@ -136,15 +140,16 @@ on operserv:NOTICE:Access denied.:?: {
 }
 
 alias access.deniedcs {
-  noop $decision(ogi¿incorrigo syx $pipe chanserv¿Access denied.)
+  noop $decision(ogi¿incorrigo syx $pipe chanserv error¿Access denied.)
 }
 
 alias access.deniedos {
   if (!$sysop) {
-    noop $decision(ogh¿incorrigo syx $pipe operserv¿Executive commands provided by operserv are for services operators only)
+    noop $decision(ogh¿incorrigo syx $pipe operserv¿You're not an IRC operator)
   }
 
   if ($sysop) {
+    noop $decision(ogw¿incorrigo syx $pipe operserv¿You don't have permission to use this command)
     return
   }
 }
