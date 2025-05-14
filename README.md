@@ -32,7 +32,7 @@ When other clients use replies, you can see the same things they are
 There are three settings:  
 **(i)** Auto [changes to light/dark theme depending on windows setting]  
 **(ii)** Light Mode [forces light colour scheme regardless of dark mode setting]  
-**(iii)* Dark Mode [forces dark colour scheme regardless of dark mode setting]  
+**(iii)** Dark Mode [forces dark colour scheme regardless of dark mode setting]  
 ![Appreciate the new native dark mode support](https://incorrigo.io/script/screeni2-006.png)  
 
 ### Away Manager  
@@ -57,10 +57,15 @@ Certainly better than logging into your account twice
 ![No one has the care and dedication it takes to create such a comprehensive and working architecture of control, and raw power](https://incorrigo.io/script/screeni2-003.png)  
 Many of the client controls are menu driven, with context mode visibility    
 
-### Your Journey Starts Here  
-You need [mIRC](https://www.mirc.com/) to set up this script, and it's not free software. The cost to register mIRC is barely noticeable and - aside from this script - can open doors for a new IRC user, with an experience that grows more advanced as the user does
+### Extended Join Activity  
+When someone (or you) joins a channel you're on, metadata is displayed i.e. _the account_ they are logged into, and their _"real name"_ [**NB:** you do not have to use your real name, that's just what this information is commonly called]
 
-## Appraisal of the Incorrigo Syx Script  
+![Extended Join information attached to join messages from registered and unregistered users](https://syxi.incorrigo.io/script/scripti022.png)  
+This can be really useful if you use the account name to determine whether someone is who they say they are, or not. **Remember:** You can still use an unregistered nickname, and remain logged into your user account  
+
+  If you are interested in using us as an obscure way to contact people discretely e.g. charities that work with vulnerable people, we would like you to contact us [not just about the script but our network in general] ... our network is available and absolutely free to use, on any IRC client or in your browser
+
+## An Intelligent Synopsis  
 The **Incorrigo Syx Script** - as maintained here - is not simply a script in the traditional sense. It is a fully formed communications architecture; a behavioural framework of a collection of mIRC menus, aliases, and event hooks. It is, in every meaningful way, a **self-contained operating environment** for IRC -- a digital exosuit for the sysop who refuses to operate within the defaults of mediocrity
 
 This script was not designed for the casual user, nor for the passively curious. It is a deliberate, sophisticated, and sometimes confrontational piece of software that needs no-one to understand what you're doing. And if you don't, it gives you what's going on in plain english
