@@ -42,16 +42,23 @@ When you are mentioned in a channel, receive a private message of any kind; you 
 
 ### Readable Mode Activity (for new users / can be toggled)
 ![Getting the mode changes in plain english, with warnings](https://incorrigo.io/script/screeni14.png)  
-If you join a channel, the modes are scanned automatically. There are also informative readings, i.e. "This channel uses chat history playback" which will make sense of the channel settings even if you don't understand the modes in the read-out (other modes also provide this read-out)  
+If you join a channel, the modes are scanned automatically. You will always get a full read-out of all the modes that are set
 
 When a channel is registered or someone is made a channel op, the read-out is more legible. However, you can turn this off and your decision will be remembered by the script settings  
+
+### Circumstance Alerts  
+Even an experienced user might not understand how the channel will behave. The modes might be different on this network than what they are used to, so the script will give you **circumstance alerts** ... an alert for each circumstance you're in, on the channel that you have joined  
   
+The script will tell you as soon as you've joined the channel, before you learn anything the hard way.  
+![Channel circumstance alerts](https://syxi.incorrigo.io/script/scripti023.png)
+
+### Fast Nickname Recovery  
+When your nickname is protected by a services hold, the script will recover and log in with your password. Example:  
 ![Tactile Response](https://incorrigo.io/script/screeni2-001.png)  
 
-When your nickname is protected by a services hold, the script will recover and log in with your password. Example:
-
+Instead of _recover, login_ which requires your account info twice  
 ![Process Simplification](https://incorrigo.io/script/screeni2-002.png)  
-Certainly better than logging into your account twice    
+Certainly better than logging into your account twice  
 
 ### Comprehensive Client Controls  
 ![No one has the care and dedication it takes to create such a comprehensive and working architecture of control, and raw power](https://incorrigo.io/script/screeni2-003.png)  
