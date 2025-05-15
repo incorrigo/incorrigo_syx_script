@@ -399,7 +399,7 @@ getuserID {
 
 checkme {
   if ($server != $null) { whois $me $me }
-  else { rawbak.d words incorrigo syx $pipe whois error¿You need to be connected to a server to make whois requests }
+  else { noop $$decision(ogu¿incorrigo syx $pipe whois error¿You need to be connected to a server to make whois requests) }
 }
 
 obk {
@@ -424,7 +424,7 @@ go {
 
 pipe {
   ;; pipe, not next command
-  return $eval(|,0)
+  return $eval($chr(124),1)
 }
 
 ampersand {
@@ -649,8 +649,8 @@ pnlnf {
 }
 
 wwy {
-  if ($sysop) { return $null }
   if ($me !ison $$1) { return $style(2) }
+  if ($sysop) { return $null }
   return $null
 }
 

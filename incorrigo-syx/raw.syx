@@ -30,11 +30,11 @@ on *:JOIN:#: {
 }
 
 alias -l extended.join {
-  echo -tc whois $4  $+ $color(join) `--> account:  $+ $1 $+  name: $right($$6-, -1)
+  echo -tc info $4  $+ $color(join) `--> account:  $+ $1 $+  name: $right($$6-, -1)
 }
 
 alias -l extended.ajoin {
-  echo -tc whois $4  $+ $color(join) `-->14  name: $right($$6-, -1)
+  echo -tc info $4  $+ $color(join) `-->14  name: $right($$6-, -1)
 }
 #extendedjoin end
 

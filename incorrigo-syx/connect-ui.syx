@@ -372,9 +372,11 @@ on *:DIALOG:bingowing:edit:24: {
   }
   if ($len($did(bingowing, 24).text) < 2) {
     did -c bingowing 21 1
+    %main.method = none
   }
   if ($len($did(bingowing, 24).text) >= 2) {
     did -c bingowing 21 2
+    %main.method = sasl
   }
 }
 
