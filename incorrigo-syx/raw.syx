@@ -1022,7 +1022,7 @@ raw 324:*: if (($me ison $2) && (%reverx != $2)) {
   echo -tc Mode $2 *  $+ $2 $+  modes: $3-
   if (D isincs $3) {
     .timer -m 1 750 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Lurkers may not be shown in the user list
+      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Other users may not be shown in the list
     }
   }
 
