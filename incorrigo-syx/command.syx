@@ -424,7 +424,7 @@ go {
 
 pipe {
   ;; pipe, not next command
-  return $eval($chr(124),0)
+  return $eval(|,0)
 }
 
 ampersand {
