@@ -12,36 +12,438 @@
 alias explain.ra {
   ;; explanations that are context-specific when the user happens across one of the features to explain
   if ($$1 == nicklist) {
-    noop $decision(gio¿incorrigo syx $pipe remote assist¿You can use this menu to give or remove the high trust level that enables a user to remotely assist $&
-      $+ $crlf $crlf $+ You must enable the functions in the first place = whether you have given someone permission or not - for this feature to work)
+    noop $decision(gio¿incorrigo syx $pipe remote assist¿You can give or take the permission to entrust $$1 at a level that can give you remote assistance $&
+      $+ $crlf $crlf $+ This trust is given to the user address so you would have to actually be $$1 to provide remote assistance $&
+      $+ $crlf $crlf $+ Even stil $+ $c you need to enable specific commands or no one will be permitted to use them no matter what level they are)
   }
 
   if ($$1 == channel) {
-    noop $decision(oig¿incorrigo syx $pipe remote assist¿Starting with the 2.1a8 release $+ $c we are going to start rolling out features that work using mIRC levels. $&
-      $+ $crlf $crlf $+ In mIRC a new user you never met before is default level 1. Then $+ $c trust goes up ... level goes up $+ $crlf $crlf $+ $&
-      With _remote assist_ we are starting at level 50. When you "show remote assist" you will have a give / take permission in the channel nickname list $&
-      $+ $crlf $crlf $+ Another thing that will appear in the channel menu is the _remote assist settings_ where you have to enable specific things before $&
-      anyone - even if you have give them level 50 already - is able to do a thing)
+    noop $decision(oig¿incorrigo syx $pipe remote assist¿This is a feature that was added at version 2.1a8 which gives you the remote assist capability $&
+      $+ $crlf $crlf $+ You have to enable remote assist $+ $c it is off by default. Even when you switch it on $+ $c you have to enable specific commands or it does nothing)
   }
 
   if ($$1 == status) {
     noop $decision(oig¿incorrigo syx $pipe remote assist¿Remote assist is a feature that enables users you have trusted to do things remotely over your IRC session $&
-      $+ $crlf $crlf $+ The settings for remote assist and the options in the channel nick list will appear if you choose to show remote assist in this menu)
+      $+ $crlf $crlf $+ The settings for remote assist and the options in the channel / nick list will appear if you choose to show remote assist in this menu)
   }
 }
 
+dialog ra {
+  title "incorrigo syx | remote assist settings"
+  size -1 -1 247 117
+  option dbu
+  box "Remote Assist Manager", 1, 4 6 239 88
+  check "Enable Remote Assist", 2, 9 17 65 10
+  check "Input Requests", 3, 15 30 55 10, disable
+  check "User list level control", 4, 15 40 70 10, disable
+  check "Set + Return Variables", 5, 15 50 70 10, disable
+  check "Send Channel / Query / Notice Messages", 6, 15 60 115 10, disable
+  check "Full Command Access", 7, 15 70 70 10, disable
+  text "message boxes pop up on the screen asking for your input answers", 8, 70 31 169 8, hide disable
+  text "can add / remove to any user list level (even remote level)", 9, 91 40 148 8, hide disable
+  text "can set / change / see value of any variables (your settings)", 10, 89 50 150 8, hide disable
+  text "which will be from you and in your name", 11, 133 60 107 8, hide disable
+  text "assistant will be able to issue both mIRC and server commands which means that they will have absolute full control of your session", 12, 90 70 150 21, hide disable
+  button "E&xit", 13, 197 99 45 12, default flat ok
+}
+
+
+alias ram {
+  if ($dialog(ra) == $null) {
+    dialog -muo ra ra
+  }
+}
+
+on *:DIALOG:ra:init:0: {
+  if (%remote.assist == $true) {
+    did -ec ra 2
+    did -ue ra 3-7
+    did -bv ra 8-12
+
+    if (%ra.box) {
+      did -c ra 3
+      did -e ra 8
+    }
+
+    if (%ra.userlev) {
+      did -c ra 4
+      did -e ra 9
+    }
+
+    if (%ra.evar) {
+      did -c ra 5
+      did -e ra 10
+    }
+
+    if (%ra.message) {
+      did -c ra 6
+      did -e ra 11
+    }
+
+    if (%ra.llcmd) {
+      did -c ra 7
+      did -e ra 12
+    }
+  }
+}
+
+on *:DIALOG:ra:sclick:2: {
+  if ($did(ra, 2).state == 1) {
+    %ra.evar = $false
+    %ra.box = $false
+    %ra.userlev = $false
+    %ra.message = $false
+    %ra.llcmd = $false
+    %remote.assist = $true
+    did -ue ra 3-7
+    did -bv ra 8-12
+  }
+
+  if ($did(ra, 2).state == 0) {
+    %ra.evar = $false
+    %ra.box = $false
+    %ra.userlev = $false
+    %ra.message = $false
+    %ra.llcmd = $false
+    %remote.assist = $false
+    did -ub ra 3-7
+    did -bh ra 8-12
+  }
+}
+
+on *:DIALOG:ra:sclick:3: {
+  if ($did(ra, 3).state == 1) {
+    %ra.box = $true
+    did -e ra 8
+  }
+
+  if ($did(ra, 3).state == 0) {
+    %ra.box = $false
+    did -b ra 8
+  }
+}
+
+on *:DIALOG:ra:sclick:4: {
+  if ($did(ra, 4).state == 1) {
+    %ra.userlev = $true
+    did -e ra 9
+  }
+
+  if ($did(ra, 4).state == 0) {
+    %ra.userlev = $false
+    did -b ra 9
+  }
+}
+
+on *:DIALOG:ra:sclick:5: {
+  if ($did(ra, 5).state == 1) {
+    %ra.evar = $true
+    did -e ra 10
+  }
+
+  if ($did(ra, 5).state == 0) {
+    %ra.evar = $false
+    did -b ra 10
+  }
+}
+
+on *:DIALOG:ra:sclick:6: {
+  if ($did(ra, 6).state == 1) {
+    %ra.message = $true
+    did -e ra 11
+  }
+
+  if ($did(ra, 6).state == 0) {
+    %ra.message = $false
+    did -b ra 11
+  }
+}
+
+on *:DIALOG:ra:sclick:7: {
+  if ($did(ra, 7).state == 1) {
+    %ra.llcmd = $true
+    did -e ra 12
+  }
+
+  if ($did(ra, 7).state == 0) {
+    %ra.llcmd = $false
+    did -b ra 12
+  }
+}
+
+
+;;; REMOTE ASSIST user level command event handler
 on ^50:NOTICE:.*:?: {
-  if ($window(@assist. $+ $nick) == $null) {
-    window -ni @assist. $+ $nick
-    background -f @assist. [ $+ [ $nick ] ] incorrigo-syx\workaround.bmp
-    echo 9 -t @assist. [ $+ [ $nick ] ] Incoming remote assist requests from  $+ $nick $+ , to  $+ $me $+ :
+  if (%remote.assist == $true) {
+
+    if ($window(@assist. $+ $nick) == $null) {
+      ;; creates user-specific remote assist command console [unique per user]
+      window -ni @assist. $+ $nick
+      background -f @assist. [ $+ [ $nick ] ] incorrigo-syx\workaround.bmp
+      echo 9 -t @assist. [ $+ [ $nick ] ] Incoming remote assist requests from  $+ $nick $+ , to  $+ $me $+ :
+    }
+
+    ;;; set false to any command type that has not been configured
+    if (%ra.box == $null) { %ra.box = $false }
+    if (%ra.message == $null) { %ra.message = $false }
+    if (%ra.userlev == $null) { %ra.userlev = $false }
+    if (%ra.evar == $null) { %ra.evar = $false }
+    if (%ra.llcmd == $null) { %ra.llcmd = $false }
+
+    ;;; output command issued [whether enabled or not] and all argument(s)
+    haltdef
+    echo 9 -t @assist. $+ $nick  $+ $nick $+ : $$1-
+
+    ;;; authorisation check / version
+    if ($1 == .ra-check) {
+      ;; checks for user level 50 and remote assist version
+      notice $nick [remote assist] authorised: incorrigo syx remote assist version 2025.01
+      halt
+    }
+
+    if ($1 == .ra-msg) {
+      ;; display message from assisting user in current window
+      ;; [NOT] visible to other users
+      echo -atc Info2  $+ $nick $+ : $$2-
+      .notice $nick [remote assist] message displayed
+      halt
+    }
+
+    if (%ra.box) {
+      if ($1 == .box) {
+        ;; creates and displays a message box from assistant
+        %ra.box.type = gvf
+        %ra.text = select a response
+
+        ;; parameter - prompt icon
+        if ($$2 == none) {
+          goto goto3
+        }
+        if ($$2 == info) {
+          %ra.box.type = %ra.box.type $+ i
+          goto goto3
+        }
+        if ($$2 == warn) {
+          %ra.box.type = %ra.box.type $+ w
+          goto goto3
+        }
+        if ($$2 == halt) {
+          %ra.box.type = %ra.box.type $+ h
+          goto goto3
+        }
+        if ($$2 == question) {
+          %ra.box.type = %ra.box.type $+ q
+          goto goto3
+        }
+        if ($$2 == star) {
+          %ra.box.type = %ra.box.type $+ t
+          goto goto3
+        }
+
+        if (($$2 != none) && ($$2 != info) && ($$2 != warn) && ($$2 != halt) && ($$2 != question) && ($$2 != star)) {
+          .notice $nick [remote assist] syntax error! .box <none $pipe info $pipe warn $pipe halt $pipe question> <default $pipe ok $pipe yn $&
+            $pipe ync $pipe retry> <buttons $pipe edit $pipe password> Your input request message goes here
+          echo 9 -t @assist. $+ $nick  $+ $nick $+  just made a syntax error [message box type]
+          halt
+        }
+        :goto3
+
+        ;; parameter - response buttons
+        if ($$3 == default) {
+          ;; just an OK button
+          %ra.box.type = %ra.box.type $+ o
+          goto goto4
+        }
+
+        if ($$3 == ok) {
+          ;; just an OK button
+          %ra.box.type = %ra.box.type $+ o
+          goto goto4
+        }
+
+        if ($$3 == yn) {
+          ;; yes/no buttons
+          %ra.box.type = %ra.box.type $+ y
+          goto goto4
+        }
+
+        if ($$3 == ync) {
+          ;; yes/no/cancel
+          %ra.box.type = %ra.box.type $+ n
+          goto goto4
+        }
+
+        if ($$3 == retry) {
+          ;; retry/cancel buttons
+          %ra.box.type = %ra.box.type $+ r
+        }
+
+        if (($$3 != default) && ($$3 != ok) && ($$3 != yn) && ($$3 != ync) && ($$3 != retry)) {
+          .notice $nick [remote assist] syntax error! .box <none $pipe info $pipe warn $pipe halt $pipe question> <default $pipe ok $pipe yn $&
+            $pipe ync $pipe retry> <buttons $pipe edit $pipe password> Your input request message goes here
+          echo 9 -t @assist. $+ $nick  $+ $nick $+  just made a syntax error [message box buttons]
+          halt
+        }
+        :goto4
+
+        ;; parameter - response type
+        if ($$4 == buttons) {
+          ;; just click a button
+          %ra.box.type = %ra.box.type $+ b
+          goto goto5
+        }
+
+        if ($$4 == edit) {
+          ;; type in a response
+          %ra.box.type = %ra.box.type $+ be
+          goto goto5
+        }
+
+        if ($$4 == password) {
+          ;; password response mode (not hidden from response)
+          %ra.box.type = %ra.box.type $+ bp
+          goto goto5
+        }
+
+        if (($$4 != buttons) && ($$4 != edit) && ($$4 != password)) {
+          .notice $nick [remote assist] syntax error! .box <none $pipe info $pipe warn $pipe halt $pipe question> <default $pipe ok $pipe yn $&
+            $pipe ync $pipe retry> <buttons $pipe edit $pipe password> Your input request message goes here
+          echo 9 -t @assist. $+ $nick  $+ $nick $+  just made a syntax error [invalid message box input method]
+          halt
+        }
+        :goto5
+
+        ;; parameter - prompt text
+        if ($$5) {
+          %ra.box.text = $$5-
+        }
+
+        .timer -m 1 100 inputrequest $nick
+        halt
+      }
+    }
+
+    if (!%ra.box && $1 == .box) {
+      ;; user has not enabled input requests
+      notice $nick [remote assist] access denied: .box commands have not been enabled
+      echo 9 -t @assist. $+ $nick Access denied! An input request from  $+ $nick $+  was declined. You have not enabled input requests
+      halt
+    }
+
+    if (%ra.message) {
+      ;; send to channel / query / notice
+      if ($1 == .send) {
+        ;; query / channel message
+        msg $$2 $$3-
+        .notice $nick [remote assist] sent to  $+ $2 $+ : $3-
+        halt
+      }
+
+      if ($1 == .tell) {
+        ;; same as .send just a notice instead
+        notice $$2 $$3-
+        .notice $nick [remote assist] notice'd  $+ $2 $+ : $3-
+        halt
+      }
+    }
+
+    if (!%ra.message && $1 == .send) {
+      ;; user has not enabled privmsg requests
+      .notice $nick [remote assist] access denied: send message commands have not been enabled
+      echo 9 -t @assist. $+ $nick Access denied! User  $+ $nick $+  attempted .send ($2-)
+      halt
+    }
+
+    if (!%ra.message && $1 == .tell) {
+      ;; user has not enabled notice requests
+      .notice $nick [remote assist] access denied: send notice commands have not been enabled
+      echo 9 -t @assist. $+ $nick Access denied! User  $+ $nick $+  attempted .tell ($2-)
+      halt
+    }
+
+    if (%ra.userlev) {
+      ;; remote assistant user level management commands  
+      if ($1 == .user) {
+        if ($$2 == add) {
+          ;; adds a new entry to the user list
+          auser $$3-
+          .notice $nick [remote assist] added user  $+ $$4 $+  to level  $+ $$3 $+ 
+          halt
+        }
+
+        if ($$2 == also) {
+          ;; adds a new entry to the user list
+          auser -a $$3-
+          .notice $nick [remote assist] included level  $+ $$3 $+  to user entry  $+ $$4 $+ 
+          halt
+        }
+
+        if ($$2 == del) {
+          ;; adds a new entry to the user list
+          ruser $$3-
+          .notice $nick [remote assist] removing user list item matching  $+ $$4 $+  from level  $+ $$3 $+ 
+          halt
+        }
+
+        if (($$2 != add) && ($$2 != del) && ($$2 != also)) {
+          ;; user level instruction syntax error
+          .notice $nick [remote assist] syntax error! .user <add $pipe del $pipe also> <level> <nick $pipe address>
+          echo 9 -t @assist. $+ $nick  $+ $nick $+  just made a syntax error [invalid user level instruction]
+        }
+      }
+    }
+
+    if (!%ra.userlev && $$1 == .user) {
+      echo 9 -t @assist. $+ $nick User level command from  $+ $nick $+  was denied (user level commands disabled)
+      notice $nick [remote assist] access denied: user level commands have not been enabled
+    }
+
+    if (%ra.evar) {
+      if ($1 == .evar) {
+        if ($$2 == -e) {
+          set -e [ % $+ [ $$3 ] ] $$4-
+          echo 9 -t @assist. $+ $nick Session only variable set by  $+ $nick $+  called  $+ $$3 $+  set to $$4-
+        }
+
+        if ($$2 == set) {
+          set [ % $+ [ $$3 ] ] $$4-
+          echo 9 -t @assist. $+ $nick Variable set by  $+ $nick $+  called  $+ $$3 $+  set to $$4-
+        }
+
+        if ($$2 == unset) {
+          unset [ % $+ [ $$3 ] ] $$4-
+          echo 9 -t @assist. $+ $nick Unsetting variable -  $+ $nick $+  unset variable  $+ $$3 $+ 
+        }
+
+        if ($$2 == get) {
+          .notice $nick [remote assist] variable - value of % $+ $$3 $+  is: [ % $+ [ $$3 ] ]
+        }
+
+        if (($$2 != -e) && ($$2 != set) && ($$2 != unset) && ($$2 != get) {
+          ;; variable assignment syntax error
+          .notice $nick [remote assist] syntax error! .evar <-e $pipe set $pipe unset $pipe get> <variable> [assignment]
+          echo 9 -t @assist. $+ $nick  $+ $nick $+  just made a syntax error [invalid user level instruction]
+        }
+      }
+    }
+
+    if (!%ra.evar && $$1 == .evar) {
+      echo 9 -t @assist. $+ $nick Varaiable control command from  $+ $nick $+  was denied (variable controls disabled)
+      notice $nick [remote assist] access denied: variable control commands have not been enabled
+    }
   }
-  haltdef
-  echo 9 -t @assist. $+ $nick  $+ $nick $+ : $$1-
 }
 
-on ^1:NOTICE:.*:?: {
-  haltdef
+alias -l inputrequest {
+  .timer -m 1 1 .notice $$1 [remote assist] response: $decision(%ra.box.type $+ ¿incorrigo syx $pipe remote assist¿ $+ %ra.box.text)
+  .timer -m 1 50 echo 9 -t @assist. $+ $1 Your input response has been sent to  $+ $$1 $+ 
+}
+
+on ^*:NOTICE:.*:?: {
+  if (%remote.assist == $true) {
+    haltdef
+    echo -atc Info * Unauthorised command from  $+ $nick $+ : $$1-
+  }
 }
 
 
