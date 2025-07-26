@@ -56,9 +56,13 @@ alias -l badvhost.check {
 ;; mode change disabled
 on ^*:SNOTICE:Setting/removing of usermode(s) 'x' has been disabled.: {
   haltdef
-  .timer -m 1 100 text-reader incorrigo-syx\docu-mental\address-cloaking.tr Setting/removing of usermode(s) 'x' has been disabled
+  .timer -m 1 1 no.x
 }
-on ^*:SNOTICE:Setting/removing*: haltdef | .timer -m 1 100 rawbak.d words incorrigo syx $eval($chr(124),0) server message¿ $+ $$1-
+on ^*:SNOTICE:Setting/removing*: haltdef | .timer -m 1 100 rawbak.d words incorrigo syx $eval($pipe,0) server message¿ $+ $$1-
+
+alias -l no.x {
+  noop $$decision(wogb¿incorrigo syx $pipe mode x¿Mode +x is locked for all users $+ $crlf $crlf $+ This stops your real address from being displayed to other people and applies to everyone)
+}
 
 #statusmodechange on
 on ^*:RAWMODE:#: {

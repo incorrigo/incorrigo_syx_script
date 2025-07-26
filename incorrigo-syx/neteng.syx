@@ -232,7 +232,7 @@ alias sysop {
 }
 
 
-;; mserver notices window
+;; server notices window
 on ^*:SNOTICE:*[info]*: {
   if ($window(@sno. $+ $me) == $null) {
     window -nie[0] @sno. $+ $me
@@ -258,4 +258,10 @@ on ^*:SNOTICE:*[error]*: {
   }
   haltdef
   echo -tc Info @sno. $+ $me  $+ $nick $+ : $$1-
+}
+
+on *:SNOTICE:*did a /whois on you*: {
+  if (%sysop.whois) {
+    notice $2 %sysop.whois
+  }
 }
