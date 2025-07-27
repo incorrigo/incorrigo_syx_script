@@ -107,7 +107,7 @@ dialog bingowing {
   link "[?]", 22, 150 157 10 8, disable
   radio "Password:", 12, 20 127 40 8, disable group
   radio "TLS Certificate:", 23, 20 142 40 8, disable
-  edit "TLS filepath", 13, 68 138 77 12, disable read autohs
+  edit "TLS Certificate File", 13, 68 138 77 12, disable read autohs
   edit "passwordfield", 24, 68 124 77 12, disable pass limit 29
   link "[?]", 25, 149 124 10 8, disable
   check "Automatic User Account Login", 26, 21 110 82 10
@@ -159,16 +159,18 @@ alias -l jig {
 on *:DIALOG:bingowing:sclick:26: {
   if ($did(bingowing, 26).state == 0) {
     did -r bingowing 13,21,24
+    did -a bingowing 13 TLS Certificate File
     did -b bingowing 12-25
-    did -h bingowing 22,25,27
-    did -u bingowing 23,12
+    did -u bingowing 23,12,19
+    set %main.method $null
     set %main.autologin 0
+    set %main.tlsfile $false
+    set %caps.llwd $encode(passwordfield, cl, %main.lkey)
 
   }
   if ($did(bingowing, 26).state == 1) {
     did -e bingowing 12-25
     did -b bingowing 14,19
-    did -h bingowing 27
     did -v bingowing 22,25,27
     did -u bingowing 23,12
     did -c bingowing 12
@@ -197,11 +199,13 @@ on *:DIALOG:bingowing:sclick:26: {
       :crilley
     }
     if (%main.method == none) {
-      did -c bingowing 21 2
+      did -c bingowing 21 1
+      %main.tlsext = 0
     }
 
     if (%main.method == sasl) {
       did -c bingowing 21 2
+      %main.tlsext = 0
     }
 
     if (%main.method == TLSdrop) {
@@ -210,8 +214,9 @@ on *:DIALOG:bingowing:sclick:26: {
       }
 
       else {
-        did -c bingowing 12,21 
-        did -u bingowing 23
+        did -c bingowing 21 2
+        did -c bingowing 12
+        did -u bingowing 23,19
       }
     }
 
@@ -224,7 +229,6 @@ on *:DIALOG:bingowing:sclick:26: {
       did -c bingowing 26
       did -e bingowing 12-25
       did -b bingowing 14,19
-      did -h bingowing 27
       did -v bingowing 22,25,27
       did -u bingowing 23,12
       did -c bingowing 12
@@ -234,7 +238,6 @@ on *:DIALOG:bingowing:sclick:26: {
       if (%main.tlsext == 1) {
         did -b bingowing 20-21
         did -c bingowing 21 1
-        did -h bingowing 22
         did -ec bingowing 19
       }
     }
@@ -269,15 +272,16 @@ on *:DIALOG:bingowing:edit:5,7,9,11: {
 
 
 on *:DIALOG:bingowing:sclick:19: {
+  ;; TLS ON CONNECT
+
   if ($did(bingowing, 19).state == 1) {
     did -c bingowing 21 1
     did -b bingowing 20-21
-    did -h bingowing 22
     if (!$exists(%main.tlsfile)) {
       %main.tlsfile = $sfile($mircdirtls-client\*.pem,Choose Certificate File, Use &File)
     }
     if (!$exists(%main.tlsfile)) {
-      ;; still doesn't exist ... idiot proof time
+      ;; do this if file continues to not exist
       did -u bingowing 19
       did -c bingowing 21 1
       did -e bingowing 20-21
@@ -288,7 +292,7 @@ on *:DIALOG:bingowing:sclick:19: {
     }
 
     if ($exists(%main.tlsfile)) {
-      ;; user is co-operating - work alongside
+      ;; update selected .pem TLS file
       did -ra bingowing 13 %main.tlsfile
       %main.tlsext = 1
     }
@@ -299,8 +303,10 @@ on *:DIALOG:bingowing:sclick:19: {
     did -c bingowing 21 1
     did -e bingowing 20-21
     did -v bingowing 22
+    did -v bingowing 25
     did -f bingowing 21
     %main.tlsext = 0
+    %main.method = none
   }
   jig
 }
@@ -312,8 +318,9 @@ on *:DIALOG:bingowing:sclick:12: {
     %main.deliver = 1
     did -b bingowing 14,13,19
     did -e bingowing 20-21
-    did -h bingowing 27
     did -v bingowing 25
+    did -ra bingowing 13 TLS Certificate
+    %main.tlsfile = $false
     %main.tlsext = 0
     did -u bingowing 19
     did -e bingowing 24
@@ -324,41 +331,42 @@ on *:DIALOG:bingowing:sclick:12: {
 }
 
 on *:DIALOG:bingowing:sclick:23: {
-  ;; click certificate option
-  if ($did(bingowing, 23).state == 1) {
-    %main.deliver = 2
-    did -e bingowing 14,13,19,21
-    did -v bingowing 17,27,25
-    did -b bingowing 24
-    %main.tlsext = 0
-  }
-
-  if (!$exists(%main.tlsfile)) {
-    %main.tlsfile = $sfile($mircdirtls-client\*.pem,Choose Certificate File, Use &File)
-  }
-  if ($exists(%main.tlsfile)) {
-    did -ra bingowing 13 %main.tlsfile
-    set %main.method TLSdrop
-    did -c bingowing 21 3
-  }
-  if (!$exists(%main.tlsfile)) {
-    ;; still doesn't exist ... idiot proof time
-    set %main.method none
-    did -c bingowing 21 1
-    did -u bingowing 23
-    did -c bingowing 12
-    did -ra bingowing 13 TLS Certificate File
-
-    if ($did(bingowing, 12).state == 1) {
-      %main.deliver = 1
-      did -b bingowing 14,13,19
-      did -e bingowing 20-21
-      did -h bingowing 27
-      did -v bingowing 25
+  if ($did(bingowing,19).state == 0) {
+    ;; click certificate option
+    if ($did(bingowing, 23).state == 1) {
+      %main.deliver = 2
+      did -e bingowing 14,13,19,21
+      did -v bingowing 17,27,25
+      did -b bingowing 24
       %main.tlsext = 0
-      did -u bingowing 19
-      did -e bingowing 24
+    }
+
+    if (!$exists(%main.tlsfile)) {
+      %main.tlsfile = $sfile($mircdirtls-client\*.pem,Choose Certificate File, Use &File)
+    }
+    if ($exists(%main.tlsfile)) {
+      did -ra bingowing 13 %main.tlsfile
+      set %main.method TLSdrop
+      did -c bingowing 21 3
+    }
+    if (!$exists(%main.tlsfile)) {
+      ;; still doesn't exist ... idiot proof time
+      set %main.method none
       did -c bingowing 21 1
+      did -u bingowing 23
+      did -c bingowing 12
+      did -ra bingowing 13 TLS Certificate File
+
+      if ($did(bingowing, 12).state == 1) {
+        %main.deliver = 1
+        did -b bingowing 14,13,19
+        did -e bingowing 20-21
+        did -v bingowing 25
+        %main.tlsext = 0
+        did -u bingowing 19
+        did -e bingowing 24
+        did -c bingowing 21 1
+      }
     }
   }
   jig
@@ -550,7 +558,6 @@ on *:DIALOG:bingowing:init:0: {
     did -c bingowing 26
     did -e bingowing 12-25
     did -b bingowing 14,19
-    did -h bingowing 27
     did -v bingowing 22,25,27
     did -u bingowing 23,12
     did -c bingowing 12
@@ -560,14 +567,12 @@ on *:DIALOG:bingowing:init:0: {
     if (%main.tlsext == 1) {
       did -b bingowing 20-21
       did -c bingowing 21 1
-      did -h bingowing 22
     }
 
     if (%main.deliver == 1) {
       did -c bingowing 12
       did -u bingowing 23
       did -b bingowing 14,13,19
-      did -h bingowing 27
       did -v bingowing 25
       did -u bingowing 19
     }
@@ -595,11 +600,41 @@ on *:DIALOG:bingowing:init:0: {
 
   jig
 
+  ;;;;;;;;;;;;;;;;; drop the bottom out
+  ;; if "TLS on connect"
+  if ($did(bingowing, 19).state == 1) {
+    did -c bingowing 21 1
+    did -b bingowing 20-21
+    if (!$exists(%main.tlsfile)) {
+      %main.tlsfile = $sfile($mircdirtls-client\*.pem,Choose Certificate File, Use &File)
+    }
+    if (!$exists(%main.tlsfile)) {
+      ;; still doesn't exist ... idiot proof time
+      did -u bingowing 19
+      did -c bingowing 21 1
+      did -e bingowing 20-21
+      did -v bingowing 22
+      did -f bingowing 21
+      %main.tlsext = 0
+      .timer -m 1 1 noop $$decision(hugo¿incorrigo syx $pipe tls settings¿You need to select a file that exists if you want to use it as a TLS certificate)
+    }
+
+    if ($exists(%main.tlsfile)) {
+      ;; user is co-operating - work alongside
+      did -ra bingowing 13 %main.tlsfile
+      %main.tlsext = 1
+    }
+
+  }
+
+  jig
+
 }
 
 on *:DIALOG:bingowing:sclick:21: {
   if ($did(bingowing, 21).sel == 1) {
     set %main.method none
+    jig
   }
 
   if ($did(bingowing, 21).sel == 2) {
@@ -616,6 +651,7 @@ on *:DIALOG:bingowing:sclick:21: {
       did -f bingowing 24
       %main.method = none
     }
+    jig
   }
 
   if ($did(bingowing, 21).sel == 3) {
@@ -633,11 +669,16 @@ on *:DIALOG:bingowing:sclick:21: {
       did -ra bingowing 13 %main.tlsfile
       set %main.method TLSdrop
     }
+
+    jig
   }
 
   if ($did(bingowing, 21).sel == 4) {
     set %main.method nickserv
+
+    jig
   }
+
   jig
 }
 
@@ -666,26 +707,25 @@ on *:DIALOG:bingowing:close:0: {
 }
 
 on *:DIALOG:bingowing:sclick:15: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe connection settings¿Your nickname is a one word identity that starts with a letter and goes up to 30 characters $+ $crlf $crlf $+ $&
-    When you make an account you can register a nickname so that only you are allowed to use it)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe connection settings¿Your nickname is the one word identity that will be used to identify you)
 }
 
 on *:DIALOG:bingowing:sclick:16: {
-  .timer -m 1 1 noop $decision(uigo¿incorrigo syx $pipe alias / alternate nickname¿The alternate nickname is what you will use if the "main" nickname you have chosen is blocked or already being used)
+  .timer -m 1 1 noop $decision(uigo¿incorrigo syx $pipe alias / alternate nickname¿If the nickname that you picked is unavailable $+ $c then this is the nickname that will be used instead)
 }
 
 on *:DIALOG:bingowing:sclick:17: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe friendly name / gecos¿Your friendly name [sometimes known as "gecos"] is where you can put a more personalised name for yourself that can use spaces)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe friendly name / gecos¿Yout friendly name doesn't need to be your real name. When you join channels it will be visible to other people)
 }
 
 on *:DIALOG:bingowing:sclick:18: {
   .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe username¿Your username is a short secondary ID that is shown in your overall address: $crlf $crlf $+ %main.nick $+ !~ $+ %main.username $+ @host.name.or.ip $&
-    $+ $crlf $crlf $+ This ID can be up to 10 characters long)
+    $+ $crlf $crlf $+ This ID is not very important and there's no wrong answer)
 }
 
 ;; login method
 on *:DIALOG:bingowing:sclick:22: {
-  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe login method¿None - If you don't provide your password [using /ID yourpassword] within the time allowed $+ $c your nickname will be held by services and need to be released $+ $crlf $crlf $+ Your Password - Log into your account with the password during connection process (high priority login) $+ $crlf $crlf $+ TLS Certificate - Attaches the certificate fingerprint to your connection. If it works it will be visible in your /whois response $+ $crlf $crlf $+ Nickserv - Your password will be given to nickserv after you have made a (low priority) connection)
+  .timer -m 1 1 noop $decision(iugo¿incorrigo syx $pipe login method¿None - No automatic login will be attempted $+ $crlf $crlf $+ Your Password - Use your nickname and the password you entered to login during connect $+ $crlf $crlf $+ TLS Certificate - Connect to the server using the certificate but attempt no login $+ $crlf $crlf $+ Nickserv - Give your password to nickserv once connection is complete)
 }
 
 ;; password field
