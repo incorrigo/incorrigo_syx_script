@@ -170,3 +170,86 @@ dialog eevar {
   button "O&K", 8, 103 68 37 12, ok
   button "Ca&ncel", 9, 144 68 37 12, cancel
 }
+
+;; Fake lag calculator
+dialog fakelag {
+  title "incorrigo syx | lag calculator"
+  size -1 -1 213 90
+  option dbu
+  box "Fake Lag", 1, 3 2 207 65
+  text "Lag penalty:", 2, 10 16 55 8
+  text "Lag penalty bytes:", 3, 10 31 55 8
+  edit "750", 4, 66 15 50 12, right
+  edit "180", 5, 66 29 50 12, right
+  text "IRC command:", 6, 10 52 38 8
+  text "/", 7, 48 52 7 8, center
+  edit "", 8, 56 49 150 12, autohs limit 360
+  button "O&K", 9, 164 73 45 12, default flat ok
+  text "Lag (ms):", 10, 116 24 32 8, right
+  edit "(enter command)", 11, 149 21 50 12, read center
+  text "Insert values to calculate UnrealIRCd lag penalty", 12, 4 75 135 8
+}
+
+
+alias lagcalculator {
+  if ($dialog(fakelag) == $null) {
+    noop $dialog(fakelag,fakelag, u)
+  }
+
+}
+
+alias -l lagcalculate {
+  var %lag.penalty = $1
+  var %lag.pbytes = $2
+  var %lag.command = $len($$3-)
+  var %lag.floor = $calc(1 + $floor($calc(%lag.command / %lag.pbytes)))
+  return $calc(1 + %lag.floor * %lag.penalty)
+}
+
+on *:DIALOG:fakelag:edit:4: {
+  if ($len($did(fakelag, 8).text) == 0) {
+    did -ra fakelag 11 (enter command)
+    halt
+  }
+
+  if ($did(fakelag, 4).text isalnum) {
+    if ($did(fakelag, 5).text isalnum) {
+      if ($len($did(fakelag, 8).text) > 0) {
+        did -ra fakelag 12 Command length: $len($did(fakelag, 8).text)
+        did -ra fakelag 11 $lagcalculate($int($did(fakelag, 4).text), $int($did(fakelag, 5).text), $did(fakelag, 8))
+      }
+    }
+  }
+}
+
+on *:DIALOG:fakelag:edit:5: {
+  if ($len($did(fakelag, 8).text) == 0) {
+    did -ra fakelag 11 (enter command)
+    halt
+  }
+
+  if ($did(fakelag, 4).text isalnum) {
+    if ($did(fakelag, 5).text isalnum) {
+      if ($len($did(fakelag, 8).text) > 0) {
+        did -ra fakelag 12 Command length: $len($did(fakelag, 8).text)
+        did -ra fakelag 11 $lagcalculate($int($did(fakelag, 4).text), $int($did(fakelag, 5).text), $did(fakelag, 8))
+      }
+    }
+  }
+}
+
+on *:DIALOG:fakelag:edit:8: {
+  if ($len($did(fakelag, 8).text) == 0) {
+    did -ra fakelag 11 (enter command)
+    halt
+  }
+
+  if ($did(fakelag, 4).text isalnum) {
+    if ($did(fakelag, 5).text isalnum) {
+      if ($len($did(fakelag, 8).text) > 0) {
+        did -ra fakelag 12 Command length: $len($did(fakelag, 8).text)
+        did -ra fakelag 11 $lagcalculate($int($did(fakelag, 4).text), $int($did(fakelag, 5).text), $did(fakelag, 8))
+      }
+    }
+  }
+}
