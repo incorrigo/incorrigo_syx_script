@@ -121,7 +121,7 @@ ctcp ^*:VERSION:#: {
 ctcp ^*:VERSION:?: {
   haltdef
   echo -astc CTCP * CTCP: $nick requests your client version
-  /notice $nick I am using 14,1incorrigo15,1syx IRC Network - script for mIRC - version %lacigare by 4,1westid. - 13https://incorrigo.io/ / 13#incorrigo
+  /notice $nick I am using 14,1incorrigo15,1syx Network script for mIRC - version %lacigare by 4,1westid. - 13https://incorrigo.io/ / 13#incorrigo
 }
 
 ctcp ^*:TIME:*: {
@@ -177,15 +177,15 @@ raw 401:*: .timer -m 1 1 rawbak.d warnin incorrigo syx $eval($pipe, 0) server re
 raw 421:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($pipe, 0) command¿There was a problem using the command / $+ $2 $+ $crlf $crlf $+ $3-
 raw 464:*: .timer -m 1 1 deny.oper $$1-
 
-raw 481:*: .timer -m 1 1 rawbak.d words incorrigo syx $pipe server message¿ $+ $$2-
-raw 491:*: .timer -m 1 1 rawbak.d words incorrigo syx $pipe network engineer login¿ $+ $$2-
+raw 481:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($pipe,0) server message¿ $+ $$2-
+raw 491:*: .timer -m 1 1 rawbak.d words incorrigo syx $eval($pipe,0) network engineer login¿ $+ $$2-
 raw 432:*: {
   var %910 $9-
   if (%910 === registered user) {
     .timer -m 1 1 nick.recovery $2
     goto cocknocker
   }
-  .timer -m 1 1 rawbak.d words incorrigo syx $pipe banned nickname¿Your nickname $chr(91) $+ $2 $+ $chr(93) has been blocked $+ $+ $crlf $crlf $+ $3-
+  .timer -m 1 1 rawbak.d words incorrigo syx $eval($pipe,0) banned nickname¿Your nickname $chr(91) $+ $2 $+ $chr(93) has been blocked $+ $+ $crlf $crlf $+ $3-
   :cocknocker
 }
 
@@ -204,7 +204,7 @@ on nickserv:NOTICE:*nickname has been registered*not use*:?: {
 }
 
 alias -l nickslap {
-  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿The nickname %nickslapshot $iif($ironnik(login) == $null,already belongs to someone else,is not registered under your account) $+ $crlf $crlf $+ $&
+  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿The nickname %nickslapshot $iif($ironnik(login) == $null,looks like it already belongs to someone else,requires successful login before you start using it $chr(91) $+ kill immediate $+ $chr(93)) $+ $crlf $crlf $+ $&
     If you don't want a random guest nickname $+ $c then you can try using a different one here $+ $crlf $crlf $+ Enter a new nickname:)
 }
 
@@ -449,12 +449,6 @@ raw 313:*: {
   if ($7) { %scan.oline = $remove($7,$obk,$cbk) }
   if ($8) { %scan.operclass = $remove($8,$chr(91),$chr(93)) }
   echo -act Whois * Operator: $2 $3 $4 $5 $6 $iif($7,O-Line: $remove($7,$obk,$cbk),$null) $iif($8,Operclass: $remove($8,$chr(91),$chr(93)),$null)
-  if ($2 == nickserv) { text-reader incorrigo-syx\docu-mental\nickserv.tr Account Registration and Protection Service }
-  if ($2 == chanserv) { .timer -m 1 1 whois.chanserv }
-  if ($2 == operserv) { .timer -m 1 1 whois.operserv }
-  if ($2 == memoserv) { whois.memoserv }
-  if ($2 == hostserv) { .timer -m 1 1 whois.hostserv }
-  if ($2 == botserv) { whois.botserv }
 }
 
 alias -l whois.operserv {
@@ -465,7 +459,14 @@ alias -l whois.operserv {
 alias -l whois.chanserv {
   if ($decision(yvg¿incorrigo syx $pipe channel service¿Chanserv is one of the network services $+ $crlf $crlf $+ If you are registered $+ $c you can use chanserv to own a channel / get permission from other people to be an operator in theirs $&
     $+ $crlf $crlf $+ Would you like to read more detailed information about chanserv?) == $yes) {
-    text-reader incorrigo-syx\docu-mental\chanserv.tr Chanserv: Own Your Channels
+    text-reader incorrigo-syx\docu-mental\chanserv.tr Chanserv - Own Your Channels
+  }
+}
+
+alias -l whois.nickserv {
+  if ($decision(yvg¿incorrigo syx $pipe channel service¿Nickserv is the account registration and management service $+ $crlf $crlf $+ $&
+    Would you like more information aout nickserv?) == $yes) {
+    text-reader incorrigo-syx\docu-mental\nickserv.tr Nickserv - User Account Service
   }
 }
 
@@ -482,7 +483,7 @@ alias -l whois.hostserv {
 }
 
 alias -l whois.botserv {
-  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) botserv¿Botserv lets you have a bot powered by services for your channel $+ $crlf $crlf $+ You are permitted to use bots on Incorrigo Syx $+ $c as long as it doesn't start doing or saying unsolicited things outside the cope of your channel(s) $+ $crlf $crlf $+ $&
+  .timer -m 1 1 rawbak.d info incorrigo syx $eval($pipe, 0) botserv¿Botserv lets you have a bot powered by services for your channel $+ $crlf $crlf $+ You are permitted to use bots on Incorrigo Syx $+ $c as long as it doesn't start doing or saying unsolicited things outside the scope of your channel(s) $+ $crlf $crlf $+ $&
     A services bot will give you more settings and more control over your channel than chanserv does. These can be dealt with via botserv
 }
 
@@ -497,6 +498,12 @@ raw 317:*: {
 raw 318:*: {
   haltdef
   echo -atc Whois *** That was  $+ $2 $+ .
+  if ($2 == nickserv) { .timer -m 1 1 whois.nickserv }
+  if ($2 == chanserv) { .timer -m 1 1 whois.chanserv }
+  if ($2 == operserv) { .timer -m 1 1 whois.operserv }
+  if ($2 == memoserv) { whois.memoserv }
+  if ($2 == hostserv) { .timer -m 1 1 whois.hostserv }
+  if ($2 == botserv) { whois.botserv }
 }
 raw 319:*: {
   haltdef
@@ -859,7 +866,7 @@ raw 404:*: {
   haltdef
   if ($6 == wait) { .timer -m 1 100 explain Being kicked from $2 has a $9 second delay to try and re-join the channel | halt }
   if (%get.the.message != $2) {
-    echo -astc Info2 # *  $+ $2 $+  You $iif($me ison $2,are being silenced:,can't message the channel:) $3-
+    echo -astc Info2 # *  $+ $2 $+  You $iif($me ison $2,$+ 're being silenced:,can't message the channel:) $3-
     %get.the.message = $2
     .timer 1 6 unset %get.the.message
   }
@@ -1017,45 +1024,69 @@ alias -l warnmodeD {
 }
 
 #chreport on
-raw 324:*: if (($me ison $2) && (%reverx != $2)) {
-  set %reverx $2
-  echo -tc Mode $2 *  $+ $2 $+  modes: $3-
-  if (D isincs $3) {
-    .timer -m 1 750 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Other users may not be shown in the list
+raw 324:*: {
+  if (($me ison $2) && ($ironnik($2) == $null) && (%reverx != $2)) {
+    set %reverx $2
+    echo -tc Mode $2 *  $+ $2 $+  modes: $3-
+    if (D isincs $3) {
+      .timer -m 1 750 if ($me ison $3 && $me !isop $3) {
+        .timer -m 1 550 echo -tc Topic $2 *  $+ $2 $+ : Other users may not be shown in the list
+      }
     }
-  }
 
-  if (H isincs $3) {
-    .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : This channel uses chat history playback
+    if (H isincs $3) {
+      .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
+        .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : This channel uses chat history playback
+      }
     }
-  }
 
-  if (N isincs $3) {
-    .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : You can't change your nickname while you are on this channel
+    if (N isincs $3) {
+      .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
+        .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : You can't change your nickname while you are on this channel
+      }
     }
-  }
 
-  if (G isincs $3) {
-    .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
-      .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : Profanity in channel messages will be censored
+    if (G isincs $3) {
+      .timer -m 1 350 if ($me ison $3 && $me !isop $3) {
+        .timer -m 1 550 echo -tc Notify $2 *  $+ $2 $+ : Profanity in channel messages will be censored
+      }
     }
-  }
 
-  if (M isincs $3) {
-    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Users will need 3+voice if they are not registered
-  }
+    if (M isincs $3) {
+      .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Users will need 3+voice if they are not registered
+    }
 
-  if (m isincs $3) {
-    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Normal users will need 3+voice or higher to speak
-  }
+    if (m isincs $3) {
+      .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Normal users will need 3+voice or higher to speak
+    }
 
-  if (T isincs $3) {
-    .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Channel notices are prohibited
-  }
+    if (T isincs $3) {
+      .timer -m 1 200 echo -tc Notify $2 *  $+ $2 $+ : Channel notices are prohibited
+    }
 
+    if (i isincs $3) {
+      .timer -m 1 200 echo -tc Invite $2 *  $+ $2 $+ : This channel is invite only
+    }
+
+    if (V isincs $3) {
+      .timer -m 1 200 echo -tc Invite $2 *  $+ $2 $+ : /INVITE command is not available here
+    }
+
+    ronnik $2 $ctime
+
+  }
 }
-raw 329:*: if (($me ison $2) && (%revery != $3)) { set %revery $3 | echo -tc Mode $2 * created: $asctime($3, yyyy-mm-dd HH:nnTT $chr(91) $+ dddd $+ $chr(93)) existed: $duration($calc($ctime - %revery)) }
+
+raw 329:*: {
+  if (($me ison $2) && (%revery != $3)) {
+    set %revery $3
+    echo -tc Mode $2 * created: $asctime($3, yyyy-mm-dd HH:nnTT $chr(91) $+ dddd $+ $chr(93)) existed: $duration($calc($ctime - %revery))
+  }
+}
+
+on *:PART:#: {
+  if ($nick == $me) {
+    xronnik #
+  }
+}
 #chreport end
