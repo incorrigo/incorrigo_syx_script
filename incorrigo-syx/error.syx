@@ -82,7 +82,7 @@ alias -l error.banned {
 }
 
 alias -l error.killed2 {
-  return $decisionm(oghb¿incorrigo syx $pipe session ended¿You were killed automatically by the network manager $+ $crlf $crlf $+ Reason: $2-)
+  return $decision(oghb¿incorrigo syx $pipe session ended¿You were killed automatically by the network manager $+ $crlf $crlf $+ Reason: $2-)
 }
 
 alias -l pillock {

@@ -61,6 +61,15 @@ checkdark {
   }
 }
 
+lineshading {
+  ronnik linesh $readini(mirc.ini, options, n0)
+  if ($gettok($ironnik(linesh), 36, 44) == 1) {
+    return $true
+  }
+
+  return $false
+}
+
 gettime {
   if (!%ctcp.timeformat || %ctcp.timeformat !isnum 1-5) {
     %ctcp.timeformat = 2
@@ -166,12 +175,10 @@ aopper.self {
 }
 
 aopper.details {
-  noop $decision(obg¿incorrigo syx $pipe self-aop¿Self-AOP is an IRC operator function that automatically grants you channel admin status when a channel is joined. It has the following settings: $&
-    $+ $crlf $crlf $+ Self - This is the default setting and uses your 'oper override' permission when any channel is joined $&
-    $+ $crlf $crlf $+ Chanserv - This setting will use chanserv PROTECT on join - this works in registered channels only $&
-    $+ $crlf $crlf $+ Services - This setting will use the operserv/mode permission and you will be granted +a by operserv on join $&
-    $+ $crlf $crlf $+ SA Command - This will use the /SAMODE command and will show to the channel that +a mode was granted by the server you are currently on and not the server which created the channel $&
-    $+ $crlf $crlf $+ This feature will only kick in on channel join when you are an IRC operator $obk $+ even if you choose to use one of the services commands $+ $cbk the network engineer sub-menu will only be displayed if you have IRC operator status)
+  noop $decision(ugo¿incorrigo syx $pipe self-aop information¿Self-AOP is a function that gives you elevated permissions automatically when you join a channel $+ $crlf $crlf $+ $&
+    This feature will only be displayed / trigger on-join if you are an IRC operator $+ $crlf $crlf $+ $&
+    You can set from voice - owner. Giving yourself owner in other people's channels is not recommended $+ $crlf $crlf $+ $&
+    The method it uses is self (override), chanserv (registered channels only), operserv mode command, or /SAMODE to the server. By default it is set to "off" so it doesn't do anything unexpected until you have changed the settings)
 }
 
 ;; CODEFIELDS SWAY LAZILY

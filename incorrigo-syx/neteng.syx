@@ -18,7 +18,8 @@ on *:LOAD: {
 on *:JOIN:#: {
   ;; This requires operserv/mode permission on the network manager
   if ($nick == $me && $sysop) {
-    .operserv mode # %aopper.lev $me
+    .timer -m 1 275 echo -tc Info2 # self aop: activated  $+ %aopper.lev $+  using operserv/mode
+    .timer -m 1 750 operserv mode # %aopper.lev $me
   }
 }
 #svcsaop end
@@ -27,16 +28,22 @@ on *:JOIN:#: {
 on *:JOIN:#: {
   ;; Use your own (oper override was the intended) permssion to establish yourself in a channel
   if ($nick == $me && $sysop) {
-    .mode # %aopper.lev $me
+    .timer -m 1 275 echo -tc Info2 # self aop: setting  $+ %aopper.lev $+  with oper override
+    .timer -m 1 750 mode # %aopper.lev $me
   }
 }
 #selfaop end
 
-#csvcaop off
+#csvcaop on
 on *:JOIN:#: {
   ;; Use chanserv [registered channels only!]
   if ($nick == $me && $sysop) {
-    .chanserv protect # $me
+    .timer -m 1 275 echo -tc Info2 # self aop: setting  $+ %aopper.lev $+  [registered channels only]
+    if (%aopper.lev == +v) { .timer -m 1 750 chanserv voice # }
+    if (%aopper.lev == +h) { .timer -m 1 750 chanserv halfop # }
+    if (%aopper.lev == +o) { .timer -m 1 750 chanserv op # }
+    if (%aopper.lev == +a) { .timer -m 1 750 chanserv protect # }
+    if (%aopper.lev == +q) { .timer -m 1 750 chanserv owner # }
   }
 }
 #csvcaop end
@@ -45,7 +52,8 @@ on *:JOIN:#: {
 on *:JOIN:#: {
   ;; Using /SAMODE will make the server _you are on_ give you %aopper.lev status
   if ($nick == $me && $sysop) {
-    .samode # %aopper.lev $me
+    .timer -m 1 275 echo -tc Info2 # self aop: setting  $+ %aopper.lev $+  via /samode request
+    .timer -m 1 750 samode # %aopper.lev $me
   }
 }
 #scmdaop end
@@ -57,10 +65,11 @@ alias aopper.what {
     }
     return %aopper.lev
   }
-  if ($1 == v) { %aopper.lev = +v }
-  if ($1 == h) { %aopper.lev = +h }
-  if ($1 == o) { %aopper.lev = +o }
-  if ($1 == a) { %aopper.lev = +a }
+  if ($1 == v) { %aopper.lev = +v | return +v }
+  if ($1 == h) { %aopper.lev = +h | return +h }
+  if ($1 == o) { %aopper.lev = +o | return +o }
+  if ($1 == a) { %aopper.lev = +a | return +a }
+  if ($1 == a) { %aopper.lev = +q | return +q }
 }
 
 alias aopper.set {
@@ -73,7 +82,7 @@ alias aopper.set {
       .disable #csvcaop
       .disable #svcsaop
       .disable #scmdaop
-      if ($sysop) { .echo -atc Info2 * Aopper: Current method is now oper override [se1f] }
+      if ($sysop) { .echo -atc Info2 * aopper: Current method is now oper override [se1f] }
       goto barrymore
     }
 
@@ -85,7 +94,7 @@ alias aopper.set {
       .disable #svcsaop
       .disable #selfaop
       .disable #scmdaop
-      if ($sysop) { .echo -atc Info2 * Aopper: Current method now set to chanserv [registered channels only] }
+      if ($sysop) { .echo -atc Info2 * aopper: Current method now set to chanserv [registered channels only] }
       goto barrymore
     }
 
@@ -98,7 +107,7 @@ alias aopper.set {
       %aopper.mode = svcs
       .disable #selfaop
       .disable #scmdaop
-      if ($sysop) { .echo -atc Info2 * Aopper: Current method now set to services operator [operserv / mode] }
+      if ($sysop) { .echo -atc Info2 * aopper: Current method now set to services operator [operserv / mode] }
       goto barrymore
     }
 
@@ -110,7 +119,7 @@ alias aopper.set {
       .enable #scmdaop
       %aopper.active = $true
       %aopper.mode = scmd
-      if ($sysop) { .echo -atc Info2 * Aopper: Current method now set to server mode [/SAMODE command] }
+      if ($sysop) { .echo -atc Info2 * aopper: Current method now set to server mode [/SAMODE command] }
       goto barrymore
     }
 
@@ -121,7 +130,7 @@ alias aopper.set {
       .disable #csvcaop
       %aopper.active = $false
       %aopper.mode = off
-      if ($sysop) { echo -atc Info2 * Aopper: Aopper has been de-activated }
+      if ($sysop) { echo -atc Info2 * aopper: Aopper has been de-activated }
       goto barrymore
     }
 
@@ -134,7 +143,7 @@ alias aopper.set {
       .disable #svcsaop
       .disable #scmdaop
       .disable #csvcaop
-      if ($sysop) { echo -atc Info2 * Aopper: Aopper has been activated and set to oper override [self] }
+      if ($sysop) { echo -atc Info2 * aopper: Aopper has been activated and set to oper override [self] }
       goto barrymore
     }
 

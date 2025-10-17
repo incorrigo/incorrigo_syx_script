@@ -546,7 +546,7 @@ raw 379:*: {
 raw 671:*: { haltdef | echo -atc Whois * Secure Line: $2 is connected securely with TLS  $+ $remove($8,$chr(91),$chr(93)) $+  }
 
 ;; services account login / sasl and other authentication messages from raw numeric
-raw 381:*: .timer -m 1 100 decision ogt¿incorrigo syx $eval($chr(124), 0) network engineer¿ $+ $$2-
+raw 381:*: .timer -m 1 100 decision ugot¿incorrigo syx $eval($chr(124), 0) network engineer¿ $+ $$2-
 raw 382:*: {
   haltdef
   echo -astc Info * Server $3 $+ : [ $+ $nick $+ ] [ Path: $2 $+ ]
