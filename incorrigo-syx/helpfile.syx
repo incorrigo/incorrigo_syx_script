@@ -33,12 +33,15 @@ alias -l lh-reader {
     did -r documentation 3
     if (%text-reader.lines == 0) { did -a documentation 3 This file is empty. $chr(91) $+ %text-reader.file $+ $chr(93) $crlf }
     if (%text-reader.lines > 0) {
-      lh-ln Incorrigo Syx: %text-reader.title $+ $crlf
+      lh-ln Loading help documentation text ...
+      lh-ln $crlf
       while (%text-reader.counter <= %text-reader.lines) {
         if $len($read(%text-reader.file, n, %text-reader.counter)) > 0 { lh-ln $read(%text-reader.file, n, %text-reader.counter) }
         else { did -a documentation 3 $crlf }
         inc %text-reader.counter
       }
+      did -d documentation 3 1
+      did -i documentation 3 1 Incorrigo Syx: %text-reader.title
     }
   }
 
