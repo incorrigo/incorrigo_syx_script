@@ -64,6 +64,17 @@ alias -l no.x {
   noop $$decision(wogb¿incorrigo syx $pipe mode x¿Mode +x is locked for all users $+ $crlf $crlf $+ This stops your real address from being displayed to other people and applies to everyone)
 }
 
+;; knock knock, neo.
+on ^*:NOTICE:[Knock]*:*: if (. isin $nick && @# isin $target) {
+  haltdef
+  ronnik knock.channel $right($target, -1)
+  ronnik knock.knocker $3
+  ronnik knock.message $right($left($4-, -1), -1)
+  ronnik knock.knick $gettok($3, 1, 33)
+  ronnik knock.knack $gettok($3, 2, 33)
+  echo -ct info $ironnik(knock.channel) knock:  $+ $ironnik(knock.knick) $+   $+ $chr(91) $+  $+ $ironnik(knock.message) $+  $+ $chr(93) $+  press F5 for quick invite
+}
+
 #statusmodechange on
 on ^*:RAWMODE:#: {
   ;; as you can see this didn't turn out to be an exact science

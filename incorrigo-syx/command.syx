@@ -231,6 +231,14 @@ cF12 {
   exit -rn
 }
 
+F5 {
+  if ($ironnik(knock.channel) != $null) {
+    if ($ironnik(knock.knick) != $null) {
+      invite $ironnik(knock.knick) $ironnik(knock.channel)
+    }
+  }
+}
+
 ;; lH- NGEN
 lHngen {
   ;; generate a single lH number
