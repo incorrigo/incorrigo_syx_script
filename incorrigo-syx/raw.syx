@@ -517,6 +517,18 @@ raw 276:*: {
   %scan.certfp = $7
   echo -atc Whois * Client Certificate Fingerprint: %scan.certfp
 }
+
+raw 290:*: {
+  haltdef
+  write -c $mircdirincorrigo-syx\docu-mental\helpop-response.tr $remove($2-,*****)
+  .timer -m 1 750 text-reader incorrigo-syx\docu-mental\helpop-response.tr Server Help System - $remove($2-,*****)
+}
+
+raw 292:*: {
+  haltdef
+  write $mircdirincorrigo-syx\docu-mental\helpop-response.tr $2-
+}
+
 raw 330:*: {
   haltdef
   %scan.account = $3
@@ -567,7 +579,7 @@ raw INVITE:*: {
   %invite-notify.by = $right($gettok($rawmsg,1,33), -1)
   %invite-notify.on = $2
   %invite-notify.to = $1
-  if ($me ison %invite-notify.on) { echo -tc Info2 %invite-notify.on * Invite: %invite-notify.by has invited %invite-notify.to to join %invite-notify.on }
+  if ($me ison %invite-notify.on) { echo -tc Info2 %invite-notify.on invite: %invite-notify.by has invited %invite-notify.to to join %invite-notify.on }
 }
 
 raw SILENCE:*: {
