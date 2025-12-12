@@ -34,7 +34,7 @@ on *:JOIN:#: {
 }
 #selfaop end
 
-#csvcaop on
+#csvcaop off
 on *:JOIN:#: {
   ;; Use chanserv [registered channels only!]
   if ($nick == $me && $sysop) {
@@ -69,7 +69,7 @@ alias aopper.what {
   if ($1 == h) { %aopper.lev = +h | return +h }
   if ($1 == o) { %aopper.lev = +o | return +o }
   if ($1 == a) { %aopper.lev = +a | return +a }
-  if ($1 == a) { %aopper.lev = +q | return +q }
+  if ($1 == q) { %aopper.lev = +q | return +q }
 }
 
 alias aopper.set {
