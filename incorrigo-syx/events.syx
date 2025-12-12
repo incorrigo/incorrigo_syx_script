@@ -73,6 +73,9 @@ on ^*:NOTICE:[Knock]*:*: if (. isin $nick && @# isin $target) {
   ronnik knock.knick $gettok($3, 1, 33)
   ronnik knock.knack $gettok($3, 2, 33)
   echo -ct info $ironnik(knock.channel) knock:  $+ $ironnik(knock.knick) $+   $+ $chr(91) $+  $+ $ironnik(knock.message) $+  $+ $chr(93) $+  press F5 for quick invite
+  if ($active != $ironnik(knock.channel)) {
+    noop $tip(knocktip, Knock on $ironnik(knock.channel), $ironnik(knock.knick) is knocking: $+ $crlf $crlf $+ $ironnik(knock.message), 8, $mircdirincorrigo-syx\syx.ico, $null, join $ironnik(knock.channel), $null)
+  }
 }
 
 #statusmodechange on
@@ -210,6 +213,14 @@ on ^*:SERVERDEOP:#: {
   ;; i.e. 'amok.incorrigo.io sets mode: -o some_wanker'
   if ($1 == -o) { haltdef }
   echo -ct mode # * $opnick is no longer a channel operator
+}
+
+on ^*:SERVERMODE:#: {
+  ;; newly created channel
+  if ($1 == +nt) {
+    haltdef
+    echo -ct mode # * channel: created on  $+ $nick $+ 
+  }
 }
 
 on ^*:DEVOICE:#: {

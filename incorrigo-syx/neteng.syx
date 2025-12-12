@@ -34,7 +34,7 @@ on *:JOIN:#: {
 }
 #selfaop end
 
-#csvcaop off
+#csvcaop on
 on *:JOIN:#: {
   ;; Use chanserv [registered channels only!]
   if ($nick == $me && $sysop) {

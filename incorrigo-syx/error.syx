@@ -139,9 +139,29 @@ on operserv:NOTICE:Access denied.:?: {
   }
 }
 
-alias access.deniedcs {
-  noop $decision(ogi¿incorrigo syx $pipe chanserv error¿Access denied.)
+alias cs {
+  ronnik servchan $wildtok($$1-, #*, 1, 32)
+  ronnik servcommand $upper($$1)
+  cs $$1-
 }
+
+alias chanserv {
+  ronnik servchan $wildtok($$1-, #*, 1, 32)
+  ronnik servcommand $upper($$1)
+  chanserv $$1-
+}
+
+alias access {
+  ronnik servchan $$1
+  ronnik servcommand ACCESS $upper($$2)
+  access $$1-
+}
+
+alias access.deniedcs {
+  noop $decision(ogw¿incorrigo syx $pipe chanserv¿The $ironnik(servcommand) command was rejected by chanserv: $+ $crlf $+ Access denied. $&
+    $+ $crlf $crlf $+ You don't have high enough access level on $ironnik(servchan))
+}
+
 
 alias access.deniedos {
   if (!$sysop) {

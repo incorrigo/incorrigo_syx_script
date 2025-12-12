@@ -465,7 +465,7 @@ alias -l whois.chanserv {
 
 alias -l whois.nickserv {
   if ($decision(yvg¿incorrigo syx $pipe channel service¿Nickserv is the account registration and management service $+ $crlf $crlf $+ $&
-    Would you like more information aout nickserv?) == $yes) {
+    Would you like more information about nickserv?) == $yes) {
     text-reader incorrigo-syx\docu-mental\nickserv.tr Nickserv - User Account Service
   }
 }
@@ -519,13 +519,11 @@ raw 276:*: {
 }
 
 raw 290:*: {
-  haltdef
   write -c $mircdirincorrigo-syx\docu-mental\helpop-response.tr $remove($2-,*****)
-  .timer -m 1 750 text-reader incorrigo-syx\docu-mental\helpop-response.tr Server Help System - $remove($2-,*****)
+  .timer -m 1 1259 text-reader incorrigo-syx\docu-mental\helpop-response.tr Server Help System - $remove($2-,*****)
 }
 
 raw 292:*: {
-  haltdef
   write $mircdirincorrigo-syx\docu-mental\helpop-response.tr $2-
 }
 
@@ -947,7 +945,7 @@ alias -l channel.fool {
 }
 
 alias -l channel.full {
-  return $$decision(hog¿incorrigo syx $pipe mode +l error¿ $+ Unable to join $$1 $+ $crlf $crlf $+ The channel is full)
+  return $$decision(hog¿incorrigo syx $pipe channel user limit¿ $+ Unable to join $$1 $+ $crlf $crlf $+ The channel is full)
 }
 
 alias -l no.chance {
@@ -1035,7 +1033,7 @@ alias -l warnmodeD {
   }
 }
 
-#chreport on
+#chreport off
 raw 324:*: {
   if (($me ison $2) && ($ironnik($2) == $null) && (%reverx != $2)) {
     set %reverx $2

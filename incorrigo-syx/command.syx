@@ -366,7 +366,7 @@ deprecation {
 
 explain {
   ;; there was a lot to explain
-  return $$decision(ogb¿incorrigo syx $pipe what's this?¿ $+ $$1-)
+  return $$decision(ogbi¿incorrigo syx $pipe what's this?¿ $+ $$1-)
 }
 
 implain {
@@ -715,4 +715,221 @@ ls {
 if (!$server) {
   rawbak.d error incorrigo syx $pipe channel settings¿You must be connected to the network to look at the settings of any channel
 
+}
+
+unbanyourself {
+  if ($me !ison $active) {
+    chanserv UNBAN $active
+    return
+  }
+
+  else {
+    ronnik unban.chan $$decision(eg¿incorrigo syx $pipe self unban¿Enter channel to unban yourself from:)
+    chanserv UNBAN $ironnik(unban.chan)
+    .timer -m 1 500 join $ironnik(unban.chan)
+  }
+}
+
+inviteyourself {
+  if ($me !ison $active) {
+    chanserv INVITE $active
+    return
+  }
+
+  else {
+    ronnik uninvite.chan $$decision(eg¿incorrigo syx $pipe gain access¿Enter channel you're locked out of:)
+    chanserv INVITE $ironnik(uninvite.chan)
+    .timer -m 1 500 join $ironnik(uninvite.chan)
+  }
+}
+
+getchannelkey {
+  if ($me !ison $active) {
+    chanserv GETKEY $active
+    .timer -m 1 500 join $active
+    return
+  }
+
+  else {
+    ronnik getkey.chan $$decision(eg¿incorrigo syx $pipe gain access¿Enter channel to get key of:)
+    chanserv GETKEY $ironnik(getkey.chan)
+    .timer -m 1 500 join $ironnik(getkey.chan)
+  }
+}
+
+destroychannelkey {
+  if ($me !ison $active) {
+    chanserv MODE $active set -k wanker
+    .timer -m 1 500 join $active
+    return
+  }
+
+  else {
+    ronnik delkey.chan $$decision(eg¿incorrigo syx $pipe gain access¿Enter channel to remove key from:)
+    chanserv MODE $ironnik(delkey.chan) set -k wanker
+    .timer -m 1 500 join $ironnik(delkey.chan)
+  }
+}
+
+operator.join {
+  if ($me !ison $active) {
+    invite $me $active
+    .timer -m 1 450 join $active
+    return
+  }
+
+  else {
+    ronnik oper.join $$decision(egbt¿incorrigo syx $pipe operator join¿Enter channel to override join:)
+    invite $me $ironnik(oper.join)
+    .timer -m 1 450 join $ironnik(oper.join)
+  }
+}
+
+makelimitless {
+  if ($me !ison $active) {
+    chanserv MODE $active set -l
+    .timer -m 1 500 join $active
+  }
+
+  else {
+    ronnik nolimit.chan $$decision(eg¿incorrigo syx $pipe gain access¿Enter channel name with user limit:)
+    chanserv MODE $ironnik(nolimit.chan) set -l
+    .timer -m 1 500 join $ironnik(nolimit.chan)
+  }
+}
+
+details.banlist {
+  noop $decision(ugo¿incorrigo syx $pipe channel ban list¿When you match an entry on the ban list $+ $c you will not be able to join or speak on the channel $&
+    $+ $crlf $crlf $+ You can add someone to the ban list by setting the mode +b nick!user@host.name.or.ip $&
+    $+ $crlf $crlf $+ Using the extended ban creator $+ $c you can set special bans that let the user join but with restrictions on a channel $&
+    $+ $crlf $crlf $+ Banning someone doesn't remove them from the channel. For that you would need to kick them or wait for them to leave)
+}
+
+details.exceptionlist {
+  noop $decision(ugo¿incorrigo syx $pipe channel exception list¿You can add someone to the exception list by setting the mode +e nick!user@host.name.or.ip $&
+    $+ $crlf $crlf $+ If a banned user matches something on this list $+ $c they will not be affected by the ban $&
+    $+ $crlf $crlf $+ Adding someone to the exception list does not let them in when the channel is invite only)
+}
+
+details.invitelist {
+  noop $decision(ugo¿incorrigo syx $pipe channel invitations¿The channel invite list is used to let people in without manually having to use the /INVITE command $&
+    $+ $crlf $crlf $+ Someone can be added to the invite list by setting the mode +I nick!user@host.name.or.ip $+ $crlf $crlf $+ $&
+    This is used for when the channel is invite only (+i) ... being on this list will not let someone in if they are banned on the channel)
+}
+
+details.channelregistration {
+  noop $decision(iugo¿incorrigo syx $pipe channel registration¿If you have a user account then you can register channels $&
+    $+ $crlf $crlf $+ When you register a channel $+ $c you become the owner of it and have full control of the channel settings $&
+    $+ $crlf $crlf $+ Two extra levels become available $+ $c owner and channel admin (aka protect). You will become the channel owner $&
+    $+ $crlf $crlf $+ The settings you use will be remembered by chanserv $+ $c and maintained even when you're not there)
+}
+
+details.servicesignore {
+  noop $decision(iugo¿incorrigo syx $pipe services ignore list¿If someone matches an entry on the services ignore list $+ $c they will be completely unable to use $&
+    any of the network services $+ $crlf $crlf $+ You can still log into your account but pretty much every other command for every network service will not get a response)
+}
+
+details.setmainnick {
+  noop $decision(ogi¿incorrigo syx $pipe main nickname¿Your main nickname is currently: $+ $crlf $+ $getuserID $&
+    $+ $crlf $crlf $+ A number of nicknames can be registered under your account. But one particular nickname represents them all $&
+    $+ $crlf $crlf $+ This setting allows you to change your "main" nickname displayed to others as your account $&
+    $+ $crlf $crlf $+ It must be a name you already own. $iif($idfr && ($getuserID != $me),You own this nickname. Do you want it to be your main one?,$null))
+}
+
+details.nickservkill {
+  noop $decision(og¿incorrigo syx $pipe kill protect method¿Kill protects your nickname from being used by anyone if they do not log in to your account $&
+    $+ $crlf $crlf $+ ON - You have 60 seconds to identify with your password. This is the default setting $&
+    $+ $crlf $crlf $+ QUICK - This is the same as ON but only 20 seconds $&
+    $+ $crlf $crlf $+ IMMED - You have to be logged in already before you start using the registered nickname - even on connect $&
+    $+ $crlf $crlf $+ OFF - People can use your nickname without logging in at all for as long as they want. Not recommended $&
+    $+ $crlf $crlf $+ When someone triggers a kill $+ $c your nickname will be LOCKED out and no one will be able to try and use it ... until you use the nickserv RECOVER command to release the services hold)
+}
+
+details.nickservhide {
+  noop $decision(ogib¿incorrigo syx $pipe hide user information¿You can request user information from nickserv: $+ $crlf $+ /nickserv info nickname $&
+    $+ $crlf $crlf $+ Nickserv allows you to hide certain information from the response $&
+    $+ $crlf $crlf $+ EMAIL - Your account verified email address $&
+    $+ $crlf $crlf $+ STATUS - Current account access status $&
+    $+ $crlf $crlf $+ USERMASK - The last seen user@host.name.or.ip $&
+    $+ $crlf $crlf $+ QUIT - What message you left behind last time you disconnected from the network)
+}
+
+chanmodes {
+  text-reader incorrigo-syx\docu-mental\channel-modes.tr More Information: Channel Modes
+}
+
+drop.nickname {
+  if ($idf) {
+    if ($decision(qybgv¿incorrigo syx $pipe drop nickname¿Do you want to drop the nickname you are currently using?) == $yes) {
+      if ($ironnik(login) == $me) {
+        if ($decision(wybgfv¿incorrigo syx $pipe close account¿You are about to drop the nickname: $+ $crlf $+ $me $&
+          $+ $crlf $crlf $+ Doing this will CLOSE YOUR ACCOUNT! All your channels / account settings / vhost / registered nicknames / everything else associated with your account will be $&
+          permanently lost. This decision is not reversible $+ $crlf $crlf $+ Do you wish to proceed?) == $yes) {
+          nickserv DROP $me
+        }
+
+        else {
+          ;; answers no or cancels prompt
+          return
+        }
+      }
+
+      else {
+        if ($decision(ygv¿incorrigo syx $pipe drop nickname¿You are about to drop the nickname: $+ $crlf $+ $me $&
+          $+ $crlf $crlf $+ This will no longer belong to your account $+ $c and become available to anyone again $+ $crlf $crlf $+ $&
+          Are you sure you wish to proceed?) == $yes) {
+          nickserv DROP $me
+        }
+
+        else {
+          ;; answers no or cancels prompt
+          return
+        }
+      }
+    }
+
+    else {
+      var %dodrop $$decision(egb¿incorrigo syx $pipe drop nickname¿Enter nickname you wish to drop:)
+      if ($ironnik(login) == %dodrop) {
+        if ($decision(ybgfvw¿incorrigo syx $pipe close account¿You are about to drop the nickname: $+ $crlf $+ %dodrop $&
+          $+ $crlf $crlf $+ Doing this will CLOSE YOUR ACCOUNT! All your channels / account settings / vhost / registered nicknames / everything else associated with your account will be $&
+          permanently lost. This decision is not reversible $+ $crlf $crlf $+ Do you wish to proceed?) == $yes) {
+          nickserv DROP %dodrop
+        }
+
+        else {
+          ;; answers no or cancels prompt
+          return
+        }
+      }
+
+      else {
+        if ($decision(ygv¿incorrigo syx $pipe drop nickname¿You are about to drop the nickname: $+ $crlf $+ %dodrop $&
+          $+ $crlf $crlf $+ This will no longer belong to your account $chr(91) $+ $ironnik(login) $+ $chr(93) and become available to everyone again $+ $crlf $crlf $+ $&
+          Are you sure you wish to proceed?) == $yes) {
+          nickserv DROP %dodrop
+        }
+
+        else {
+          ;; answers no or cancels prompt
+          return
+        }
+      }
+    }
+  }
+
+  else {
+    noop $$decision(og¿incorrigo syx $pipe nickname drop¿You can't drop a nickname because you are not currently logged into an account)
+  }
+}
+
+change.founder {
+  if ($ironnik(change.founder.channel) && $ironnik(change.founder.nick) != $null) {
+    ;; give up channel founder status to nickname
+    if ($decision(yvgbw¿incorrigo syx $pipe change founder confirmation¿This will give $ironnik(change.founder.nick) full ownership of $ironnik(change.founder.channel) $&
+      $+ $crlf $crlf $+ This decision will not add you to the access list $+ $c and can not be reversed $&
+      $+ $crlf $crlf $+ Do you wish to proceed?) == $yes) {
+      chanserv set founder $ironnik(change.founder.channel) $ironnik(change.founder.nick)
+    }
+  }
 }
