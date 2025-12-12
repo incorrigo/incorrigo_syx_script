@@ -1,0 +1,17 @@
+Every user that's online has a unique host address and no two are the same
+
+nickname!~username@host.name.or.ip
+
+If you banned someone using the full address, then all they need to do is change their nickname or username and the ban no longer has an effect
+
+To overcome this problem, wildcards are used. Wildcards represent "anything" and they can be used in bans / invites / exceptions
+
+So this: *!*@* means all users, including yourself
+
+There is a setting for registered channels called BANTYPE. This tells chanserv how to use wildcards and where
+
+By default, the BANTYPE setting is 2: *!*@host.name.or.ip
+
+Using the hostname or IP address to ban someone - regardless of what nickname / username they have - is the best because because hostname / IP address is a lot more difficult to change
+
+If the person you are trying to ban has an account then it's probably a good idea to put them on the AKICK list instead, since it doesn't matter what address someone has, if they are going to be logged into an account that is banned instead

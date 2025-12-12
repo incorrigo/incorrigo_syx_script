@@ -1,0 +1,8 @@
+Chghost
+-
+Changes the hostname of a user currently on the IRC network.
+IRC Operator only command.
+-
+Syntax: CHGHOST <nick> <host>
+Example: CHGHOST hAtbLaDe root.me.com
+-

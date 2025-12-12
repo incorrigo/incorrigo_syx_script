@@ -8,6 +8,8 @@ invite list (+I)
 Remember the mode letters are case-sensitive
 i.e. +i makes the channel invite only, +I adds an entry to the invite list
 
+- - - - - - - - - -
+
 To add an item to the list, you can insert a user mask. User masks are like this: nick!user@host.name.or.ip
 
 Wildcards are accepted too. They take the form of an asterisk (*)
@@ -16,6 +18,8 @@ Here's an example: *!*@*.name.or.ip
 This example means [any nickname]![any username]@[anything].name.or.ip
 
 If a user has an hostname or IP address that ends in .name.or.ip then they will either (i) be denied access to the channel because they're banned (ii) be allowed access to the channel because they are an exception (iii) gain access to the channel when it's 'invite only' without having to be /INVITEd each time they want to join
+
+- - - - - - - - - -
 
 * * EXTENDED BANS * *
 When you add an entry to one of the three lists, you can also use something called 'extended bans' - which basically mean other criteria than *!*@* may be used to qualify an entry on the list instead

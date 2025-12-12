@@ -1,19 +1,118 @@
-When you want to control what goes on, who gets in, what people are allowed to do, on your channel; this is done by using settings called modes
+Channels are group conversations that people either join or get invited to. If you try to join a channel that doesn't exist, then it is created for you
 
-If you right-click a channel while you are a channel operator [@] and go to "Set Channel Modes" you will see a list of all possible channel modes [the modes are listed in alphabetical order]
+----- ----- ----- ----- -----
 
-For most of the modes, you will see a "What is This?" option, which will tell you information about a specific mode
+[1]		WHO CAN SET MODES?
 
-Some modes require parameters, for example = setting a user limit in a channel
+A channel operator can set controls that dictate how the channel works. These controls are called MODES
 
-/mode #channelname +l 150
-This will set a maximum user count of 150 ... once the 151st user tries to join, they will be denied access
+Each mode is represented by a case sensitive letter. It is set by using + and unset by using -
 
-/mode #channelname +L #rejects
-Note that channel modes are CaSe SeNsItIvE .... this mode will automatically forward users who can't get in [for any reason ... banned, invite only] to another channel - in this example #rejects
+NOTE: If you are an operator on a channel using this script, right-click the channel window and go to "set modes" where they are all written out and explained
 
-To set modes you use + as you can see here. To unset modes /mode #channelname -L will remove the channel link and it won't do that anymore
+----- ----- ----- ----- -----
 
-Explore the list of channel modes by creating a new channel [joining one that doesn't exist yet] ... you will have descriptions of all the modes
+[2]		MODES ARE CaSe SeNsItIvE
 
-When creating a new channel, the default modes +nt are automatically set
+One example for you:
+/mode #channelname +M
+When you use this mode, unregistered users need to be given voice or they can't say anything
+
+/mode #channelname +m
+This, on the other hand, will require ALL users to be given voice whether they are registered or not
+
+----- ----- ----- ----- -----
+
+[3]		MODE PARAMETER
+
+Some modes have a parameter. These will be asked for if you use the "Set Modes" list
+
+Example of modes with parameters:
+/mode #channelname +k LetMeIn22565
+If you use this command, the channel will require a password [the password you set] to join the channel at all
+
+/mode #channelname +l 59
+Here is an example of a user limit. When this mode is set no more than [example: 59] users will be allowed to join at any one time
+
+----- ----- ----- ----- -----
+
+[4]		STATUS MODES / POWERS
+
+Status modes give people powers to do things like speak while banned, set modes themselves, &c.
+
+/mode #channelname +v jimbob
+This will give someone voice to speak [+] i.e. when the channel is +m or while banned
+
+/mode #channelname +h poo_tang
+Give someone helper status [%] a limited scope of operator commands
+
+/mode #channelname +o juliet
+Give juliet [or whomever you choose] full channel operator status [@]
+
+The following are only available on registered channels:
+
+/mode #channelname +a king
+A channel admin [&] is a protected channel operator and can only be chosen by an owner
+
+/mode #channelname +q queen
+Finally, channel owner [~] ... is what you become when you register a channel, and reigns supreme over all
+
+----- ----- ----- ----- -----
+
+[5]		LIST MODES
+
+Finally there are LIST modes. Each channel has three lists ...
+
+(a)	Ban list: +b
+(b)	Invite list: +I
+(c)	Exceptions: +e
+
+These modes make a list because you can set them more than once with different details
+
+If someone matches a ban, they are not allowed to join or speak on a channel
+/mode #channelname +b dickhead!*@*
+This will ban any user with the nickname `dickhead` from joining / speaking on the channel
+
+There is an exceptions list also. Anyone matching an exception will be immune to any bans
+/mode #channelname +e *!*@gooduser.user-id.incorrigo.io
+Someone who has logged on during connect with the account `gooduser` will not be affected by any bans on #channelname
+
+Be advised though:
+(a)	Matching an entry on the exception list does not allow you to join if the channel is invite only
+(b)	Matching an entry on the invite list does not make you immune to the channel ban list
+
+----- ----- ----- ----- -----
+
+[6]		INVITE ONLY CHANNEL / INVITE LIST
+
+Last but not least there is the invite list...
+
+If you have an exclusive channel with selective clientele, you can make a channel invite only:
+/mode #channelname +i
+
+There are only two ways to get into an invite-only channel. Either by getting someone else to use the /INVITE command, or being on the invite list
+
+/mode #channelname +I trusted_user!*@*.users-isp.net
+This will let anyone with the nickname `trusted_user` and a hostname that ends in `.users-isp.net` into the channel without having to manually use the /INVITE command every time they need to join
+
+----- ----- ----- ----- -----
+
+[7]		LOCKED OUT OF YOUR OWN CHANNEL
+
+If you are a registered user and you're locked out of your own channel, right click the channel window and go to:
+Registered Channel --> [Unlock a Channel] OR [Get Back in This Channel] -->
+
+(a)	Unban Yourself - this will remove ALL bans matching you
+	/chanserv UNBAN #channelname
+
+(b)	Invite Yourself - this is VERY useful and does not affect the channel's current settings
+	/chanserv INVITE #channelname
+
+(c)	Get Channel Key - chanserv or a services channel bot will tell you the password
+	/chanserv GETKEY #channelname
+
+(d)	Remove Key - tell chanserv to remove the key completely using the MODE command
+	/chanserv MODE #channelname set -k password
+
+(e)	Remove User Limit - remove the user limit using the MODE command
+	/chanserv MODE #channelname set -l 0

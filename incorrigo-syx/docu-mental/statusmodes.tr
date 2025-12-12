@@ -1,17 +1,55 @@
-Channel Permissions (or Status Modes)
+Status modes are powers which are given to users on a channel so that they have permission to do things
 
-There are 5 levels of control you can have on a channel. Owner, admin, operator, half-op, and voice
+People who have these permissions can be identified by looking at the member list in the channel. They will have symbols next to their nicknames
 
-Voice - This will allow the user to talk in situations where they otherwise could not
+----- ----- ----- ----- -----
 
-Half-Op - An half-op can kick / ban / edit some of the channel settings, but not all
+[+v]		VOICE [+]
 
-Channel Operator - This allows someone to change all the channel settings / can give other people channel operator permissions as well
+Having voice on a channel allows you to speak either when the channel is moderated or while you're banned
 
-Channel Admin - Can do everything a channel operator can do but is protected. This mode can only be set by services or a channel owner
+----- ----- ----- ----- -----
 
-Owner - This level is for the user who has registered the channel, and their most trusted co-owners
+[+h]		HELPER / HALF-OP [%]
 
-Channel Admin / Owner levels are not available on unregistered channels. You must be a channel operator to register a channel using chanserv
-Server messages help system:				/helpop register-channel
-Using the help system with chanserv:				/query chanserv help register
+This gives someone the ability to kick / ban people, give them voice status, and set a limited selection of channel modes
+
+----- ----- ----- ----- -----
+
+[+o]		CHANNEL OPERATOR [@]
+
+A channel operator is the status you get when you create your own channel, and has the power to set any modes
+
+(a)	A channel operator can set any modes on the channel and is not restricted in any way
+(b)	You automatically have this when you create a channel / can give it to others
+(c)	If the channel is unregistered, having this status allows you to register the channel
+(d)	You can send / receive special channel notices that are visible to ops only
+
+----- ----- ----- ----- -----
+
+[+a]		CHANNEL ADMIN / PROTECT [&]
+
+When someone is a channel admin ...
+
+(a)	Unless they're a channel owner, nobody can kick you
+(b)	Channel admins can not even kick / demote each other
+(c)	Only an owner can give or take away this status
+
+(d)	This status is only available on registered channels
+
+----- ----- ----- ----- -----
+
+[+q]		OWNER
+
+This is the highest level in a channel that someone can get. It is given to you when you register a channel
+
+(a)	You will appear at the very top of the channel member list(s)
+(b)	Only another owner can demote / kick you from the channel
+(c)	You can promote and recruit channel admins who can control things on your behalf
+(d)	This status is a big deal on the channel access list, chan/botserv powers, &c.
+
+(e)	This status is only available on registered channels
+
+----- ----- ----- ----- -----
+
+These five status modes represent the powers you can have on a channel. When a channel is registered, there are a lot more commands and settings provided by services which give the permissions listed here a next level gravity and absolute control that enables you to reign supreme over the community that convenes in your channel

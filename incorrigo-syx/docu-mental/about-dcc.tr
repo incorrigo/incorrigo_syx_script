@@ -1,15 +1,25 @@
-DCC stands for Direct Client to Client - and provides some functions that involve connecting to someone else over the internet
+DCC means Direct Client to Client
 
-When you log onto the network, your real IP / hostname is hidden or cloaked, replaced by your vHost - no one can use it to connect to you
+The main things you can do with this are:
+--> send and receive files
+--> have a private conversation
 
-If you send or accept a DCC request, this information will be shared (their address will be visible too)
+1) Sending Files
+Anyone that you chat with or see in channels can send you a file. When they do, a request will appear which you can either accept or decline
 
-There are two main things that you can do with DCC ...
+To send someone a file, right-click the window in a private query / right-click someone in the user list on a channel
 
-Chat - This creates an intimate p2p conversation between you and the other user, which can not be moderated by our network, even if you disconnect from our network... the conversation will still continue until the link is closed
+Anyone can send or receive a file from you ... they don't need to be using this script or even mIRC
 
-Send / Get - You can send and receive files using DCC sens
+Files that are capable of being malicious are blocked by the server and can only be sent if the recipient adds you to their DCC Allow list
 
-Some file names can be detected and blocked before a file transfer can be set up. To get around this you must add somoene to your DCC Allow list
+2) Private Conversations
+The other thing you can do is DCC chat. This is the brilliance of white light
 
-Also, the DCC trust list. When you have added an address to your DCC trust list, files and chats will be automatically accepted without needing your approval to begin
+As with file transfers, the request and response happen on our server ... but once you're both connected, anything that is sent or received is completely private and takes place directly between two people
+
+
+3) Direct Client to Client
+This means exactly what it says on the tin. We cannot be held responsible for any files or messages that are sent privately between two connected computers
+
+Even if we would like to help or interrvene, things exchanged in a DCC session are not possible for us to quality control in any way, nor moderate

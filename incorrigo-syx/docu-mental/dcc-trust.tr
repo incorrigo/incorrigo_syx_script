@@ -1,0 +1,9 @@
+The DCC trust list is built in to your mIRC options
+
+When someone requests a direct chat / to send you a file ... if they match an entry on your trust list, the request will be accepted automatically
+
+Obviously the chat / send windows will appear
+
+This is useful when you are asking someone for help, working together on files, or you don't want to miss anything that's being sent to you just because you might not be at the computer
+
+Incorrigo Syx is a proprietary network and has sole discretion over who is given an address that is trusted by default in the released versions of the script

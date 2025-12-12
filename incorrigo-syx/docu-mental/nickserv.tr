@@ -6,9 +6,11 @@ If you have become known to others as a certain nickname, this would be inconven
 
 This is where nickserv comes in. When you have registered an account with nickserv - all you need is a password and an email address you have access to - your nickname [a group of nicknames can belong to one account, so you only need to go through the verification process once] will be reserved so that no one but you will be able to use it
 
-When you're registered, anyone [even you] who logs on / changes to your nickname(s) will be challenged. To log in, you need to identify with your password. Also, you can use a self-signed client certificate fingerprint, which will allow you to log in without a password and more securely
+When you're registered, anyone [even you] who logs on / changes to your nickname(s) will be challenged. To log in, you need to identify with your password. Also, you can use a client certificate, which will allow you to log in without a password and reinforces the secure encryption that is put in place between you and the server
 
 Registration allows you to have a vanity hostname [hostserv] and you can be given permission to operate / co-own registered channels, and even register channels of your own
+
+Connecting using SASL will give you the special vHost YourMainNickname.user-id.incorrigo.io and even prioritises your connection so you can avoid various checks that are run on users who are connecting to the network
 
 All nicknames that are registered in your group will share the same privileges and permissions / even services operator [a services operator is someone who has extra permissions to control / change things to help general users]
 

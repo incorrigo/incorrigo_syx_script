@@ -1,0 +1,9 @@
+Some file types, like ".exe" for example, are powerful because they make a computer do things
+
+Those things could be bad for you or your computer
+
+For them types od dile, the send request will be blocked by the server
+
+Putting someone on your DCC Allow list tells the server that they are someone you trust, that you allow them to send you files which would usually be blocked
+
+Your DCC Allow list is cleared when you finish your session. If you connect to the network again, you will have to re-add these trusted people

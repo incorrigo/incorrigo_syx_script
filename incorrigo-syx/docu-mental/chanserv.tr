@@ -1,17 +1,25 @@
 chanserv is the channel registration service
 
-You create a channel by /JOINing one that doesn't exist yet. When you do this, the server you are on creates the channel / sets default modes / you start off as a channel operator
+A channel is created when you /join one that doesn't exist yet. If you are the creator, you will have automatic channel operator privileges
 
-If someone else comes in, and you are disconnected or have to leave the channel for any other reason, you can not get your channel operator status back when you return ... and if more people who came in are still there, then no one will be able to control the channel
+When other users have joined the channel and you disconnect or leave for some reason, you will not get your operator powers back on your return
 
-When you're a channel operator, you can register a channel so it belongs to your services account
+While you're a channel operator - if you are a registered user - then you can register the channel using chanserv
 
-Everyone leaving a channel [whether it's registered or not] will cause the channel to automatically be destroyed. All modes / settings are gone, anyone who /JOINs the channel will be the operator as it will be created again
+If a channel goes empty, it is deleted. Even if the channel is registered, this still happens
 
-If you're taken away from an unregistered channel, the other user who comes in can just leave/rejoin and then they will be the channel operator before you return
+When you, or anyone in fact, create that channel by /joining it again ... the operator powers are removed from that person, and then chanserv automatically restores all the channel settings and options to the way that they were when you set them. You can even lock modes so that, even if you allow someone to be an operator on your channel, they can not be changed
 
-Registered channels are stored in the services database and whenever someone creates the channel, all of the configuration [modes, ban / except / invite lists, channel operators] will be restored by chanserv. This will stop people from 'taking over' your channel, and allow you to control who gets to run the place, and what settings to put in place / enforce
+When you register a channel, two new levels are unlocked. These are owner, and protect [also referred to as channel admin] ... they are not available on unregistered channels because no one owns a channel that has not been claimed
 
-Chanserv takes care of all this, even when you're not there! You could be living your best life somewhere and chanserv will still be keeping your channel the way you wanted it to be
+Bear in mind that, if you give someone else operator status on an unregistered channel ... they can claim it for themselves also
 
-Get acquainted with chanserv: /query chanserv help
+You can set your own rules when you have registered your own channel, and chanserv will enforce them, even when you're not online or at the computer
+
+As well as chanserv, you can set co-owners / channel admins / operators / half-operators / or give voice to people so that they can talk when they're banned / unregistered / silenced .... all according to the rules you set which will be saved in the services database
+
+Registered channels will expire if they are not used for a length of time. At the time this help topic was written, the expire duration is 41 days. This may be changed depending on network activity, but if your channel is used there is no need to be concerned about this even if your channel does go empty from time to time
+
+On Incorrigo Syx you have extra features when you own a registered channel. A channel bot hosted by services that give you even more controls and features, with bot commands. [/query botserv help] Registered channels have their own memoserv inbox ... [/query memoserv help] ... you can control who can access the channel memo inbox using the LEVELS feature [/query chanserv help levels]
+
+You can build beautiful things with chanserv: /query chanserv help
