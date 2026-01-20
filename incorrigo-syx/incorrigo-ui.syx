@@ -9,7 +9,7 @@ dialog extban-creator {
   icon $mircdirincorrigo-syx\img\favicon.png, 0
   box "Extended Bans", 1, 6 2 277 164
   button "E&xit", 2, 217 169 65 12, default flat cancel
-  check "Tell server to remove this in", 3, 27 12 76 10, flat
+  check "Tell server to remove in", 3, 27 12 76 10, flat
   edit "28", 4, 105 12 17 12, disable limit 3
   text "minute(s)", 5, 124 14 28 8, disable
   box "Select Which Channel List", 6, 189 13 82 58
@@ -30,19 +30,19 @@ dialog extban-creator {
   box "Target User Mask / Nickname", 21, 13 98 163 61
   text "Country:", 22, 18 146 26 8, disable
   combo 23, 86 146 85 50, disable size drop
-  text "Enter your desired target:", 24, 16 107 68 8
+  text "Enter your target:", 24, 16 107 55 8
   text "Here is an example: ~time:28:~account:westid`", 25, 7 170 181 8
   combo 26, 17 66 150 35, disable size vsbar drop
   text "Subcategory of ban type or restricted mode exemption:", 27, 22 56 136 8
   text "Forward to:", 28, 30 82 29 8, disable
   edit "#channelname", 29, 62 80 95 12, read autohs limit 32
   text "Extended Target Types:", 30, 18 133 66 8, disable
-  link "How Targeting / Banlist All Works", 31, 87 106 83 8
+  link "Targeting & Ban Lists", 31, 86 107 86 8
   box "Current Channel Name", 32, 189 72 82 27
   text "#antidisestablishmentarianism", 33, 194 83 72 8, center
   button "Set Now", 34, 195 145 70 12, hide flat ok
   box "Creation Complete?", 35, 189 136 82 26, hide
-  link "copy text", 36, 189 170 25 8, hide
+  link "copy text", 36, 185 170 30 8, hide
 }
 
 

@@ -107,13 +107,13 @@ dialog bingowing {
   link "[?]", 22, 182 157 10 8, disable
   radio "Password:", 12, 20 127 58 8, disable group
   radio "TLS Certificate:", 23, 20 142 58 8, disable
-  edit "TLS Certificate File", 13, 85 138 87 12, disabble read autohs
+  edit "TLS Certificate File", 13, 85 138 87 12, disable read autohs
   edit "passwordfield", 24, 85 124 87 12, disable pass limit 29
   link "[?]", 25, 182 124 10 8, disable
   check "Automatic User Account Login", 26, 21 110 99 10
   link "[?]", 27, 182 110 10 8, disable
   button "&Connect to Network", 28, 134 181 70 12, flat ok
-  link "Disconnect from Current Connection", 29, 104 168 89 8, hide
+  link "Disconnect from Current Connection", 29, 54 168 189 8, hide
 }
 
 
@@ -302,7 +302,7 @@ on *:DIALOG:bingowing:sclick:19: {
   }
 
   if ($did(bingowing, 19).state == 0) {
-    did -c bingowing 21 1
+    did -c bingowing 21 3
     did -e bingowing 20-21
     did -v bingowing 22
     did -v bingowing 25
@@ -635,6 +635,7 @@ on *:DIALOG:bingowing:init:0: {
 
 on *:DIALOG:bingowing:sclick:21: {
   if ($did(bingowing, 21).sel == 1) {
+    did -b bingowing 19
     set %main.method none
     jig
   }
@@ -643,13 +644,17 @@ on *:DIALOG:bingowing:sclick:21: {
     did -e bingowing 12
     did -e bingowing 24
     did -c bingowing 12
+    did -b bingowing 19
+    did -u bingowing 23
+    did -b bingowing 13-14
+    did -ra bingowing 13 TLS Certificate
     if ($len($did(bingowing, 24).text) >= 2) {
       set %main.method sasl
     }
 
     else {
       did -c bingowing 21 1
-      .timer -m 1 1 noop $$decision(hugo¿incorrigo syx $pipe sasl login¿You should enter a password if you want to auto login during connect)
+      .timer -m 1 1 noop $$decision(hugo¿incorrigo syx $pipe sasl login¿To login automatically $+ $c you need to enter an account password $+ $crlf $crlf $+ Please enter an account password that is 2 or more characters long)
       did -f bingowing 24
       %main.method = none
     }
@@ -664,11 +669,23 @@ on *:DIALOG:bingowing:sclick:21: {
       ;; still doesn't exist ... idiot proof time
       set %main.method none
       did -c bingowing 21 1
+      did -e bingowing 12
+      did -e bingowing 24
+      did -c bingowing 12
+      did -b bingowing 19
+      did -u bingowing 23
+      did -b bingowing 13-14
+      did -ra bingowing 13 TLS Certificate
       did -ra bingowing 13 TLS Certificate File
     }
 
     if ($exists(%main.tlsfile)) {
       did -ra bingowing 13 %main.tlsfile
+      did -e bingowing 13-14
+      did -e bingowing 19
+      did -b bingowing 24
+      did -c bingowing 23
+      did -u bingowing 12
       set %main.method TLSdrop
     }
 
@@ -676,8 +693,23 @@ on *:DIALOG:bingowing:sclick:21: {
   }
 
   if ($did(bingowing, 21).sel == 4) {
-    set %main.method nickserv
+    did -e bingowing 12
+    did -e bingowing 24
+    did -c bingowing 12
+    did -b bingowing 19
+    did -u bingowing 23
+    did -b bingowing 13-14
+    did -ra bingowing 13 TLS Certificate
+    if ($len($did(bingowing, 24).text) >= 2) {
+      set %main.method nickserv
+    }
 
+    else {
+      did -c bingowing 21 1
+      .timer -m 1 1 noop $$decision(hugo¿incorrigo syx $pipe nickserv login¿The nickserv setting will wait until you are connected and then send your password to nickserv $+ $crlf $crlf $+ To use this setting $+ $c please enter a password that's 2 or more characters long)
+      did -f bingowing 24
+      %main.method = none
+    }
     jig
   }
 

@@ -7,25 +7,26 @@ dialog away-manager {
   option dbu
   box "Away Manager", 1, 4 4 152 82
   check "Auto-Away after", 2, 9 14 53 10
-  edit "5", 3, 63 13 18 12, read limit 2
-  link "+", 4, 84 10 7 8
-  link "--", 5, 84 18 7 8
-  text "minute[s]", 6, 94 15 30 8, center
-  text "Auto Away Reason:", 7, 10 30 51 8
-  edit "", 8, 64 28 75 12, autohs limit 359
+  edit "5", 3, 77 13 18 12, read limit 2
+  link "+", 4, 98 10 7 8
+  link "--", 5, 98 18 7 8
+  text "minute[s]", 6, 108 15 30 8, center
+  text "Auto Away Reason:", 7, 10 30 60 8
+  edit "", 8, 77 28 75 12, autohs limit 359
   box "Set Away Now", 9, 4 42 152 44
   text "Message:", 10, 9 52 26 8
-  edit "", 11, 34 50 115 12, autohs limit 359
-  button "Set Aw&ay", 12, 33 68 51 12, flat
-  button "Come Bac&k", 13, 88 68 51 12, flat
+  edit "", 11, 42 50 111 12, autohs limit 359
+  button "Set Aw&ay", 12, 46 68 51 12, flat
+  button "Come Bac&k", 13, 101 68 51 12, flat
   button "E&xit", 14, 105 142 50 12, default flat ok cancel
   box "Away Reminder", 15, 5 88 151 49
-  text "Auto-reply with away status on:", 16, 9 99 85 8
+  text "Auto-reply with away status on:", 16, 9 99 104 8
   check "Private Conversation", 17, 8 110 66 10
   check "Whisper (Notice)", 18, 8 121 66 10
   check "Mention in Channel", 19, 78 109 60 10
   check "CTCP Request", 20, 78 120 66 10
 }
+
 
 alias awaymgr {
   noop $dialog(away-manager, away-manager, u)

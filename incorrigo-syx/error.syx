@@ -91,6 +91,7 @@ alias -l pillock {
 
 ;; La Cigare Volant
 on *:START: {
+  .server -a irc.incorrigo.io -d Random Server -p +6697 -g Incorrigo-Syx
   .timercheckdark -o 0 8 checkdark
   if (!%lacigare) { set %lacigare 2.1a }
   echo -stc Info * Good $timeofdaynow $+ . 15,1incorrigo14,1syx official script v $+ %lacigare

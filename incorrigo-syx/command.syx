@@ -710,10 +710,11 @@ ls {
     if (%aktiv != $null) { rawbak.d words incorrigo syx $pipe channel settings¿You can't see the channel settings when you're not on the channel }
     else { rawbak.d words incorrigo syx $pipe channel settings¿It's a bit difficult to figure out which channel you're trying to get the modes of ... }
   }
-}
 
-if (!$server) {
-  rawbak.d error incorrigo syx $pipe channel settings¿You must be connected to the network to look at the settings of any channel
+  if (!$server) {
+    rawbak.d error incorrigo syx $pipe channel settings¿You must be connected to the network to look at the settings of any channel
+
+  }
 
 }
 

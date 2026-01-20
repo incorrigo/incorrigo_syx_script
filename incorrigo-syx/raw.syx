@@ -339,7 +339,7 @@ alias -l no.privates {
 }
 
 alias -l no.dcc {
-  noop $decision(uoh¿incorrigo syx $pipe dcc send¿Your file transfer to $2 was stopped by the server $+ $crlf $crlf $+ $$7-)
+  noop $decision(uoh¿incorrigo syx $pipe dcc send¿Your file transfer to $2 was stopped by the server $+ $crlf $crlf $+ $strip($$7-))
 }
 
 alias -l deny.invite {
