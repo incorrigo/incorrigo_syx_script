@@ -10,7 +10,7 @@ Having the latest mIRC version / updating your mirc.ini settings are important b
   
 New releases are only issued when there has been a lot of stable changes that have successfully withstood an appropriate frequency of edge cases. In between releases, there are a large number of changes not just to our script files but also our famous elite popup menu system  
 
-────────────────────────────────────────────────────────────────────────────  
+──────────────────────────────────────────────────────────────────────  
   
 The method of script setup is still simple as ever:  
   
@@ -28,7 +28,7 @@ The method of script setup is still simple as ever:
 
   [Click Here](https://syxi.incorrigo.io/how-to/script/setup "This version even has pictures") to visit the step by step installation guide on our website    
   
-────────────────────────────────────────────────────────────────────────────  
+──────────────────────────────────────────────────────────────────────  
 
 Some useful tips:  
   
