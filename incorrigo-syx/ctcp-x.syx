@@ -25,6 +25,29 @@ raw TAGMSG:*: {
 
 alias clientmsgs {
   if ($1 != $me) {
+    if ((Teabag isincs $ctcp.tag) && ($numtok($ctcp.tag, 1) == 2)) {
+      ;; this is an encrypted message
+      ronnik puzzle $gogat($ctcp-x.tag)
+      ronnik puzzlekey $gettok($ctcp.tag, 2, 1)
+
+      ;; solve puzzle
+      ronnik solution $decode($ironnik(puzzle), cl, $ironnik(puzzlekey))
+
+      if ($left($ironnik(aud), 1) == $chr(35)) {
+        echo -mtc Info2 $ironnik(aud) [ $+ $ironnik(from) $+ ] $ironnik(solution) (encrypted)
+        halt
+      }
+      if ($ironik(aud) == $me) {
+        query $ironnik(from)
+        echo -mtc Info2 $ironnik(from) [ $+ $ironnik(from) $+ ] $ironnik(solution)(encrypted)
+        halt
+      }
+
+      if ($ironik(aud) != $me) {
+        echo -mtc Info2 $ironnik(from) [ $+ $ironnik(from) $+ ] $ironnik(solution)(encrypted)
+        halt
+      }
+    }
     if ($0 == 2) {
       ;; this is a request
       echo -smtc CTCP $1 sent you a  $+ $upper($2) $+  request

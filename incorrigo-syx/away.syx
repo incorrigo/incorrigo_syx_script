@@ -27,7 +27,6 @@ dialog away-manager {
   check "CTCP Request", 20, 78 120 66 10
 }
 
-
 alias awaymgr {
   noop $dialog(away-manager, away-manager, u)
 }
@@ -44,43 +43,52 @@ alias away {
     ;; no message = no longer away
     away
     ronnik isaway 0
+    resetidle
   }
 
   else {
-    ;; won't interfere with auto away
+    ;; flag genuine away
     away $1-
     ronnik isaway 1
   }
 }
 
 alias -l checkidle {
+  var %idle = $idle
   if (%away.auto) {
     if ($away == $false) {
-      if ($idle > $calc(%away.idletime * 60)) {
+      if ($idle >= $calc(%away.idletime * 60)) {
         ;; set away if idle time exceeds X * 60
         away auto away: %away.areason
-        ronnik isaway 0
+        ;ronnik isaway 0
         if ($dialog(away-manager)) {
+          ;; reverse "set away" / "come back"
           did -b away-manager 12
           did -e away-manager 13
         }
+
+        return
       }
     }
 
     if ($away == $true && $ironnik(isaway) == 0) {
       if ($idle < $calc(%away.idletime * 60)) {
+        ;; does not presume "cancel away on activity"
         away
 
         if ($dialog(away-manager)) {
+          ;; reverse "set away" / "come back"
           did -b away-manager 12
           did -e away-manager 13
         }
+
+        return
       }
     }
   }
 
   if (!%away.auto) {
-    if ($away == $true && !$ironnik(isaway)) {
+    if ($away == $true && $ironnik(isaway) == 0) {
       away
     }
   }
@@ -231,6 +239,7 @@ on *:DIALOG:away-manager:dclick:5: {
 }
 
 on *:START: {
+  ;; load away manager default settings
   if (!%away.auto || %away.auto == $false) {
     ;; idle away [or auto-away] setting
     %away.auto = 1
@@ -242,49 +251,54 @@ on *:START: {
   }
 
   if (!%away.idletime || %away.idletime == $false) {
-    ;; idle duration [minutes]
+    ;; idle duration [minutes] to activate auto away
     %away.idletime = 5
   }
 
   if (%away.reason == $null || %away.reason == $false) {
-    ;; general away reason vary between session
+    ;; this is the actual [not auto] away message
     %away.reason = currently set myself as away [no reason given]
   }
 
+  ;; away manager's away reminder system
   if (!%away.on-notice || %away.on-notice == $false) {
+    ;; when a user whispers to you
     %away.on-notice = 1
   }
 
   if (!%away.on-msg || %away.on-msg == $false) {
+    ;; on private session
     %away.on-msg = 1
   }
 
   if (!%away.on-mention || %away.on-mention == $false) {
+    ;; when your nickname is mentioned in a channel you're on
     %away.on-mention = 1
   }
 
   if (!%away.on-ctcp || %away.on-ctcp == $false) {
+    ;; on CTCP (this will send a CTCP AWAY response)
     %away.on-ctcp = 1
   }
 }
 
 on 1:NOTICE:*:?: {
-  ;; private notices only
+  ;; one-off private messages /notice
   if ($away == $true && %away.on-notice && $timer($server $+ . $+ $me $+ .wap) == $null) {
     if (reply: !isin $1-) {
-      .notice $nick auto reply: away from keyboard  $+ $chr(91) $+  $+ $awaymsg  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+ 
-      .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop
+      .notice $nick auto reply: away from keyboard  $+ $chr(91) $+  $+ $awaymsg  $+ $chr(93) $+   $+ $chr(91) $+ been gone: $duration($awaytime) $+  $+ $chr(93) $+ 
+      .timer $+ $server $+ . $+ $me $+ .wap 1 14 noop
     }
   }
 }
 
 
 on 1:TEXT:*:?: {
-  ;; respond to open query
+  ;; private session /msg <you>
   if ($away == $true && %away.on-msg && $timer($server $+ . $+ $me $+ .wap) == $null) {
     if (reply: !isin $1-) {
-      msg $nick auto reply: i'm currently away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+ 
-      .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop
+      msg $nick auto reply: i'm currently away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ gone: $duration($awaytime) $+  $+ $chr(93) $+ 
+      .timer $+ $server $+ . $+ $me $+ .wap 1 14 noop
     }
   }
 }
@@ -292,23 +306,30 @@ on 1:TEXT:*:?: {
 
 
 on 1:TEXT:*:#: {
-  ;; nick mentioned in channel
+  ;; when your name is mentioned in a channel
   if ($msgtags(batch).key == $null) {
+    ;; messages with a batch ID are chat history playback
     if ($me isin $strip($1-) && $away == $true && $timer($server $+ . $+ $me $+ .wap) == $null) {
-      .privmsg # $chr(1) $+ ACTION is away  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+  $+ $chr(1)
-      .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop    
+      .privmsg # $chr(1) $+ ACTION is away  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ away: $duration($awaytime) $+  $+ $chr(93) $+  $+ $chr(1)
+      .timer $+ $server $+ . $+ $me $+ .wap 1 14 noop    
     }
   }
 }
 
 ctcp 1:*:?: {
   if ($away == $true && %away.on-ctcp && $timer($server $+ . $+ $me $+ .wap) == $null) {
-    .ctcpreply $nick AWAY away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ idle: $duration($awaytime) $+  $+ $chr(93) $+  
-    .timer $+ $server $+ . $+ $me $+ .wap 1 8 noop
+    .ctcpreply $nick AWAY away from keyboard  $+ $chr(91) $+  $+ $awaymsg $+  $+ $chr(93) $+   $+ $chr(91) $+ been gone: $duration($awaytime) $+  $+ $chr(93) $+  
+    .timer $+ $server $+ . $+ $me $+ .wap 1 14 noop
   }
 }
 
 ;; raw 306 away 305 back
+
+raw 305:*: {
+  ;; stop auto-away from bouncing back
+  ronnik justgotback 1
+  .timer 1 8 xronnik justgotback
+}
 
 raw 306:*: {
   if ($ironnik(isaway)) {

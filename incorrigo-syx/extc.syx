@@ -4,20 +4,23 @@
 
 alias extc.mode {
   if (!%extc.mode) {
-    %extc.mode = account
+    %extc.mode = address
   }
   if (%extc.mode == account) {
     return ~a: $+ $$1
   }
   if (%extc.mode == address) {
-    return $$address($1, 2)
+    return $$address($$1, 2)
+  }
+  if (%extc.mode == userhost) {
+    return $$address($$1, 1)
   }
   return -1
 }
 
 alias extc.toggle {
   if (!%extc.mode) {
-    %extc.mode = account
+    %extc.mode = address
     goto hindenburg
   }
 
@@ -27,10 +30,39 @@ alias extc.toggle {
   }
 
   if (%extc.mode == address) {
+    %extc.mode = userhost
+    goto hindenburg
+  }
+
+  if (%extc.mode == userhost) {
     %extc.mode = account
+    goto hindenburg
   }
   :hindenburg
-  echo -atc Mode * Extended Modes: Toggled the extended mode target to %extc.mode
+  echo -atc Mode * Ban Target: Toggled the ban / except target to %extc.mode $chr(91) $+ $extc.mode($$1) $+ $chr(93)
+}
+
+alias extc.targetset {
+  if ($$1 == account) {
+    %extc.mode = account
+    goto hindenburg
+  }
+
+  if ($$1 == address) {
+    %extc.mode = address
+    goto hindenburg
+  }
+
+  if ($$1 == userhost) {
+    %extc.mode = userhost
+    goto hindenburg
+  }
+  :hindenburg
+  echo -atc Mode * Ban Target: Toggled the ban / except target to %extc.mode $chr(91) $+ $extc.mode($$2) $+ $chr(93)
+}
+
+alias extc.getuserhost {
+  return $gettok($extc.mode($$1), 2, 33)
 }
 
 #switchbansearch off

@@ -149,10 +149,6 @@ on *:DIALOG:bingowing:sclick:14: {
 }
 
 alias -l jig {
-  if (!%main.autologin || %main.autologin == $false || %main.autologin == 0) {
-    %main.method = none
-  }
-  .server -r irc.incorrigo.io -g Incorrigo-Syx-Autoconnect
   .server -a irc.incorrigo.io -p +6697 -g Incorrigo-Syx-Autoconnect $iif(%main.method == sasl && $len($decode(%caps.llwd, cl, %main.lkey) > 2) && $len(%main.lkey >= 5),-l sasl %main.nick $+ : $+ $decode(%caps.llwd, cl, %main.lkey),$null $+) $iif($exists(%main.tlsfile) && %main.method == TLSdrop && %main.tlsext != 1,-l none -key %main.tlsfile,$null $+) $iif(%main.method == nickserv,-l nickserv $decode(%caps.llwd, cl, %main.lkey),$null $+) $iif(%main.method == none,-l none,$null $+) $iif($exists(%main.tlsfile) && %main.tlsext == 1,-l external -key %main.tlsfile,$null) -i %main.nick %main.anick %main.username %main.myname
 }
 
@@ -375,18 +371,15 @@ on *:DIALOG:bingowing:sclick:23: {
 }
 
 on *:DIALOG:bingowing:edit:24: {
-  if ($len($did(bingowing, 24).text) > 1) {
-    did -ra bingowing 24 $remove($did(bingowing, 24).text, $chr(32))
-    %caps.llwd = $encode($did(bingowing, 24).text, cl, %main.lkey)
+  if ($len($remove($did(bingowing, 24).text, $chr(32))) >= 2) {
+    %caps.llwd = $encode($remove($did(bingowing, 24).text, $chr(32)), cl, %main.lkey)
+    %main.method = sasl
     jig
   }
   if ($len($did(bingowing, 24).text) < 2) {
     did -c bingowing 21 1
     %main.method = none
-  }
-  if ($len($did(bingowing, 24).text) >= 2) {
-    did -c bingowing 21 2
-    %main.method = sasl
+    jig
   }
 }
 
@@ -549,6 +542,33 @@ on *:DIALOG:bingowing:init:0: {
 
   if (%main.method == TLSdrop) {
     did -c bingowing 21 3
+    if (!$exists(%main.tlsfile)) {
+      .timer -m 1 1 noop $decision(wugo¿incorrigo syx $pipe connection manager¿Your TLS certificate file has moved or no longer exists $+ $crlf $crlf $+ Please re-select the certificate file or click cancel instead ...)
+      %main.tlsfile = $sfile($mircdirtls-client\*.pem,Choose Certificate File, Use &File)
+    }
+    if (!$exists(%main.tlsfile)) {
+      ;; still doesn't exist ... idiot proof time
+      set %main.method none
+      did -c bingowing 21 1
+      did -e bingowing 12
+      did -e bingowing 24
+      did -c bingowing 12
+      did -b bingowing 19
+      did -u bingowing 23
+      did -b bingowing 13-14
+      did -ra bingowing 13 TLS Certificate
+      did -ra bingowing 13 TLS Certificate File
+    }
+
+    if ($exists(%main.tlsfile)) {
+      did -ra bingowing 13 %main.tlsfile
+      did -e bingowing 13-14
+      did -e bingowing 19
+      did -b bingowing 24
+      did -c bingowing 23
+      did -u bingowing 12
+      set %main.method TLSdrop
+    }
   }
 
   if (%main.method == nickserv) {
@@ -774,6 +794,6 @@ on *:DIALOG:bingowing:sclick:27: {
 
 alias bingowing {
   if (!$dialog(bingowing)) {
-    noop $dialog(bingowing,bingowing, u)
+    noop $dialog(bingowing, bingowing, -2)
   }
 }

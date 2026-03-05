@@ -42,6 +42,14 @@ dark.mode {
   return %dark.mode
 }
 
+chanbantype {
+  if ($ironnik(chanbantype) == $null) {
+    ronnik chanbantype 2
+  }
+
+  return $ironik(chanbantype)
+}
+
 checkdark {
   ;; force dark mode (new incorrigo syx dark) theme
   if ($dark.mode == $true) {
@@ -274,9 +282,9 @@ anycgen {
 }
 
 strgen {
-  %cgen.min = $$1
-  %cgen.max = $$2
-  %cgen.str = $null
+  var %cgen.min = $$1
+  var %cgen.max = $$2
+  var %cgen.str = $null
   if (%cgen.min isnum && %cgen.max isnum && %cgen.max >= %cgen.min && %cgen.min > 0) {
     %cgen.len = $r(%cgen.min, %cgen.max)
     %cgen.cnt = 0

@@ -50,8 +50,18 @@ on *:ERROR:ERROR Closing Link*Banned*: {
 }
 
 on *:ERROR:ERROR Closing Link*ekko.incorrigo.io*: {
-  set %kill.killer ekko.incorrigo.io
-  set %kill.finalmessage $left($right($left($6-, -1), -1), -1)
+  var %kill.killer = ekko.incorrigo.io
+  var %kill.finalmessage = $left($right($left($6-, -1), -1), -1)
+  .partall
+  .partall-
+  .clear -s
+  echo -astc Own * Killed: Link was closed by services  $+ $chr(91) $+  $+ %kill.finalmessage $+  $+ $chr(93) $+ 
+  .timerworkffs -om 1 1024 error.killed2 %kill.killer %kill.finalmessage
+}
+
+on *:ERROR:ERROR Closing Link*incorrigo.io*: {
+  var %kill.killer = incorrigo.io
+  var %kill.finalmessage = $left($right($left($6-, -1), -1), -1)
   .partall
   .partall-
   .clear -s
@@ -141,21 +151,34 @@ on operserv:NOTICE:Access denied.:?: {
 }
 
 alias cs {
-  ronnik servchan $wildtok($$1-, #*, 1, 32)
-  ronnik servcommand $upper($$1)
+  if ($wildtok($$1-, #*, 1, 32) != $null) {
+    ronnik servchan $wildtok($$1-, #*, 1, 32)
+    ronnik servcommand $upper($$1)
+  }
+
   cs $$1-
 }
 
 alias chanserv {
-  ronnik servchan $wildtok($$1-, #*, 1, 32)
-  ronnik servcommand $upper($$1)
-  chanserv $$1-
+  if ($wildtok($$1-, #*, 1, 32) != $null) {
+    ronnik servchan $wildtok($$1-, #*, 1, 32)
+    ronnik servcommand $upper($$1)
+  }
+
+  cs $$1-
 }
 
 alias access {
   ronnik servchan $$1
   ronnik servcommand ACCESS $upper($$2)
   access $$1-
+}
+
+on chanserv:TEXT:*:?: {
+  if ($nick == $me) {
+    ronnik servchan $wildtok($$1-, #*, 1, 32)
+    ronnik servcommand $upper($$1)
+  }
 }
 
 alias access.deniedcs {

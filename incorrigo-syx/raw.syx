@@ -88,25 +88,25 @@ on ^*:USERMODE: {
 
   haltdef
   if ($$1 === -r) {
-    echo -estc info * Registered Nickname: Identified status removed by  $+ $nick $+ 
+    echo -stc info * Registered Nickname: Identified status removed by  $+ $nick $+ 
     goto done
   }
 
   if ($$1 === +r) {
-    echo -eastc mode * Registered Nickname: You are identified by $nick as  $+ $me $+ 
+    echo -astc mode * Registered Nickname: You are identified by $nick as  $+ $me $+ 
     goto done
   }
 
   if ($$1 === +w) {
-    echo -eastc wallops * Wallops: You are now receiving wallops messages
+    echo -astc wallops * Wallops: You are now receiving wallops messages
     goto done
   }
   if ($$1 === -w) {
-    echo -eastc wallops * Wallops: No more wallops messages will be received
+    echo -astc wallops * Wallops: No more wallops messages will be received
     goto done
   }
 
-  echo -eastc Mode * User Mode: $nick sets mode $$1-
+  echo -astc Mode * User Mode: $nick sets mode $$1-
   :done
 }
 
@@ -204,8 +204,8 @@ on nickserv:NOTICE:*nickname has been registered*not use*:?: {
 }
 
 alias -l nickslap {
-  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿The nickname %nickslapshot $iif($ironnik(login) == $null,looks like it already belongs to someone else,requires successful login before you start using it $chr(91) $+ kill immediate $+ $chr(93)) $+ $crlf $crlf $+ $&
-    If you don't want a random guest nickname $+ $c then you can try using a different one here $+ $crlf $crlf $+ Enter a new nickname:)
+  nick $$decision(eugbw¿incorrigo syx $pipe change nickname¿ $+ %nickslapshot $iif($ironnik(login) == $null,can not be used until the account owner is already logged in,does not belong to your account) $+ $crlf $crlf $+ $&
+    It is now locked out by services. Your nickname was changed to a guest one $+ $crlf $crlf You may want to choose a different nickname:)
 }
 
 raw 437:*: {
@@ -905,6 +905,8 @@ raw 617:*: {
   haltdef
   echo -atc Mode * DCC Allow: $2-
 }
+
+
 
 alias -l nomore.channels {
   return $$decision(hgo¿incorrigo syx $pipe access denied¿Access denied to $2 $+ $crlf $crlf $+ Server: $3-)

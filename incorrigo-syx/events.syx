@@ -10,6 +10,12 @@ on ^*:SNOTICE:from *: {
     halt
   }
 
+  if ($nick === incorrigo.io) { 
+    haltdef
+    echo -astc notice * services - $left($$2,-1) $+ : $$3-
+    halt
+  }
+
   if (.incorrigo.io isin $nick && $me isincs $2) { 
     haltdef
     echo -astc info * ops - $left($$2, -1) $+ : $$3-
@@ -106,7 +112,7 @@ on ^*:RAWMODE:#: {
   if ($1 === -h && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer an half-operator | halt }
   if ($1 === -h && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is no longer an half-operator | halt }
   if ($1 === +q && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
-  if ($1 === +rq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) has just registered this channel | halt }
+  if ($1 === +rq && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) has registered this channel and is now the channel owner | halt }
   if ($1 === +q && . isin $nick) { haltdef | echo -ct mode # * $mode(1) is now a channel owner | halt }
   if ($1 === +q) { haltdef | echo -ct mode # * $mode(1) is now a channel owner $chr(91) $+ given by $nick $+ $chr(93) | halt }
   if ($1 === -q && $nick == chanserv) { haltdef | echo -ct mode # * $mode(1) is no longer a channel owner | halt }
@@ -116,6 +122,7 @@ on ^*:RAWMODE:#: {
 
   ;; read out registered channel re-created activation
   if ($1 == -nt && $nick == ekko.incorrigo.io) { haltdef | set %reverx # | echo -ct mode # * This channel is registered. Services has cleared all modes ... }
+  if ($1 == -nt && $nick == incorrigo.io) { haltdef | set %reverx # | echo -ct mode # * This channel is registered. Services has cleared all modes ... }
 }
 
 on ^*:VOICE:#: {
