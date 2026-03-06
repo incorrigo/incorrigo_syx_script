@@ -1,0 +1,49 @@
+dialog mmgmt {
+  title "incorrigo syx | mode manager"
+  size -1 -1 268 265
+  option dbu
+  box "Mode Presets", 1, 4 3 260 248
+  button "Button", 2, 213 252 50 12, default flat ok
+  combo 3, 8 14 124 93, sort size edit vsbar drop
+  text "No Operation", 4, 4 254 207 8
+  text "Channel:", 5, 135 15 25 8
+  edit "", 6, 161 13 98 12, autohs limit 31
+  check "[c] Block Colour Codes", 7, 8 29 70 10, flat
+  check "[C] No CTCP Requests", 8, 8 38 70 10, flat
+  check "[D] Lurker Mode", 9, 8 47 51 10, flat
+  check "[F] Anti Flood Profile", 10, 8 57 64 10, flat
+  check "[f] Flood Protection", 11, 8 68 60 10, flat
+  check "[G] Censor Profanity", 12, 8 78 62 10, flat
+  check "[H] Chat History Playback", 13, 8 88 71 10, flat
+  check "[i] Invite Only Channel", 14, 8 97 66 10, flat
+  edit "", 15, 80 87 40 12
+  text "Lines : Time", 16, 121 88 30 8
+  edit "", 17, 152 86 21 12, limit 4
+  combo 18, 175 86 60 50, size vsbar drop
+  check "[k] Channel Password", 19, 8 106 70 10, flat
+  check "[K] /KNOCK Disabled", 20, 8 115 70 10, flat
+  check "[L] Divert to Channel", 21, 8 125 70 10, flat
+  check "[l] Limit to X Users", 22, 8 136 56 10, flat
+  edit "", 23, 80 55 58 12, autohs
+  edit "", 24, 80 68 71 12, autohs
+  edit "", 25, 79 136 50 12
+  edit "", 26, 79 122 50 12, autohs limit 32
+  check "[m] Moderated", 27, 8 146 50 10, flat
+  check "[M] Moderate Unregistered", 28, 8 156 79 10, flat
+  check "[N] No Nickname Changes", 29, 8 166 77 10, flat
+  check "[n] No External Messages", 30, 8 176 73 10, flat
+  check "[O] Operator Only Channel", 31, 8 185 79 10, flat
+  check "[P] Persistent Channel", 32, 8 194 68 10, flat
+  check "[p] Private Mode", 33, 8 203 52 10, flat
+  check "[Q] Disable /KICK", 34, 8 212 54 10, flat
+  check "[R] Registered Users Only", 35, 8 222 76 10, flat
+  check "[s] Secret Channel", 36, 8 232 58 10, flat
+  check "[S] Strip Colour Codes", 37, 87 167 65 10, flat
+  check "[T] Channel Notices Disabled", 38, 87 176 80 10, flat
+  check "[t] Channel Op Topic", 39, 87 185 64 10, flat
+  check "[V] /INVITE Disabled", 40, 87 194 65 10, flat
+  check "[z] TLS Connections Only (Secure)", 41, 87 203 94 10, flat
+  edit "", 42, 161 27 60 12, autohs limit 31
+  text "Profile:", 43, 136 30 21 8
+  button "&Add", 44, 222 26 37 12, flat
+}
