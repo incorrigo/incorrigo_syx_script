@@ -242,7 +242,7 @@ on *:START: {
   ;; load away manager default settings
   if (!%away.auto || %away.auto == $false) {
     ;; idle away [or auto-away] setting
-    %away.auto = 1
+    %away.auto = 0
   }
 
   if (!%away.areason || %away.areason == $false) {
