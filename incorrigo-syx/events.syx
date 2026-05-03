@@ -293,3 +293,23 @@ on ^*:WALLOPS:*: {
   haltdef
   echo -astc Wallops * wallops - $nick $+ : $$1-
 }
+
+;; hide clones from ath output
+on ^*:TEXT:*CONNECT*:#101,#01: {
+  if ($ip isin $1- && connect. isin $1) {
+    haltdef
+    halt
+  }
+
+  if ($ip isin $1- && $0 > 5) {
+    var %totalll $0
+    var %titalll $calc(%totalll - 5)
+    var %twattal $gettok($1-,%titalll,32)
+
+    if ($ip isin %twattal) {
+      haltdef
+      halt
+    }
+  }
+
+}
