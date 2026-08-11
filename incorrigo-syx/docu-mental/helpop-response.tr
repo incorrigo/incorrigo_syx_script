@@ -1,8 +1,86 @@
-Chghost
+Who
 -
-Changes the hostname of a user currently on the IRC network.
-IRC Operator only command.
+Retrieves information about users
+In its most simple form the syntax is 'WHO #channel' or 'WHO nickname'
+However we also support the extended who syntax (WHOX):
 -
-Syntax: CHGHOST <nick> <host>
-Example: CHGHOST hAtbLaDe root.me.com
+Syntax:
+/WHO <mask> [options]
+/WHO <mask> [options [mask2]]
+-
+The mask can contain wildcards such as * and ?
+-
+The options consist of [<flags>][%[<fields>[,<querytype>]]]
+Where:
+The <flags> define where to SEARCH on, and may contain one or more letters:
+n: nick name
+u: user name (ident)
+h: host name [*]
+i: IP address [*]
+s: server name [*]
+r: real name (gecos)
+t: connect time (mask is >seconds or <seconds) [*]
+a: account name (services account)
+m: user modes (the mask contains for example +z or -z) [*]
+R: sets output to show real hostnames [*]
+I: sets output to show IP addresses [*]
+Items marked with [*] mean that IRCOp privileges are (possibly) required.
+The <fields> decide which fields appear in the WHO output
+(note that any fields are always outputed in this order:)
+t: querytype (the <querytype> parameter that was provided in <options>)
+c: first channel name the user is on
+u: user name (ident)
+i: IP Address [*]
+h: hostname [*]
+H: real hostname [*]
+s: server name
+n: nick name
+f: status flags (explained later)
+m: user modes [*]
+d: number of server hops (eg: 0 means user is on same server)
+l: seconds idle (only for users on the same server as you, otherwise 0)
+a: account name (services account)
+o: operclass name [*]
+R: reputation score [*]
+r: real name (gecos)
+Items marked with [*] mean that IRCOp privileges are (possibly) required.
+And finally, the <querytype> is a word that clients can use to tag
+WHO requests so they can easily see which WHO response belongs to
+what WHO request.
+-
+Examples of simple WHO requests:
+WHO #channel - To list all users in a channel
+WHO 1.2.3.4 - To show all users with this IP address (IRCOp only)
+Examples of WHOX requests:
+WHO Servic* n - Show all users which name starts with Servic
+(Only IRCOps are likely to see the full list)
+WHO #chan cI - Show all users in channel #chan with their
+IP address instead of hostname (IRCOp only)
+WHO z m - Show all users with user mode z set, that is:
+all users on SSL/TLS. (IRCOp only command)
+WHO -z m - Show all insecure users, without umode z.
+(IRCOp only command)
+WHO <300 t - Show all users that are connected for
+less than 300 seconds (IRCOp only command)
+Examples of WHOX requests using output modifiers:
+WHO #test %acfhnru - Show all users in the channel #test and show
+various fields, among which 'a' (services
+account) is not displayed by normal WHO.
+-
+Status flags:
+The WHO command shows several flags in the returned result to indicate
+different information about the user. These flags are explained below:
+G - User is /away (gone)
+H - User is not /away (here)
+r - User is using a registered nickname
+B - User is a bot (+B)
+s - User is securely connected (SSL/TLS)
+* - User is an IRC Operator
+~ - User is a Channel Owner (+q)
+& - User is a Channel Admin (+a)
+@ - User is a Channel Operator (+o)
+% - User is a Halfop (+h)
++ - User is Voiced (+v)
+! - User is +H and you are an IRC Operator
+-
 -

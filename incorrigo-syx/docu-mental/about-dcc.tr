@@ -4,22 +4,26 @@ The main things you can do with this are:
 --> send and receive files
 --> have a private conversation
 
-1) Sending Files
-Anyone that you chat with or see in channels can send you a file. When they do, a request will appear which you can either accept or decline
+----- ----- ----- ----- ------
 
-To send someone a file, right-click the window in a private query / right-click someone in the user list on a channel
+[1]		SENDING FILES
+Anyone who you chat with on Incorrigo Syx has the ability to send files as well. If...
 
-Anyone can send or receive a file from you ... they don't need to be using this script or even mIRC
+(a)	... you are sending a file to someone else, they will receive a request via the network in the form of a private message which is handled automatically
+(b)	... someone else is sending you a file, then you will be prompted to either accept or decline the invitation
+(c)	... the file is of a certain protected type - executables, for instance - then the recipient needs to use this command first --> /dccallow senders_nickname
+	(/dccallow -senders_nickname) using the "-" character will remove the target matching your given nickname from the allow list for potentially harmful files
 
-Files that are capable of being malicious are blocked by the server and can only be sent if the recipient adds you to their DCC Allow list
+----- ----- ----- ----- -----
 
-2) Private Conversations
-The other thing you can do is DCC chat. This is the brilliance of white light
+[2]		RECEIVING FILES
+When someone attempts to send you a file, then a confirmation window will appear. This will show you the sender's nickname / IP address / file size / speculation of contents
 
-As with file transfers, the request and response happen on our server ... but once you're both connected, anything that is sent or received is completely private and takes place directly between two people
+If you are away from keyboard or simply deciding to ignore the file being sent, your IP address will not be revealed in any event except if you allow the sender to know your IP address by opening a peer-to-peer link between you and the other person. This can come in the form of a direct chat connection, a file transfer in either direction, or making use of your file server capabilities
 
+----- ----- ----- ----- -----
 
-3) Direct Client to Client
-This means exactly what it says on the tin. We cannot be held responsible for any files or messages that are sent privately between two connected computers
+[3]		DIRECT CHAT LINK
+Using mIRC, you have the ability to create a direct link to chat with someone. Although it needs to be requested / accepted / established using private messages in both of your IRC session ... once the connection is made there is nothing that can be used to track or monitor conversations that people have had. In addition, it's unrealistic and virtually impossible to moderate such a conversation; with this in mind, the only one who has the capability of moderation is yourself and - no matter if you're still connected to the network or not - the direct link between yourself and the one you're chatting with may continue until one of you uses the option to make the ongoing link closed
 
-Even if we would like to help or interrvene, things exchanged in a DCC session are not possible for us to quality control in any way, nor moderate
+You must remember that it is completely impossible for us to, nor make such an attempt at moderation, once you have established a direct link like this -- and it will make both sides' real IP / hostname - things which are hidden on Incorrigo Syx automatically - available to one another. Hence the term: Direct Client to Client
