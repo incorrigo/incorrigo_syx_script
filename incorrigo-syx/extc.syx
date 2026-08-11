@@ -58,7 +58,7 @@ alias extc.targetset {
     goto hindenburg
   }
   :hindenburg
-  echo -atc Mode * Ban Target: Toggled the ban / except target to %extc.mode $chr(91) $+ $extc.mode($$2) $+ $chr(93)
+  echo -atc Mode * Target Type: Toggled the target type to %extc.mode $chr(91) $+ $extc.mode($$2) $+ $chr(93)
 }
 
 alias extc.getuserhost {
@@ -192,3 +192,4 @@ alias extc.dexempt {
   .enable #switchexemptsearch
   mode %mode.search.channel +e
 }
+$extc.mode(sierra), -3)

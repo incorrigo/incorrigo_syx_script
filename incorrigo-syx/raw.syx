@@ -15,7 +15,7 @@ raw 340:*: {
 
 raw 344:*: {
   haltdef
-  echo -astc Whois * Geographical Location: [ $+ $$3 $+ ] $$7-
+  echo -atc Whois * Geographical Location: [ $+ $$3 $+ ] $$7-
 }
 
 #extendedjoin on

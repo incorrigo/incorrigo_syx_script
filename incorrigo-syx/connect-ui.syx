@@ -490,7 +490,7 @@ on *:START: {
   }
 
   else {
-    .nick %main.nick
+    .mnick %main.nick
     .anick %main.anick
     .fullname %main.myname
     .emailaddr %main.username
@@ -507,6 +507,8 @@ alias -l albeit {
 }
 
 on *:DIALOG:bingowing:init:0: {
+  jig
+
   if ($server) { did -e bingowing 29 }
   albeit %birthday
   if (!%main.lkey) {
